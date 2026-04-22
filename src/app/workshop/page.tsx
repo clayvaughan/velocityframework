@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { VisualPlaceholder } from "@/components/VisualPlaceholder";
 import { SectionHeader } from "@/components/SectionHeader";
 import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "FRE Certification Workshop",
@@ -289,25 +290,34 @@ export default function WorkshopPage() {
                 fit, you can complete registration with the Stripe checkout
                 below.
               </p>
-              <div
-                data-stripe-buy-button-slot
-                data-price="5000"
-                data-product="fre-certification-austin-2026-06"
-                className="mt-5 rounded-lg border-2 border-dashed border-accent/50 bg-secondary/40 px-4 py-6 text-center"
-              >
-                <p className="font-heading text-[0.7rem] uppercase tracking-widest text-muted-foreground">
-                  Stripe Buy Button slot
-                </p>
-                <p className="mt-2 font-velocity text-3xl tracking-wider">
+              {/*
+                Stripe Payment Link checkout. Live URL is configured in
+                `siteConfig.stripeWorkshopPaymentLink`. Opens in a new tab so
+                the user doesn't lose their place on /workshop. EARLYBIRD2026
+                promo is enabled on the Payment Link itself (no client-side
+                code needed). If we ever switch to embedded checkout, swap
+                this anchor for Stripe Elements + NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.
+              */}
+              <div className="mt-5 rounded-lg border border-border bg-secondary/40 px-4 py-6 text-center">
+                <p className="font-velocity text-3xl tracking-wider">
                   $5,000
                 </p>
                 <p className="mt-2 text-xs text-muted-foreground">
                   Use promo code <span className="font-mono text-foreground">EARLYBIRD2026</span>{" "}
                   for $1,000 off (expires May 31, 2026).
                 </p>
-                <p className="mt-4 text-[0.65rem] font-mono uppercase tracking-widest text-muted-foreground">
-                  Replace with stripe.com/buy button when Luke/Clay provide the
-                  product ID.
+                <a
+                  href={siteConfig.stripeWorkshopPaymentLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-stripe-payment-link
+                  data-product="fre-certification-austin-2026-06"
+                  className="mt-5 inline-flex h-12 items-center justify-center rounded-lg bg-accent px-6 font-heading uppercase tracking-wide text-accent-foreground shadow-card transition hover:bg-accent-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark"
+                >
+                  Secure your seat →
+                </a>
+                <p className="mt-3 text-[0.65rem] font-mono uppercase tracking-widest text-muted-foreground">
+                  Secure checkout via Stripe · opens in a new tab
                 </p>
               </div>
             </div>

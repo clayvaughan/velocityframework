@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Bebas_Neue, Barlow, Montserrat } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+
+/* ---------- Google Analytics 4 (GA4) slot ----------------------------------
+   GA4 is NOT live yet. When a Measurement ID is provided, set the env var
+   `NEXT_PUBLIC_GA_MEASUREMENT_ID` (e.g. `G-XXXXXXXXXX`) in Replit Secrets and
+   the <GoogleAnalytics /> snippet below will start firing automatically — no
+   other code change needed. Until then, the slot renders nothing.
+   --------------------------------------------------------------------------- */
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 /* ---------- Web-font fallbacks ---------------------------------------------
    These Google Fonts stand in for the licensed Velocity brand fonts until the
@@ -77,6 +86,23 @@ export default function RootLayout({
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        {/* GA4 slot — fires only when NEXT_PUBLIC_GA_MEASUREMENT_ID is set. */}
+        {GA_MEASUREMENT_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}');
+              `}
+            </Script>
+          </>
+        ) : null}
       </body>
     </html>
   );

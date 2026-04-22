@@ -15,6 +15,22 @@ export const siteConfig = {
   social: {
     linkedin: "https://linkedin.com/in/clayvaughan",
   },
+  /**
+   * HubSpot Portal ID. Used for static references and any future HubSpot form
+   * embeds (e.g. `//js.hsforms.net/forms/embed/v2.js` + `hbspt.forms.create`).
+   * No form GUIDs or Private App Token yet — every <HubSpotFormSlot> remains a
+   * placeholder until Abby provides the per-form GUIDs.
+   */
+  hubspotPortalId: "51279976",
+  /**
+   * Stripe Payment Link for the FRE Certification Workshop "Secure your seat"
+   * button on /workshop. Pre-configured at $5,000 with the EARLYBIRD2026 promo
+   * code active. Opens in a new tab — no Stripe.js / Elements integration
+   * needed for this flow. (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is stored as a
+   * secret for future embedded checkout work.)
+   */
+  stripeWorkshopPaymentLink:
+    "https://buy.stripe.com/28E5kC8nk8IU4Ixdxc9MY05",
 } as const;
 
 export type NavItem = {

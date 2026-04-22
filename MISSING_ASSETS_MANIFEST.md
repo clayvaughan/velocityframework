@@ -54,7 +54,9 @@ ratio is implied by dimensions.
 The following are not visual placeholders but are worth flagging as "not-yet-final":
 
 - Workshop page content — migrated with reasonable defaults (Clay's confirmed facts: $5k, Jun 25–26 2026, Austin, 12 seats, $1,500/yr renewal, EARLYBIRD2026 thru May 31 2026). Luke Frazier refines post-migration. Source `velocitybook.com/workshop` is a JavaScript-rendered SPA and could not be scraped — see project notes.
-- Stripe Buy Button — `src/app/workshop/page.tsx` has a `data-stripe-buy-button-slot` element holding the "Secure your seat" space. Replace with the live Stripe Buy Button when Luke provides the product ID.
+- Stripe Buy Button — WIRED. `/workshop` "Secure your seat" links out to the live Stripe Payment Link (`siteConfig.stripeWorkshopPaymentLink`), which has EARLYBIRD2026 enabled. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` is held in Replit Secrets for any future embedded-checkout work.
+- HubSpot Portal ID — `siteConfig.hubspotPortalId` = `51279976`. No form GUIDs yet, so every `<HubSpotFormSlot>` stays as a labeled placeholder per the locked spec.
+- Google Analytics 4 — slot wired in `src/app/layout.tsx`. Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` (e.g. `G-XXXXXXXXXX`) in Replit Secrets to activate.
 - `/AI` page tool list — seeded with reasonable defaults (ChatGPT, Claude, Fathom, Lindy, Gamma, Perplexity) pending Clay's direct curation. Quarterly update cadence.
 - Privacy / Terms — template language. Final copy needs legal review before launch.
 - HubSpot form slots — every `<HubSpotFormSlot>` in the codebase is a labeled placeholder. Abby wires the real HubSpot embeds. Slot identifiers (`data-form-key`, `data-workflow`) give her machine-readable targets.
