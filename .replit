@@ -36,8 +36,13 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx next dev -p 5000 -H 0.0.0.0"
-waitForPort = 5000
+# Bind Next.js to port 3000 to match the [[ports]] mapping above
+# (localPort = 3000 -> externalPort = 80). Replit Preview hits external
+# port 80, so the dev server MUST listen on 3000 for Preview to render.
+# Previously this was port 5000, which left Preview pointing at a port
+# nothing was listening on, producing "encountered an error".
+args = "npx next dev -p 3000 -H 0.0.0.0"
+waitForPort = 3000
 
 [postMerge]
 path = "scripts/post-merge.sh"
