@@ -1,11 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * VisualPlaceholder — a labeled gray rectangle standing in for real imagery
- * until the asset lands. Every instance must appear in MISSING_ASSETS_MANIFEST.md.
+ * VisualPlaceholder — renders the real asset at `/{filename}` when present and
+ * falls back to a labeled gray rectangle when the file is missing. Every
+ * placeholder filename must appear in MISSING_ASSETS_MANIFEST.md so the design
+ * team knows what to ship.
  *
- * Kind 2 placeholder per the locked spec: light gray background, medium gray
- * border, correct aspect ratio, clear label with filename and dimensions.
+ * The fallback (Kind 2 placeholder per the locked spec) is a light gray box
+ * with a medium gray dashed border, the correct aspect ratio, and a clear
+ * label showing filename and dimensions.
  */
 type VisualPlaceholderProps = {
   /** Filename the asset will eventually be saved as, e.g. "clay-headshot-600x800.jpg" */
@@ -31,6 +37,7 @@ export function VisualPlaceholder({
   maxWidthClass,
   rounded = "lg",
 }: VisualPlaceholderProps) {
+  const [errored, setErrored] = useState(false);
   const aspectRatio = `${width} / ${height}`;
   const roundedClass = {
     none: "rounded-none",
@@ -39,6 +46,29 @@ export function VisualPlaceholder({
     xl: "rounded-xl",
     full: "rounded-full",
   }[rounded];
+
+  if (!errored) {
+    return (
+      <img
+        src={`/${filename}`}
+        alt={label}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        data-placeholder-filename={filename}
+        data-placeholder-dimensions={`${width}x${height}`}
+        onError={() => setErrored(true)}
+        className={cn(
+          "block h-auto w-full object-cover",
+          roundedClass,
+          maxWidthClass,
+          className
+        )}
+        style={{ aspectRatio }}
+      />
+    );
+  }
 
   return (
     <div

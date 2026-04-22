@@ -12,11 +12,12 @@
    ============================================================================= */
 
 /* ---------- Local font faces ---------------------------------------------
-   Licensed files expected in /public/fonts/. Until they arrive, these @font-face
-   declarations fail to load silently and the Google Font fallbacks wired in
-   layout.tsx (Bebas Neue, Barlow, Montserrat) render in their place via the
-   font stacks defined below in @theme. Drop the licensed files with the exact
-   filenames below and the real Velocity fonts will take over automatically.
+   Licensed Velocity brand fonts live in /public/fonts/. The files currently
+   shipped under those filenames are open-source stand-ins (Bebas Neue,
+   Barlow Bold, Montserrat) — visually equivalent to the Google Font
+   fallbacks. When the truly-licensed Velocity fonts arrive, overwrite the
+   files in /public/fonts/ with the same filenames and the real fonts take
+   over automatically.
    -------------------------------------------------------------------------- */
 @font-face {
   font-family: "BigNoodleTitling";
@@ -34,7 +35,7 @@
 }
 @font-face {
   font-family: "NexaBold";
-  src: url("/fonts/Nexa_Bold.otf") format("opentype");
+  src: url("/fonts/Nexa_Bold.otf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;

@@ -1,17 +1,20 @@
 # Velocity brand fonts
 
-Drop licensed font files here with these **exact** filenames — the @font-face
-rules in `src/app/globals.css` look for them by name:
+The four files in this folder satisfy the `@font-face` declarations in
+`src/app/globals.css`. The site loads them automatically — no code change is
+needed when files are swapped, only the filenames must stay identical.
 
 | File | Weight | Style | Status |
 | ---- | ------ | ----- | ------ |
-| `big_noodle_titling.ttf` | 400 | normal | **MISSING — fallback Bebas Neue** |
-| `big_noodle_titling_oblique.ttf` | 400 | italic | **MISSING — fallback Bebas Neue italic** |
-| `Nexa_Bold.otf` | 700 | normal | **MISSING — fallback Barlow 700** |
-| `Montserrat-Regular.ttf` | 400 | normal | **MISSING — fallback Montserrat (Google Fonts)** |
+| `big_noodle_titling.ttf` | 400 | normal | **Stand-in (Bebas Neue Regular)** — replace with the licensed BigNoodleTitling file |
+| `big_noodle_titling_oblique.ttf` | 400 | italic | **Stand-in (Bebas Neue Regular)** — replace with the licensed BigNoodleTitling Italic file |
+| `Nexa_Bold.otf` | 700 | normal | **Stand-in (Barlow Bold)** — replace with the licensed Nexa Bold file |
+| `Montserrat-Regular.ttf` | 400 | normal | Open-source (Google Fonts Montserrat) — final |
 
-Until these land, the site renders using the Google Font fallbacks wired in
-`src/app/layout.tsx`. Once the files are dropped here, the real Velocity fonts
-take over automatically — no code change needed.
+Open-source fonts under the licensed filenames are visually equivalent to the
+Google Font fallbacks the site previously rendered, so the typography is
+production-acceptable today. When Lindsay supplies the truly-licensed
+Velocity files (BigNoodleTitling, NexaBold), drop them in here under the
+exact filenames above and they take effect automatically.
 
 Tracked in the root `MISSING_ASSETS_MANIFEST.md`.
