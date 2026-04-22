@@ -37,11 +37,11 @@ ratio is implied by dimensions.
 
 | # | Filename | Dimensions | Page | Description |
 | - | -------- | ---------- | ---- | ----------- |
-| 1 | `book-cover-hero-800x1000.jpg` | 800 × 1000 | `/` (hero) | Velocity book cover — hero shot |
+| 1 | `book-cover-hero-3d.png` | 765 × 1259 (transparent) | `/` (hero) | Velocity book — 3D rendered cover (WIRED) |
 | 2 | `clay-headshot-primary-800x1000.jpg` | 800 × 1000 | `/` (about strip) | Clay Vaughan primary headshot |
 | 3 | `cohort-photo-past-1200x800.jpg` | 1200 × 800 | `/` (workshop teaser) | Past FRE cohort — group photo |
 | 4 | `clay-headshot-about-900x1100.jpg` | 900 × 1100 | `/about` (hero) | Clay headshot — about-page |
-| 5 | `book-cover-detail-900x1100.jpg` | 900 × 1100 | `/book` (hero) | Book cover — detail shot |
+| 5 | `book-cover-flat.jpg` | 348 × 522 (intrinsic) | `/book` (hero) | Velocity book — flat front cover (WIRED) |
 | 6 | `cohort-hero-1200x900.jpg` | 1200 × 900 | `/workshop` (hero) | Workshop cohort — hero image |
 | 7 | `clay-workshop-portrait-800x1000.jpg` | 800 × 1000 | `/workshop` (founder note) | Clay portrait — workshop context |
 | 8 | `fre-client-logo-1-240x120.png` through `fre-client-logo-6-240x120.png` | 240 × 120 | `/workshop` (social proof) | Six client logos from FRE network (anonymize as needed) |

@@ -7,6 +7,7 @@ import { ResourceCard } from "@/components/ResourceCard";
 import { SectionHeader } from "@/components/SectionHeader";
 import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
 import { resources } from "@/lib/resources";
+import { siteConfig } from "@/config/site";
 
 const featuredResources = resources.slice(0, 3);
 
@@ -42,6 +43,16 @@ export default function Home() {
               <Button asChild variant="outline" size="lg">
                 <Link href="/book">Get the Book</Link>
               </Button>
+              <Button asChild variant="link" size="lg">
+                <a
+                  href={siteConfig.amazonBookUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Buy on Amazon
+                  <ArrowRight className="h-4 w-4" />
+                </a>
+              </Button>
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs uppercase tracking-widest text-muted-foreground font-heading">
               <span className="inline-flex items-center gap-2">
@@ -62,12 +73,12 @@ export default function Home() {
           <div className="lg:col-span-5">
             <div className="relative">
               <VisualPlaceholder
-                filename="book-cover-hero-800x1000.jpg"
-                width={800}
-                height={1000}
-                label="Velocity book cover — hero shot"
-                rounded="xl"
-                className="shadow-elegant"
+                filename="book-cover-hero-3d.png"
+                width={765}
+                height={1259}
+                label="Velocity book by Clay Vaughan — 3D cover"
+                rounded="none"
+                className="drop-shadow-2xl mx-auto max-w-md object-contain"
               />
               <div className="absolute -bottom-5 -left-5 hidden md:block glass rounded-xl px-5 py-3">
                 <p className="font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">

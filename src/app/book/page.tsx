@@ -5,6 +5,7 @@ import { VisualPlaceholder } from "@/components/VisualPlaceholder";
 import { SectionHeader } from "@/components/SectionHeader";
 import { PillarCard } from "@/components/PillarCard";
 import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
+import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "The Book",
@@ -35,16 +36,16 @@ export default function BookPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Button asChild variant="cta" size="lg">
-                <Link href="/toolbox">Browse the tools</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
                 <a
-                  href="https://www.amazon.com/s?k=velocity+clay+vaughan"
+                  href={siteConfig.amazonBookUrl}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Find it on Amazon
+                  Buy on Amazon
                 </a>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/toolbox">Browse the tools</Link>
               </Button>
             </div>
             <dl className="mt-10 grid grid-cols-3 gap-6 max-w-md border-t border-border pt-8">
@@ -73,12 +74,12 @@ export default function BookPage() {
 
           <div className="lg:col-span-5">
             <VisualPlaceholder
-              filename="book-cover-detail-900x1100.jpg"
-              width={900}
-              height={1100}
-              label="Velocity book cover — detail"
-              rounded="xl"
-              className="shadow-elegant"
+              filename="book-cover-flat.jpg"
+              width={696}
+              height={1044}
+              label="Velocity book cover by Clay Vaughan"
+              rounded="lg"
+              className="shadow-elegant mx-auto max-w-sm"
             />
           </div>
         </div>

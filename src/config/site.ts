@@ -31,6 +31,12 @@ export const siteConfig = {
    */
   stripeWorkshopPaymentLink:
     "https://buy.stripe.com/28E5kC8nk8IU4Ixdxc9MY05",
+  /**
+   * Amazon product page for the book — used by every "Buy / Get the Book"
+   * outbound link. Update here and every CTA across the site follows.
+   */
+  amazonBookUrl:
+    "https://www.amazon.com/Velocity-Less-Chaos-Profit-Growth/dp/B0GFGWMDWP",
 } as const;
 
 export type NavItem = {
