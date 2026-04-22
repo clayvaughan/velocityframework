@@ -74,11 +74,11 @@ export default function Home() {
             <div className="relative">
               <VisualPlaceholder
                 filename="book-cover-hero-3d.png"
-                width={765}
-                height={1259}
+                width={1500}
+                height={1383}
                 label="Velocity book by Clay Vaughan — 3D cover"
                 rounded="none"
-                className="drop-shadow-2xl mx-auto max-w-md object-contain"
+                className="drop-shadow-2xl mx-auto w-full object-contain"
               />
               <div className="absolute -bottom-5 -left-5 hidden md:block glass rounded-xl px-5 py-3">
                 <p className="font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">
