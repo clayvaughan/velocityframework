@@ -97,6 +97,33 @@ export default async function ResultsPage({ params }: { params: Params }) {
         </section>
       ) : null}
 
+      <section className="section-padding bg-gradient-section">
+        <div className="container-wide max-w-4xl">
+          <div className="rounded-2xl border-2 border-accent/40 bg-card p-6 md:p-10 shadow-elegant">
+            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+              Next move
+            </p>
+            <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
+              Ready to act on this? Build your Culture Action Plan.
+            </h2>
+            <p className="mt-4 max-w-2xl text-base md:text-lg leading-relaxed text-muted-foreground">
+              Your three lowest-scoring dimensions are pre-selected for you.
+              Ten minutes from now you&rsquo;ll have a 30/60/90-day plan with
+              calendar events on your schedule, a pre-drafted email for your
+              leadership team, and an accountability partner invite — all
+              grounded in the Heart section of the book.
+            </p>
+            <div className="mt-8">
+              <Button asChild variant="cta" size="lg">
+                <Link href={`/action-plan?source=health-check&id=${row.id}`}>
+                  Build my Culture Action Plan
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="section-padding bg-primary text-primary-foreground">
         <div className="container-wide max-w-4xl grid gap-8 md:grid-cols-2 items-start">
           <div>

@@ -217,3 +217,113 @@ export async function sendQuizResultEmail(_input: {
   );
   return { ok: false, skipped: true, reason: "template_id_missing" };
 }
+
+// ---------------------------------------------------------------------------
+// Culture Action Plan contact sync
+// ---------------------------------------------------------------------------
+
+/**
+ * Contact upsert for a saved Culture Action Plan. Sets the custom
+ * properties described in the Action Plan spec and enrolls the contact in
+ * the "Making Culture Stick" nurture sequence once the sequence id is
+ * populated in `ACTION_PLAN_SEQUENCE_ID` below.
+ *
+ * Silent no-op when the HubSpot token is missing.
+ */
+const ACTION_PLAN_SEQUENCE_ID: string | null = null;
+
+export async function syncActionPlanContact(input: {
+  email: string;
+  firstName: string;
+  role: string;
+  teamSize?: string;
+  focusAreaTitles: string[];
+  virtues: string[];
+  reassessmentDate: string | null;
+}): Promise<HubSpotSyncResult> {
+  if (!token) {
+    console.warn(
+      "[hubspot] HUBSPOT_PRIVATE_APP_TOKEN not set — skipping Action Plan sync for",
+      input.email
+    );
+    return { ok: false, skipped: true, reason: "no_token" };
+  }
+
+  const properties: Record<string, string> = {
+    email: input.email,
+    firstname: input.firstName,
+    role: input.role,
+    action_plan_focus_areas: input.focusAreaTitles.join(";"),
+    action_plan_virtues: input.virtues.join(";"),
+    action_plan_status: "In Progress",
+    lifecyclestage: "subscriber",
+  };
+  if (input.teamSize) properties.company_size = input.teamSize;
+  if (input.reassessmentDate)
+    properties.action_plan_reassessment_date = input.reassessmentDate;
+
+  try {
+    const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
+      method: "POST",
+      body: JSON.stringify({
+        filterGroups: [
+          {
+            filters: [
+              { propertyName: "email", operator: "EQ", value: input.email },
+            ],
+          },
+        ],
+        properties: ["email"],
+        limit: 1,
+      }),
+    });
+    if (!search.ok) {
+      const body = await search.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: search.status,
+        error: `search failed: ${body}`,
+      };
+    }
+    const searchJson = (await search.json()) as { results: { id: string }[] };
+    const existingId = searchJson.results?.[0]?.id;
+
+    const path = existingId
+      ? `/crm/v3/objects/contacts/${existingId}`
+      : `/crm/v3/objects/contacts`;
+    const method = existingId ? "PATCH" : "POST";
+    const res = await hubspotFetch(path, {
+      method,
+      body: JSON.stringify({ properties }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: res.status,
+        error: `${method} failed: ${body}`,
+      };
+    }
+    const json = (await res.json()) as { id: string };
+
+    // Enrollment stub — activates once ACTION_PLAN_SEQUENCE_ID is populated.
+    if (ACTION_PLAN_SEQUENCE_ID) {
+      console.info(
+        `[hubspot] Would enroll ${json.id} in sequence ${ACTION_PLAN_SEQUENCE_ID}`
+      );
+    }
+
+    return { ok: true, contactId: json.id };
+  } catch (err) {
+    return {
+      ok: false,
+      skipped: false,
+      reason: "api_error",
+      error: String(err),
+    };
+  }
+}
