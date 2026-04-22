@@ -22,11 +22,11 @@ export default function Home() {
               The Velocity Framework
             </p>
             <h1 className="mt-5 font-velocity text-foreground text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-wider">
-              Less Chaos.
+              <span className="font-velocity">Less Chaos.</span>
               <br />
-              More Profit.
+              <span className="font-velocity">More Profit.</span>
               <br />
-              <span className="text-accent-dark">Real Growth.</span>
+              <span className="font-velocity text-accent-dark">Real Growth.</span>
             </h1>
             <p className="mt-7 max-w-xl text-lg md:text-xl leading-relaxed text-muted-foreground">
               The public tools and resource library for Clay Vaughan&rsquo;s
