@@ -1,0 +1,326 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   Velocity Framework — Locked Design System (do not deviate)
+   Brand: Slate Black #272727 · Harvest Gold #c7af81 · Cream #f9f7f2
+   Fonts: BigNoodleTitling (display) · NexaBold (headings) · Montserrat (body)
+   ============================================================================= */
+
+/* ---------- Local font faces ---------------------------------------------
+   Licensed files expected in /public/fonts/. Until they arrive, these @font-face
+   declarations fail to load silently and the Google Font fallbacks wired in
+   layout.tsx (Bebas Neue, Barlow, Montserrat) render in their place via the
+   font stacks defined below in @theme. Drop the licensed files with the exact
+   filenames below and the real Velocity fonts will take over automatically.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: "BigNoodleTitling";
+  src: url("/fonts/big_noodle_titling.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "BigNoodleTitling";
+  src: url("/fonts/big_noodle_titling_oblique.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NexaBold";
+  src: url("/fonts/Nexa_Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MontserratLocal";
+  src: url("/fonts/Montserrat-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Semantic tokens ----------------------------------------------- */
+:root {
+  --background: 40 44% 96%;           /* Cream #f9f7f2 */
+  --foreground: 0 0% 15%;             /* Slate Black #272727 */
+  --primary: 0 0% 15%;
+  --primary-foreground: 40 44% 96%;
+  --primary-light: 0 0% 25%;
+  --accent: 38 35% 64%;               /* Harvest Gold #c7af81 */
+  --accent-light: 38 35% 74%;
+  --accent-dark: 38 35% 54%;
+  --accent-foreground: 0 0% 15%;
+  --secondary: 40 30% 92%;
+  --secondary-foreground: 0 0% 15%;
+  --muted: 40 20% 90%;
+  --muted-foreground: 0 0% 40%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 15%;
+  --border: 40 15% 85%;
+  --input: 40 15% 85%;
+  --ring: 38 35% 64%;
+  --success: 142 70% 40%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 15%;
+  --info: 199 89% 48%;
+  --info-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --radius: 0.5rem;
+
+  /* Placeholder swatches — used by VisualPlaceholder component */
+  --placeholder-bg: 40 18% 90%;
+  --placeholder-border: 40 10% 70%;
+  --placeholder-label: 0 0% 30%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 0 0% 12%;
+    --foreground: 40 44% 96%;
+    --primary: 40 44% 96%;
+    --primary-foreground: 0 0% 12%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 40 44% 96%;
+    --muted: 0 0% 22%;
+    --muted-foreground: 40 20% 70%;
+    --card: 0 0% 15%;
+    --card-foreground: 40 44% 96%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --accent: 38 35% 64%;
+    --accent-light: 38 35% 74%;
+    --accent-foreground: 0 0% 12%;
+    --placeholder-bg: 0 0% 18%;
+    --placeholder-border: 0 0% 35%;
+    --placeholder-label: 40 20% 75%;
+  }
+}
+
+/* ---------- Tailwind theme registration ---------------------------------- */
+@theme inline {
+  /* Colors — all exposed as bg-*, text-*, border-*, ring-* utilities */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-light: hsl(var(--primary-light));
+  --color-accent: hsl(var(--accent));
+  --color-accent-light: hsl(var(--accent-light));
+  --color-accent-dark: hsl(var(--accent-dark));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  /* Font stacks — real font first, Google fallback via CSS variable, then system */
+  --font-velocity: "BigNoodleTitling", var(--font-bebas), "Bebas Neue", system-ui, sans-serif;
+  --font-heading: "NexaBold", var(--font-barlow), "Barlow", system-ui, sans-serif;
+  --font-sans: "MontserratLocal", var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+
+  /* Radii */
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.5rem);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+  --shadow-elegant: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+  --shadow-glow: 0 0 40px rgba(199, 175, 129, 0.35);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1400px;
+}
+
+/* ---------- Base styles --------------------------------------------------- */
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga", "clig", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography hierarchy per locked design system */
+h1 {
+  font-family: var(--font-velocity);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.04em;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+::selection {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Custom utilities --------------------------------------------- */
+@utility container-narrow {
+  max-width: 56rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@utility container-wide {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@utility section-padding {
+  padding-block: 3.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-narrow, .container-wide { padding-inline: 2rem; }
+  .section-padding { padding-block: 5rem; }
+}
+@media (min-width: 1024px) {
+  .container-narrow, .container-wide { padding-inline: 2.5rem; }
+  .section-padding { padding-block: 8rem; }
+}
+
+@utility font-velocity {
+  font-family: var(--font-velocity);
+  letter-spacing: 0.08em;
+}
+@utility font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0.04em;
+}
+
+@utility transition-smooth {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@utility transition-bounce {
+  transition-property: all;
+  transition-duration: 400ms;
+  transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@utility glass {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(249, 247, 242, 0.8));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(199, 175, 129, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+@utility bg-gradient-hero {
+  background-image: linear-gradient(180deg, hsl(40 44% 96%), hsl(40 44% 92%));
+}
+@utility bg-gradient-hero-dark {
+  background-image: linear-gradient(180deg, hsl(0 0% 12%), hsl(0 0% 8%));
+}
+@utility bg-gradient-accent {
+  background-image: linear-gradient(135deg, hsl(0 0% 15%), hsl(38 35% 64%));
+}
+@utility bg-gradient-subtle {
+  background-image: linear-gradient(180deg, hsl(40 44% 96%), hsl(0 0% 100%));
+}
+@utility bg-gradient-section {
+  background-image: linear-gradient(180deg, hsl(40 30% 92%), hsl(40 44% 96%));
+}
+
+@utility shadow-elegant {
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+}
+@utility shadow-card {
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
+}
+@utility shadow-glow {
+  box-shadow: 0 0 40px rgba(199, 175, 129, 0.35);
+}
+@utility shadow-glass {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- Animations --------------------------------------------------- */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
+}
+@utility animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+@utility animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
