@@ -93,14 +93,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- Three pillars ---------- */}
-      <section className="section-padding bg-background">
+      {/* ---------- Three pillars (dark rhythm anchor) ---------- */}
+      <section className="section-padding bg-primary text-primary-foreground">
         <div className="container-wide">
-          <SectionHeader
-            eyebrow="The three pillars"
-            title="Heart. Heading. Hustle."
-            description="Every resource on this site maps to one of the three pillars of the Velocity framework. Culture, strategy, execution — built to be used in order, but read in any order."
-          />
+          <div className="max-w-3xl">
+            <p className="font-heading text-xs uppercase tracking-[0.25em] text-accent">
+              The three pillars
+            </p>
+            <h2 className="mt-3 font-velocity text-primary-foreground text-4xl md:text-5xl lg:text-6xl uppercase tracking-wider">
+              Heart. Heading. Hustle.
+            </h2>
+            <p className="mt-4 text-base md:text-lg leading-relaxed text-primary-foreground/70">
+              Every resource on this site maps to one of the three pillars of
+              the Velocity framework. Culture, strategy, execution — built to
+              be used in order, but read in any order.
+            </p>
+          </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             <PillarCard pillar="heart" />
             <PillarCard pillar="heading" />

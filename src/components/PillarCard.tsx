@@ -4,10 +4,16 @@ import { cn } from "@/lib/utils";
 import type { Pillar } from "@/lib/resources";
 import { pillarMeta } from "@/lib/resources";
 
+/**
+ * Intentional dark surface — renders slate-black-on-cream-text regardless of
+ * background context (dark-section rhythm or light-section standalone use).
+ * Accent gradient at the top is tinted gold-family so each pillar reads as a
+ * subtle variation on the brand accent against the dark card body.
+ */
 const pillarAccent: Record<Pillar, string> = {
-  heart: "from-accent/20 to-transparent",
-  heading: "from-primary/10 to-transparent",
-  hustle: "from-foreground/10 to-transparent",
+  heart: "from-accent/30 to-transparent",
+  heading: "from-accent-light/25 to-transparent",
+  hustle: "from-primary-foreground/10 to-transparent",
 };
 
 type PillarCardProps = {
@@ -22,7 +28,7 @@ export function PillarCard({ pillar, className }: PillarCardProps) {
     <Link
       href={`/${pillar}`}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-6 md:p-8 shadow-card transition-smooth hover:shadow-elegant hover:-translate-y-0.5",
+        "group relative flex flex-col overflow-hidden rounded-xl border border-accent/20 bg-primary-light text-primary-foreground p-6 md:p-8 shadow-elegant transition-smooth hover:shadow-glow hover:-translate-y-0.5",
         className
       )}
     >
@@ -34,16 +40,16 @@ export function PillarCard({ pillar, className }: PillarCardProps) {
         )}
       />
       <div className="relative flex-1 flex flex-col">
-        <span className="font-heading text-xs uppercase tracking-widest text-muted-foreground">
+        <span className="font-heading text-xs uppercase tracking-widest text-primary-foreground/70">
           {tagline}
         </span>
-        <h3 className="font-velocity text-foreground mt-2 text-4xl md:text-5xl uppercase tracking-wider">
+        <h3 className="font-velocity text-primary-foreground mt-2 text-4xl md:text-5xl uppercase tracking-wider">
           {label}
         </h3>
-        <p className="mt-4 text-sm md:text-base leading-relaxed text-muted-foreground">
+        <p className="mt-4 text-sm md:text-base leading-relaxed text-primary-foreground/80">
           {description}
         </p>
-        <div className="mt-6 inline-flex items-center gap-1 font-heading text-xs uppercase tracking-wider text-accent-dark">
+        <div className="mt-6 inline-flex items-center gap-1 font-heading text-xs uppercase tracking-wider text-accent">
           Explore {label}
           <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>

@@ -13,7 +13,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+    <header className="sticky top-0 z-50 border-b border-accent/20 bg-primary text-primary-foreground">
       <div className="container-wide flex h-16 md:h-20 items-center justify-between gap-6">
         <Link
           href="/"
@@ -22,7 +22,7 @@ export function SiteHeader() {
           onClick={() => setOpen(false)}
         >
           Velocity
-          <span className="ml-2 font-heading text-[0.6rem] tracking-[0.4em] text-accent-dark align-middle">
+          <span className="ml-2 font-heading text-[0.6rem] tracking-[0.4em] text-accent align-middle">
             Framework
           </span>
         </Link>
@@ -38,7 +38,9 @@ export function SiteHeader() {
                 href={item.href}
                 className={cn(
                   "font-heading text-xs uppercase tracking-widest transition-smooth",
-                  active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  active
+                    ? "text-primary-foreground"
+                    : "text-primary-foreground/70 hover:text-primary-foreground"
                 )}
               >
                 {item.label}
@@ -57,7 +59,7 @@ export function SiteHeader() {
           type="button"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-md border border-border"
+          className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-md border border-primary-foreground/30 text-primary-foreground"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -65,7 +67,7 @@ export function SiteHeader() {
       </div>
 
       {open ? (
-        <div className="lg:hidden border-t border-border bg-background">
+        <div className="lg:hidden border-t border-primary-foreground/15 bg-primary">
           <nav className="container-wide py-5 flex flex-col gap-1" aria-label="Primary mobile">
             {primaryNav.map((item) => {
               const active =
@@ -78,7 +80,9 @@ export function SiteHeader() {
                   onClick={() => setOpen(false)}
                   className={cn(
                     "rounded-md px-3 py-3 font-heading text-sm uppercase tracking-wider",
-                    active ? "bg-secondary text-foreground" : "text-muted-foreground hover:bg-secondary/60"
+                    active
+                      ? "bg-primary-foreground/10 text-primary-foreground"
+                      : "text-primary-foreground/70 hover:bg-primary-foreground/5 hover:text-primary-foreground"
                   )}
                 >
                   {item.label}
