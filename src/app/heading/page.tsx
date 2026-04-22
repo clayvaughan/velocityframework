@@ -42,10 +42,11 @@ export default function HeadingPage() {
         </div>
       </section>
 
-      <section id="resources" className="section-padding bg-background">
+      <section id="resources" className="section-padding bg-gradient-download">
         <div className="container-wide">
           <SectionHeader
-            eyebrow="Tools in the Heading pillar"
+            tone="dark"
+            eyebrow="Tools in the Heading pillar · Free downloads"
             title="Strategy tools"
             description="Worksheets and templates for the strategy side of the operating system. Released as they're finalized."
           />

@@ -47,11 +47,12 @@ export default function ToolboxPage() {
           <section
             key={pillar}
             id={pillar}
-            className="section-padding odd:bg-background even:bg-gradient-section"
+            className="section-padding bg-gradient-download"
           >
             <div className="container-wide">
               <SectionHeader
-                eyebrow={`Pillar · ${meta.tagline}`}
+                tone="dark"
+                eyebrow={`Pillar · ${meta.tagline} · Free downloads`}
                 title={meta.label}
                 description={meta.description}
               />

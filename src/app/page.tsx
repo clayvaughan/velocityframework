@@ -132,15 +132,21 @@ export default function Home() {
       </section>
 
       {/* ---------- Featured resources ---------- */}
-      <section className="section-padding bg-gradient-section">
+      <section className="section-padding bg-gradient-download">
         <div className="container-wide">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <SectionHeader
-              eyebrow="The toolbox"
+              tone="dark"
+              eyebrow="The toolbox · Free downloads"
               title="Download what you read about"
               description="Every worksheet, script, and scorecard the book references, free. Released in phases — newest on top."
             />
-            <Button asChild variant="link" size="sm">
+            <Button
+              asChild
+              variant="link"
+              size="sm"
+              className="text-accent hover:text-accent-dark"
+            >
               <Link href="/toolbox">
                 View all 13 resources
                 <ArrowRight className="h-3.5 w-3.5" />

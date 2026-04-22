@@ -42,10 +42,11 @@ export default function HustlePage() {
         </div>
       </section>
 
-      <section id="resources" className="section-padding bg-background">
+      <section id="resources" className="section-padding bg-gradient-download">
         <div className="container-wide">
           <SectionHeader
-            eyebrow="Tools in the Hustle pillar"
+            tone="dark"
+            eyebrow="Tools in the Hustle pillar · Free downloads"
             title="Execution tools"
             description="Scorecards, scripts, and dashboards for the weekly rhythm."
           />

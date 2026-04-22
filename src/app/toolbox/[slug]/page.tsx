@@ -98,11 +98,12 @@ export default async function ResourcePage({
       </section>
 
       {/* ---------- Download form ---------- */}
-      <section className="section-padding bg-background">
+      <section className="section-padding bg-gradient-download">
         <div className="container-narrow">
           <SectionHeader
+            tone="dark"
             align="center"
-            eyebrow="Download"
+            eyebrow="Free download"
             title="Grab your copy"
             description="Enter your details and we'll send the PDF to your inbox. You'll also be enrolled in a short nurture sequence tied to this resource."
           />
@@ -131,10 +132,11 @@ export default async function ResourcePage({
       </section>
 
       {related.length > 0 ? (
-        <section className="section-padding bg-gradient-section">
+        <section className="section-padding bg-gradient-download">
           <div className="container-wide">
             <SectionHeader
-              eyebrow={`More ${resource.pillar} tools`}
+              tone="dark"
+              eyebrow={`More ${resource.pillar} downloads`}
               title="Related resources"
             />
             <div className="mt-10 grid gap-6 md:grid-cols-3">

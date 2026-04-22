@@ -10,6 +10,7 @@ type SectionHeaderProps = {
   align?: "start" | "center";
   className?: string;
   as?: "h2" | "h3";
+  tone?: "light" | "dark";
 };
 
 export function SectionHeader({
@@ -19,8 +20,10 @@ export function SectionHeader({
   align = "start",
   as = "h2",
   className,
+  tone = "light",
 }: SectionHeaderProps) {
   const Heading = as;
+  const isDark = tone === "dark";
   return (
     <div
       className={cn(
@@ -30,21 +33,33 @@ export function SectionHeader({
       )}
     >
       {eyebrow ? (
-        <p className="font-heading text-xs uppercase tracking-[0.25em] text-accent-dark">
+        <p
+          className={cn(
+            "font-heading text-xs uppercase tracking-[0.25em]",
+            isDark ? "text-accent" : "text-accent-dark"
+          )}
+        >
           {eyebrow}
         </p>
       ) : null}
       <Heading
         className={cn(
+          "mt-3 uppercase",
           as === "h2"
-            ? "mt-3 font-velocity text-foreground text-4xl md:text-5xl lg:text-6xl uppercase tracking-wider"
-            : "mt-3 font-heading text-foreground text-2xl md:text-3xl uppercase tracking-wide"
+            ? "font-velocity text-4xl md:text-5xl lg:text-6xl tracking-wider"
+            : "font-heading text-2xl md:text-3xl tracking-wide",
+          isDark ? "text-primary-foreground" : "text-foreground"
         )}
       >
         {title}
       </Heading>
       {description ? (
-        <p className="mt-4 text-base md:text-lg leading-relaxed text-muted-foreground">
+        <p
+          className={cn(
+            "mt-4 text-base md:text-lg leading-relaxed",
+            isDark ? "text-primary-foreground/75" : "text-muted-foreground"
+          )}
+        >
           {description}
         </p>
       ) : null}

@@ -267,6 +267,14 @@ h4, h5, h6 {
 @utility bg-gradient-section {
   background-image: linear-gradient(180deg, hsl(40 30% 92%), hsl(40 44% 96%));
 }
+@utility bg-gradient-download {
+  background-color: hsl(0 0% 9%);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(199, 175, 129, 0.18), transparent 70%),
+    linear-gradient(180deg, hsl(0 0% 11%) 0%, hsl(0 0% 8%) 60%, hsl(30 12% 11%) 100%);
+  border-top: 1px solid rgba(199, 175, 129, 0.25);
+  border-bottom: 1px solid rgba(199, 175, 129, 0.18);
+}
 
 @utility shadow-elegant {
   box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);

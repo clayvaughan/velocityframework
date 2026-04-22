@@ -42,10 +42,11 @@ export default function HeartPage() {
         </div>
       </section>
 
-      <section id="resources" className="section-padding bg-background">
+      <section id="resources" className="section-padding bg-gradient-download">
         <div className="container-wide">
           <SectionHeader
-            eyebrow="Tools in the Heart pillar"
+            tone="dark"
+            eyebrow="Tools in the Heart pillar · Free downloads"
             title="Culture tools"
             description="Worksheets and frameworks for the culture side of the operating system. Released as they're finalized."
           />
