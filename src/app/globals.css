@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Restrict Tailwind's class scanning to our actual source. Prevents rogue
+   files (unbound Replit workspace docs, stray templates, AI-generated stubs)
+   from leaking broken utility prototypes like `mask-[url(...)]` into the
+   compiled CSS, which Turbopack then fails to resolve. */
+@source "./**/*.{ts,tsx,js,jsx,mdx}";
+
+/* Belt + suspenders: neutralize the specific placeholder class that has
+   triggered this issue so even if it somehow gets emitted it doesn't break
+   the bundler. `none` avoids any url() parsing entirely. */
+.mask-\[url\(\.\.\.\)\] {
+  mask-image: none !important;
+}
+
 /* =============================================================================
    Velocity Framework — Locked Design System (do not deviate)
    Brand: Slate Black #272727 · Harvest Gold #c7af81 · Cream #f9f7f2
