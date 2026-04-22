@@ -17,7 +17,7 @@ export default function Home() {
       {/* ---------- Hero ---------- */}
       <section className="bg-gradient-hero section-padding relative overflow-hidden">
         <div className="container-wide grid gap-12 lg:grid-cols-12 lg:gap-16 items-center">
-          <div className="lg:col-span-7 animate-fade-in-up">
+          <div className="lg:col-span-6 animate-fade-in-up">
             <p className="font-heading text-xs md:text-sm uppercase tracking-[0.3em] text-accent-dark">
               The Velocity Framework
             </p>
@@ -70,7 +70,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-6">
             <div className="relative">
               <VisualPlaceholder
                 filename="book-cover-hero-3d.png"
@@ -78,7 +78,7 @@ export default function Home() {
                 height={1088}
                 label="Velocity book by Clay Vaughan — 3D cover"
                 rounded="none"
-                className="drop-shadow-2xl mx-auto w-full object-contain"
+                className="drop-shadow-2xl mx-auto w-full max-w-[16rem] sm:max-w-xs lg:max-w-none object-contain"
               />
               <div className="absolute -bottom-5 -left-5 hidden md:block glass rounded-xl px-5 py-3">
                 <p className="font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">
