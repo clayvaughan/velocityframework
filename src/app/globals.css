@@ -84,29 +84,6 @@
   --placeholder-label: 0 0% 30%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 0 0% 12%;
-    --foreground: 40 44% 96%;
-    --primary: 40 44% 96%;
-    --primary-foreground: 0 0% 12%;
-    --secondary: 0 0% 20%;
-    --secondary-foreground: 40 44% 96%;
-    --muted: 0 0% 22%;
-    --muted-foreground: 40 20% 70%;
-    --card: 0 0% 15%;
-    --card-foreground: 40 44% 96%;
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --accent: 38 35% 64%;
-    --accent-light: 38 35% 74%;
-    --accent-foreground: 0 0% 12%;
-    --placeholder-bg: 0 0% 18%;
-    --placeholder-border: 0 0% 35%;
-    --placeholder-label: 40 20% 75%;
-  }
-}
-
 /* ---------- Tailwind theme registration ---------------------------------- */
 @theme inline {
   /* Colors — all exposed as bg-*, text-*, border-*, ring-* utilities */
