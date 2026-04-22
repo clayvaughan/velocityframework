@@ -10,9 +10,11 @@ type ResourceCardProps = {
 };
 
 export function ResourceCard({ resource, className }: ResourceCardProps) {
+  const href = resource.externalHref ?? `/toolbox/${resource.slug}`;
+  const ctaLabel = resource.externalHref ? "Open" : "Download";
   return (
     <Link
-      href={`/toolbox/${resource.slug}`}
+      href={href}
       className={cn(
         "group flex flex-col rounded-xl border border-border bg-card p-6 shadow-card transition-smooth hover:shadow-elegant hover:-translate-y-0.5",
         className
@@ -35,7 +37,7 @@ export function ResourceCard({ resource, className }: ResourceCardProps) {
           {resource.format}
         </span>
         <span className="inline-flex items-center gap-1 font-heading text-[0.7rem] uppercase tracking-widest text-accent-dark">
-          Download
+          {ctaLabel}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </span>
       </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PillarTag } from "@/components/PillarTag";
@@ -38,6 +38,9 @@ export default async function ResourcePage({
   const { slug } = await params;
   const resource = resourceBySlug(slug);
   if (!resource) notFound();
+  // Live interactive tools (e.g., Culture Action Plan) redirect straight to
+  // their real route instead of rendering the generic placeholder detail.
+  if (resource.externalHref) redirect(resource.externalHref);
 
   const related = resourcesByPillar(resource.pillar)
     .filter((r) => r.slug !== resource.slug)

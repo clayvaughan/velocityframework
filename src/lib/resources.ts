@@ -18,6 +18,13 @@ export type Resource = {
   /** HubSpot workflow identifier this form submission will trigger.
    *  Used as a data attribute on the HubSpotFormSlot so Abby can wire it. */
   hubspotWorkflowKey: string;
+  /**
+   * Optional override — when set, the ResourceCard links here instead of
+   * `/toolbox/[slug]`, and the generic /toolbox/[slug] detail page
+   * redirects to this URL. Used for resources that are live interactive
+   * tools (Culture Action Plan) rather than PDF downloads.
+   */
+  externalHref?: string;
 };
 
 /** Master list of the 12 downloadable resources (+ the quiz lives separately at /health-survey). */
@@ -148,11 +155,12 @@ export const resources: Resource[] = [
     number: "01b",
     title: "Culture Action Plan",
     hook:
-      "Companion download to the Culture Health Check quiz — turns your score into a 30-day action plan.",
+      "Turn your Culture Health Check results into a 30/60/90-day plan with calendar events, a leadership email, and an accountability partner — grounded in the Heart section of the book.",
     pillar: "heart",
-    format: "PDF, ~8 pages (draft)",
+    format: "Interactive plan · ~10 minutes",
     owner: "Clay",
     hubspotWorkflowKey: "resource_culture_action_plan",
+    externalHref: "/action-plan",
   },
 ];
 
