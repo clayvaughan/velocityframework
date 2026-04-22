@@ -16,6 +16,7 @@ import { DIMENSION_COPY, TIER_LABEL, TIER_OVERALL, type Tier } from "../quiz/cop
 import type { TeamAggregate } from "../quiz/scoring";
 import { COLOR, FONT, pdfStyles, registerFonts } from "./theme";
 import { FACILITATOR_GUIDE } from "../quiz/facilitator-guide";
+import { ClosingPage } from "./ClosingPage";
 
 registerFonts();
 
@@ -324,83 +325,8 @@ export function TeamReport({
         <Footer label="Page 6 of 7" />
       </Page>
 
-      {/* ---------- Page 7 — CTA ---------- */}
-      <Page size="LETTER" style={pdfStyles.pageDark}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-          }}
-        >
-          <Text
-            style={{ ...pdfStyles.display, fontSize: 14, color: COLOR.cream }}
-          >
-            Velocity
-          </Text>
-          <Text style={{ ...pdfStyles.eyebrow, color: COLOR.gold }}>
-            Next steps
-          </Text>
-        </View>
-        <View style={{ marginTop: 80 }}>
-          <Text style={{ ...pdfStyles.eyebrow, color: COLOR.gold }}>
-            Go deeper
-          </Text>
-          <Text
-            style={[
-              pdfStyles.display,
-              { fontSize: 40, color: COLOR.cream, marginTop: 12 },
-            ]}
-          >
-            Tools for the{"\n"}next 30 days.
-          </Text>
-          <View style={{ ...pdfStyles.goldRule, marginTop: 16 }} />
-          <Text
-            style={{
-              ...pdfStyles.body,
-              color: COLOR.cream,
-              opacity: 0.85,
-              marginTop: 20,
-              maxWidth: 440,
-            }}
-          >
-            Every tool the book references is free on
-            velocityframework.com/toolbox. Download the ones that match the
-            dimensions your team scored lowest on and use them in next
-            month's leadership meeting.
-          </Text>
-        </View>
-        <View style={{ marginTop: 50 }}>
-          <Text style={{ ...pdfStyles.eyebrow, color: COLOR.gold }}>
-            FRE Certification Workshop
-          </Text>
-          <Text
-            style={[
-              pdfStyles.h2,
-              { color: COLOR.cream, fontSize: 20, marginTop: 8 },
-            ]}
-          >
-            Become the leader who runs this.
-          </Text>
-          <Text
-            style={{
-              ...pdfStyles.body,
-              color: COLOR.cream,
-              opacity: 0.85,
-              marginTop: 12,
-              maxWidth: 440,
-            }}
-          >
-            Two days in Austin with Clay Vaughan and Luke Frazier. Twelve
-            seats. Apply at velocityframework.com/workshop.
-          </Text>
-        </View>
-        <View style={[pdfStyles.footer, { color: COLOR.cream, opacity: 0.6 }]} fixed>
-          <Text>© 2026 Clayton Vaughan Strategies</Text>
-          <Text>Page 7 of 7</Text>
-          <Text>velocityframework.com</Text>
-        </View>
-      </Page>
+      {/* ---------- Page 7 — Close: "You've named it. Now move." ---------- */}
+      <ClosingPage pageLabel="Page 7 of 7" />
     </Document>
   );
 }

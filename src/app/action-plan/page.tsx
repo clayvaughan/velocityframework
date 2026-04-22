@@ -94,8 +94,8 @@ export default async function ActionPlanLanding({
       </section>
 
       <section className="section-padding bg-background">
-        <div className="container-wide grid gap-10 lg:grid-cols-12 max-w-5xl">
-          <div className="lg:col-span-7 space-y-4">
+        <div className="container-wide grid gap-10 lg:grid-cols-2 lg:gap-16 max-w-5xl">
+          <div className="space-y-4">
             <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
               What you&rsquo;ll leave with
             </p>
@@ -115,7 +115,7 @@ export default async function ActionPlanLanding({
             </ul>
           </div>
 
-          <div className="lg:col-span-5">
+          <div>
             <div className="rounded-2xl border-2 border-border bg-card p-6 md:p-8 shadow-elegant">
               <p className="font-heading text-xs uppercase tracking-[0.25em] text-accent-dark">
                 Before we start

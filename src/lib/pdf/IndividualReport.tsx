@@ -22,6 +22,7 @@ import type { DimensionScore } from "../quiz/scoring";
 import type { DimensionRecommendation } from "../quiz/recommendations";
 import { COLOR, FONT, pdfStyles, registerFonts } from "./theme";
 import { FACILITATOR_GUIDE } from "../quiz/facilitator-guide";
+import { ClosingPage } from "./ClosingPage";
 
 registerFonts();
 
@@ -354,83 +355,8 @@ export function IndividualReport({
         <Footer pageLabel="Page 5 of 6" />
       </Page>
 
-      {/* ---------- Page 6 — Toolbox + Workshop CTA ---------- */}
-      <Page size="LETTER" style={pdfStyles.pageDark}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-          }}
-        >
-          <Text
-            style={{ ...pdfStyles.display, fontSize: 14, color: COLOR.cream }}
-          >
-            Velocity
-          </Text>
-          <Text style={{ ...pdfStyles.eyebrow, color: COLOR.gold }}>
-            Next steps
-          </Text>
-        </View>
-        <View style={{ marginTop: 80 }}>
-          <Text style={{ ...pdfStyles.eyebrow, color: COLOR.gold }}>
-            Go deeper
-          </Text>
-          <Text
-            style={[
-              pdfStyles.display,
-              { fontSize: 40, color: COLOR.cream, marginTop: 12 },
-            ]}
-          >
-            The whole toolbox{"\n"}is free.
-          </Text>
-          <View style={{ ...pdfStyles.goldRule, marginTop: 16 }} />
-          <Text
-            style={{
-              ...pdfStyles.body,
-              color: COLOR.cream,
-              opacity: 0.85,
-              marginTop: 20,
-              maxWidth: 440,
-            }}
-          >
-            Every resource referenced in this report — worksheets, scripts,
-            scorecards, and accountability maps — is free on
-            velocityframework.com/toolbox. No paywall, no funnel tricks.
-          </Text>
-        </View>
-        <View style={{ marginTop: 50 }}>
-          <Text style={{ ...pdfStyles.eyebrow, color: COLOR.gold }}>
-            FRE Certification Workshop
-          </Text>
-          <Text
-            style={[
-              pdfStyles.h2,
-              { color: COLOR.cream, fontSize: 20, marginTop: 8 },
-            ]}
-          >
-            Ready to run this inside a client business?
-          </Text>
-          <Text
-            style={{
-              ...pdfStyles.body,
-              color: COLOR.cream,
-              opacity: 0.85,
-              marginTop: 12,
-              maxWidth: 440,
-            }}
-          >
-            Two days in Austin with Clay Vaughan and Luke Frazier. Twelve seats.
-            Full Heart → Heading → Hustle operating system, worked through
-            end-to-end. Apply at velocityframework.com/workshop.
-          </Text>
-        </View>
-        <View style={[pdfStyles.footer, { color: COLOR.cream, opacity: 0.6 }]} fixed>
-          <Text>© 2026 Clayton Vaughan Strategies</Text>
-          <Text>Page 6 of 6</Text>
-          <Text>velocityframework.com</Text>
-        </View>
-      </Page>
+      {/* ---------- Page 6 — Close: "You've named it. Now move." ---------- */}
+      <ClosingPage pageLabel="Page 6 of 6" />
     </Document>
   );
 }
