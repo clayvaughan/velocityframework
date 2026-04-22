@@ -68,8 +68,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${bebas.variable} ${barlow.variable} ${montserrat.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="bg-background text-foreground min-h-full flex flex-col">
+      <body
+        className="bg-background text-foreground min-h-full flex flex-col"
+        suppressHydrationWarning
+      >
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

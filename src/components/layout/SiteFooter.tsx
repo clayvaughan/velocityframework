@@ -6,8 +6,12 @@ import {
   siteConfig,
 } from "@/config/site";
 
+// Computed once at module load (server side) so the value is stable across
+// the request lifecycle and can never drift between SSR and hydration.
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 export function SiteFooter() {
-  const year = new Date().getFullYear();
+  const year = COPYRIGHT_YEAR;
 
   return (
     <footer className="mt-auto border-t border-border bg-secondary/40">
