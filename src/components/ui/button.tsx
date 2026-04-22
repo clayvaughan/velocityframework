@@ -23,7 +23,7 @@ const buttonVariants = cva(
         cta:
           "bg-accent text-accent-foreground shadow-card hover:bg-accent-dark hover:shadow-glow",
         "gold-outline":
-          "border-2 border-accent bg-transparent text-accent-foreground hover:bg-accent hover:text-accent-foreground",
+          "border-2 border-accent bg-transparent text-accent hover:bg-accent hover:text-accent-foreground",
         success:
           "bg-success text-success-foreground hover:opacity-90",
         warning:
