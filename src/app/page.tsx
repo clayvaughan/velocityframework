@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Download, Users } from "lucide-react";
+import { ArrowRight, BookOpen, Download, Star, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VisualPlaceholder } from "@/components/VisualPlaceholder";
 import { PillarCard } from "@/components/PillarCard";
@@ -33,7 +33,21 @@ export default function Home() {
               book <em>Velocity</em> — worksheets, scripts, scorecards, and
               accountability maps for Heart, Heading, and Hustle.
             </p>
-            <div className="mt-9 flex flex-wrap gap-4">
+            <div
+              className="mt-7 inline-flex items-center gap-3"
+              aria-label="Rated 4.9 out of 5 by readers"
+            >
+              <span className="flex items-center gap-0.5 text-accent-dark" aria-hidden="true">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Star key={i} className="h-5 w-5 fill-current" strokeWidth={0} />
+                ))}
+              </span>
+              <span className="font-heading text-sm uppercase tracking-widest text-foreground">
+                <span className="font-velocity text-base tracking-wider">4.9</span>
+                <span className="text-muted-foreground"> / 5 reader rating</span>
+              </span>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-4">
               <Button asChild variant="cta" size="lg">
                 <Link href="/toolbox">
                   Browse the Toolbox
