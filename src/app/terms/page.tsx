@@ -13,7 +13,7 @@ export default function TermsPage() {
         <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
           Legal
         </p>
-        <h1 className="font-velocity text-4xl md:text-5xl uppercase tracking-wider">
+        <h1 className="font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider">
           Terms of Service
         </h1>
         <p className="text-muted-foreground">

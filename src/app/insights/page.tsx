@@ -16,7 +16,7 @@ export default function InsightsPage() {
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
             Coming later in 2026
           </p>
-          <h1 className="mt-4 font-velocity text-5xl md:text-7xl uppercase tracking-wider">
+          <h1 className="mt-4 font-velocity text-foreground text-5xl md:text-7xl uppercase tracking-wider">
             Insights
           </h1>
           <p className="mt-6 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-2xl">

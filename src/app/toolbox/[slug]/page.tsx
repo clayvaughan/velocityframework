@@ -62,7 +62,7 @@ export default async function ResourcePage({
               </span>
             </div>
 
-            <h1 className="font-velocity text-4xl md:text-5xl lg:text-6xl uppercase tracking-wider leading-[1]">
+            <h1 className="font-velocity text-foreground text-4xl md:text-5xl lg:text-6xl uppercase tracking-wider leading-[1]">
               {resource.title}
             </h1>
             <p className="text-lg md:text-xl leading-relaxed text-muted-foreground max-w-xl">

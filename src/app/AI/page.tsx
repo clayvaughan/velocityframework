@@ -112,7 +112,7 @@ export default function AIPage() {
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark inline-flex items-center gap-2">
             <Sparkles className="h-3.5 w-3.5" /> AI Tools
           </p>
-          <h1 className="mt-4 font-velocity text-5xl md:text-7xl uppercase tracking-wider">
+          <h1 className="mt-4 font-velocity text-foreground text-5xl md:text-7xl uppercase tracking-wider">
             The tools I actually use
           </h1>
           <p className="mt-6 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-2xl">

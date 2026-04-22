@@ -18,7 +18,7 @@ export default function ContactPage() {
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
             Get in touch
           </p>
-          <h1 className="mt-4 font-velocity text-5xl md:text-7xl uppercase tracking-wider">
+          <h1 className="mt-4 font-velocity text-foreground text-5xl md:text-7xl uppercase tracking-wider">
             Contact
           </h1>
           <p className="mt-6 text-base md:text-lg leading-relaxed text-muted-foreground max-w-xl mx-auto">

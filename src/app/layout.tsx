@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Bebas_Neue, Barlow, Montserrat } from "next/font/google";
+import { Anton, Barlow, Montserrat } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { siteConfig } from "@/config/site";
@@ -18,15 +18,19 @@ const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
    These Google Fonts stand in for the licensed Velocity brand fonts until the
    real files land in /public/fonts/. Each one exposes a CSS variable that the
    font stacks in globals.css reference:
-     BigNoodleTitling -> --font-bebas
+     BigNoodleTitling -> --font-anton   (Anton: tall condensed display, heavy
+                                          strokes — visually much closer to
+                                          the real BigNoodleTitling weight than
+                                          Bebas Neue, which reads thin at hero
+                                          sizes against the cream background)
      NexaBold         -> --font-barlow
      Montserrat       -> --font-montserrat
    When the licensed files arrive, the real fonts take precedence automatically.
    --------------------------------------------------------------------------- */
-const bebas = Bebas_Neue({
+const anton = Anton({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-bebas",
+  variable: "--font-anton",
   display: "swap",
 });
 
@@ -76,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${bebas.variable} ${barlow.variable} ${montserrat.variable} h-full antialiased`}
+      className={`${anton.variable} ${barlow.variable} ${montserrat.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body

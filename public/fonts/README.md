@@ -6,7 +6,7 @@ needed when files are swapped, only the filenames must stay identical.
 
 | File | Weight | Style | Status |
 | ---- | ------ | ----- | ------ |
-| `big_noodle_titling.ttf` | 400 | normal | **Stand-in (Bebas Neue Regular)** — replace with the licensed BigNoodleTitling file |
+| `big_noodle_titling.ttf` | 400 | normal | **Stand-in (Bebas Neue Regular — swap to the licensed BigNoodleTitling file).** Hero display falls back to Google Fonts Anton (heavier-stroke display font) in the web-font stack while this local file is a thin stand-in. |
 | `big_noodle_titling_oblique.ttf` | 400 | italic | **Stand-in (Bebas Neue Regular)** — replace with the licensed BigNoodleTitling Italic file |
 | `Nexa_Bold.otf` | 700 | normal | **Stand-in (Barlow Bold)** — replace with the licensed Nexa Bold file |
 | `Montserrat-Regular.ttf` | 400 | normal | Open-source (Google Fonts Montserrat) — final |

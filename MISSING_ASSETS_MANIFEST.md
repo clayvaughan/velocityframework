@@ -18,8 +18,13 @@ Two kinds of placeholders per the locked spec:
 ## Brand fonts — `/public/fonts/`
 
 Licensed Velocity brand font files. Until these arrive, `@font-face` rules in
-`src/app/globals.css` fail silently and Google Font fallbacks (Bebas Neue,
-Barlow, Montserrat) render instead.
+`src/app/globals.css` fail silently and Google Font fallbacks (**Anton** for
+the BigNoodleTitling display slot, Barlow for NexaBold, Montserrat for body)
+render instead. Anton replaced Bebas Neue as the display fallback on
+2026-04-22 because Bebas Neue's thin 400 strokes read faint at hero sizes on
+the cream background (the color was slate black, but visual weight was
+insufficient); Anton preserves the tall-condensed display character with
+substantially heavier strokes.
 
 | Filename | Format | Weight/Style | Purpose |
 | -------- | ------ | ------------ | ------- |

@@ -152,7 +152,7 @@ export default function WorkshopPage() {
             <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
               A note from Clay
             </p>
-            <h2 className="font-velocity text-4xl md:text-5xl uppercase tracking-wider">
+            <h2 className="font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider">
               Why this workshop exists
             </h2>
             <div className="space-y-4 text-base md:text-lg leading-relaxed text-muted-foreground">
@@ -193,7 +193,7 @@ export default function WorkshopPage() {
                 <p className="font-heading text-xs uppercase tracking-widest text-accent-dark">
                   {d.day}
                 </p>
-                <h3 className="mt-2 font-velocity text-3xl md:text-4xl uppercase tracking-wider">
+                <h3 className="mt-2 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider">
                   {d.subtitle}
                 </h3>
                 <ul className="mt-6 space-y-3">

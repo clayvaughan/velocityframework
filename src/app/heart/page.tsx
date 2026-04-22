@@ -25,7 +25,7 @@ export default function HeartPage() {
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
             Pillar 01 · {meta.tagline}
           </p>
-          <h1 className="mt-4 font-velocity text-6xl md:text-8xl lg:text-9xl uppercase tracking-wider">
+          <h1 className="mt-4 font-velocity text-foreground text-6xl md:text-8xl lg:text-9xl uppercase tracking-wider">
             Heart
           </h1>
           <p className="mt-6 text-lg md:text-xl leading-relaxed text-muted-foreground max-w-2xl">

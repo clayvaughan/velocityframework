@@ -37,7 +37,7 @@ export function PillarCard({ pillar, className }: PillarCardProps) {
         <span className="font-heading text-xs uppercase tracking-widest text-muted-foreground">
           {tagline}
         </span>
-        <h3 className="font-velocity mt-2 text-4xl md:text-5xl uppercase tracking-wider">
+        <h3 className="font-velocity text-foreground mt-2 text-4xl md:text-5xl uppercase tracking-wider">
           {label}
         </h3>
         <p className="mt-4 text-sm md:text-base leading-relaxed text-muted-foreground">

@@ -21,7 +21,7 @@ export default function Home() {
             <p className="font-heading text-xs md:text-sm uppercase tracking-[0.3em] text-accent-dark">
               The Velocity Framework
             </p>
-            <h1 className="mt-5 font-velocity text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-wider">
+            <h1 className="mt-5 font-velocity text-foreground text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[0.95] tracking-wider">
               Less Chaos.
               <br />
               More Profit.
@@ -149,7 +149,7 @@ export default function Home() {
             <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
               About the author
             </p>
-            <h2 className="font-velocity text-4xl md:text-5xl uppercase tracking-wider">
+            <h2 className="font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider">
               Clay Vaughan
             </h2>
             <p className="text-base md:text-lg leading-relaxed text-muted-foreground max-w-2xl">

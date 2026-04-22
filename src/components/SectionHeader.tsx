@@ -37,8 +37,8 @@ export function SectionHeader({
       <Heading
         className={cn(
           as === "h2"
-            ? "mt-3 font-velocity text-4xl md:text-5xl lg:text-6xl uppercase tracking-wider"
-            : "mt-3 font-heading text-2xl md:text-3xl uppercase tracking-wide"
+            ? "mt-3 font-velocity text-foreground text-4xl md:text-5xl lg:text-6xl uppercase tracking-wider"
+            : "mt-3 font-heading text-foreground text-2xl md:text-3xl uppercase tracking-wide"
         )}
       >
         {title}

@@ -22,10 +22,10 @@ export default function BookPage() {
             <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
               The book
             </p>
-            <h1 className="mt-4 font-velocity text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.95] tracking-wider">
+            <h1 className="mt-4 font-velocity text-foreground text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.95] tracking-wider">
               Velocity
             </h1>
-            <p className="mt-4 font-heading text-lg md:text-2xl uppercase tracking-wide text-foreground/80">
+            <p className="mt-4 font-heading text-lg md:text-2xl uppercase tracking-wide text-foreground">
               Less Chaos. More Profit. Real Growth.
             </p>
             <p className="mt-6 text-base md:text-lg leading-relaxed text-muted-foreground max-w-xl">
