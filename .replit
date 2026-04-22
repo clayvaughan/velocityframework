@@ -1,16 +1,18 @@
 modules = ["nodejs-20"]
 
 [[ports]]
-localPort = 3000
+# Replit Preview proxies externalPort = 80, so this MUST point at the
+# port the dev server actually listens on. Aligned to 5000.
+localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 3000
+externalPort = 3000
 
 [[ports]]
 localPort = 3001
 externalPort = 3001
-
-[[ports]]
-localPort = 5000
-externalPort = 5000
 
 [agent]
 expertMode = true
@@ -36,13 +38,13 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-# Bind Next.js to port 3000 to match the [[ports]] mapping above
-# (localPort = 3000 -> externalPort = 80). Replit Preview hits external
-# port 80, so the dev server MUST listen on 3000 for Preview to render.
-# Previously this was port 5000, which left Preview pointing at a port
-# nothing was listening on, producing "encountered an error".
-args = "npx next dev -p 3000 -H 0.0.0.0"
-waitForPort = 3000
+# Bind Next.js to port 5000 on 0.0.0.0. Replit Preview proxies external
+# port 80, which we map to localPort 5000 in the [[ports]] section above.
+# Port 5000 is the Replit convention for web app dev servers; this also
+# matches the `dev` script in package.json so `npm run dev` in the Shell
+# behaves identically to the Replit workflow.
+args = "npx next dev -p 5000 -H 0.0.0.0"
+waitForPort = 5000
 
 [postMerge]
 path = "scripts/post-merge.sh"
