@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
+  // Pin Turbopack's workspace root to this project so it can resolve
+  // the `next` package reliably (otherwise it may infer src/app as root).
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   // Allow Replit preview subdomain to reach the Next.js dev server.
   // Add additional origins here if Replit rotates the subdomain.
   allowedDevOrigins: [
