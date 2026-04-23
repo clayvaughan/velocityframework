@@ -78,11 +78,12 @@ export const resources: Resource[] = [
     number: "06",
     title: "Favorite Customer Profile Worksheet",
     hook:
-      "The first step to better marketing isn't better messaging — it's a clearer picture of who you're trying to reach.",
+      "Define the exact customer your business does its best work for. Used by your entire team for marketing, sales qualification, referrals, and proposals.",
     pillar: "heading",
-    format: "Fillable PDF, 6–8 pages",
+    format: "Interactive tool · ~15 minutes",
     owner: "Clay (template) · Luke (adapt)",
     hubspotWorkflowKey: "resource_fcp_worksheet",
+    externalHref: "/favorite-customer-profile",
   },
   {
     slug: "scorecard-example",

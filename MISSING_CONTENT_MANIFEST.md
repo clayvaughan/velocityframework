@@ -1,6 +1,6 @@
 # Missing Content Manifest
 
-Both the Culture Health Check and Culture Action Plan ship with Clay-approved final copy. The outstanding items are short — calendar/anecdote placeholders plus one confirmation pass.
+The Culture Health Check, Culture Action Plan, and Favorite Customer Profile Worksheet all ship with Clay-approved final copy. The outstanding items are short — calendar/anecdote placeholders, FCP nurture copy awaiting final, plus one confirmation pass.
 
 ---
 
@@ -51,10 +51,25 @@ Everything else is verbatim from Clay's final specs:
 
 ---
 
+## 4. Favorite Customer Profile — 4 draft nurture emails awaiting final copy
+
+The FCP nurture sequence (`src/lib/fcp/nurture-sequence.ts`) ships with DRAFT bodies flagged `[DRAFT — awaiting Clay]`. All four email subjects and send-day cadence are Clay-approved; only the body copy is placeholder awaiting final language.
+
+| Sequence · Email | Subject (final) | Body (draft) |
+| ---------------- | --------------- | ------------ |
+| Build Around Your Favorite Customer · Email 1 (day 0) | "Your Favorite Customer Profiles are saved — here's what to do next" | [DRAFT — awaiting Clay] |
+| · Email 2 (day 3) | "The messaging question that breaks most service businesses" | [DRAFT — awaiting Clay] |
+| · Email 3 (day 10) | "Why your referral requests aren't working (and the fix)" | [DRAFT — awaiting Clay] |
+| · Email 4 (day 21) | "The test: can your team describe your Favorite Customer in 30 seconds?" | [DRAFT — awaiting Clay] |
+
+**Action:** Replace the four draft bodies in `src/lib/fcp/nurture-sequence.ts` with final copy.
+
+---
+
 ## Infrastructure awaiting Clay / Abby (not content)
 
-- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for both Health Check and Action Plan flows. Silent no-op until the token lands in Replit Secrets.
-- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check, in `hubspot.ts`) and `ACTION_PLAN_SEQUENCE_ID` (Action Plan, in `hubspot.ts`) once Abby has created the corresponding HubSpot sequences with the final email copy.
+- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, and FCP flows. Silent no-op until the token lands in Replit Secrets.
+- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), and `FCP_SEQUENCE_ID` (FCP Worksheet) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
 - **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id.
-- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql` and `src/lib/action-plan/SCHEMA.sql` in the velocityframework Supabase SQL editor. They can be run in any order; the Action Plan schema's `health_check_id` foreign key expects `quiz_responses` to exist first, so run Health Check schema before Action Plan schema if doing them fresh.
+- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, and `src/lib/fcp/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); FCP schema has no cross-feature foreign keys and can run any time after.
 - **Team-member optional email capture** (Health Check team mode) — Deferred, not wired; team responses stay fully anonymous unless/until Clay decides to add it.
