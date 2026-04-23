@@ -13,7 +13,20 @@ export const metadata: Metadata = {
 };
 
 const pillar = "hustle" as const;
-const resources = resourcesByPillar(pillar);
+const hustleResources = resourcesByPillar(pillar);
+/**
+ * Reorder for the Hustle hub: put the Good Agency Scorecard Example first
+ * — it's the first substantive interactive resource in the pillar and the
+ * anchor that the other Hustle tools (sales script, dashboards, etc.) build
+ * around. Other tabs (/toolbox) keep their default order.
+ */
+const FEATURED_HUSTLE_SLUGS = ["scorecard-example"];
+const resources = [
+  ...FEATURED_HUSTLE_SLUGS.map((slug) =>
+    hustleResources.find((r) => r.slug === slug)
+  ).filter((r): r is NonNullable<typeof r> => Boolean(r)),
+  ...hustleResources.filter((r) => !FEATURED_HUSTLE_SLUGS.includes(r.slug)),
+];
 
 export default function HustlePage() {
   const meta = pillarMeta[pillar];

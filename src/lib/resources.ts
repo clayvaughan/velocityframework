@@ -91,11 +91,12 @@ export const resources: Resource[] = [
     number: "07",
     title: "Good Agency Scorecard Example",
     hook:
-      "The scorecard Good Agency uses to measure team performance. Adapt it, build your own.",
+      "See what a scorecard that runs a person looks like. A real Director of Operations scorecard from Good Agency — core values, GWC, OKRs, KPIs, responsibilities, and competencies.",
     pillar: "hustle",
-    format: "3–4 page PDF",
+    format: "Reference PDF · 8 pages",
     owner: "Abby (example) · Clay (narrative)",
     hubspotWorkflowKey: "resource_scorecard_example",
+    externalHref: "/good-agency-scorecard-example",
   },
   {
     slug: "messaging-proof-bundle",

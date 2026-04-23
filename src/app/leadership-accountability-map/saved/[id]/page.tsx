@@ -205,14 +205,25 @@ export default async function AccountabilitySavedPage({
             and RevOps still report to different leaders at most growing
             companies. Unify them into one revenue team.
           </p>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/toolbox/unified-revenue-map"
               className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
             >
               Open the Unified Revenue Map →
             </Link>
+            <Link
+              href="/good-agency-scorecard-example"
+              className="inline-flex items-center gap-2 rounded-lg border border-accent/40 bg-transparent text-primary-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide transition-smooth hover:bg-accent/10 hover:border-accent"
+            >
+              Or grab the Scorecard Example →
+            </Link>
           </div>
+          <p className="mt-4 text-xs text-primary-foreground/60 max-w-2xl">
+            The Scorecard Example turns each seat you just named into an
+            individual-level accountability tool. Same structure Good Agency
+            uses for every role on the team.
+          </p>
         </div>
       </section>
     </>
