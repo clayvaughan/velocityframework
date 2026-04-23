@@ -110,19 +110,33 @@ The Scorecard Example nurture sequence (`src/lib/scorecard-example/nurture-seque
 
 ---
 
-## 8. Deferred navigation hooks (post-Scorecard Example build)
+## 8. Good Agency Dashboard Example — 3 draft nurture emails awaiting final copy
 
-The Scorecard Example build skipped two navigation cross-links because their target routes don't exist yet. Wire each when the referenced tool ships:
+The Dashboard Example nurture sequence (`src/lib/dashboard-example/nurture-sequence.ts`) ships with DRAFT bodies flagged `[DRAFT — awaiting Clay]`. All three email subjects and send-day cadence are Clay-approved; only the body copy is placeholder awaiting final language.
 
-- **Good Agency Dashboard Example** — when `/good-agency-dashboard-example/thanks/[id]` is built, add a "Next move · Scorecard Example" card to that thanks page pointing at `/good-agency-scorecard-example`. Framing: "Dashboards measure the company. Scorecards measure the person. Here's what one looks like."
-- **Unified Revenue Team Accountability Map** — the Leadership Accountability Map saved page (`src/app/leadership-accountability-map/saved/[id]/page.tsx`) still links its primary "Next move" to `/toolbox/unified-revenue-map`, which is a placeholder resource route. When the real `/revenue-team-accountability-map` tool ships, point that Link's `href` at it.
+| Sequence · Email | Subject (final) | Body (draft) |
+| ---------------- | --------------- | ------------ |
+| From Dashboard to Discipline · Email 1 (day 0) | "Your Good Agency Dashboard Example is in — here's how to use it" | [DRAFT — awaiting Clay] |
+| · Email 2 (day 7) | "The one metric most leaders are missing (and why)" | [DRAFT — awaiting Clay] |
+| · Email 3 (day 21) | "When to add more metrics, and when to cut them" | [DRAFT — awaiting Clay] |
+
+**Action:** Replace the three draft bodies in `src/lib/dashboard-example/nurture-sequence.ts` with final copy.
+
+---
+
+## 9. Deferred navigation hooks
+
+Cross-links that couldn't be wired yet because the target route doesn't exist. Wire each when the referenced tool ships:
+
+- **Unified Revenue Team Accountability Map** — the Leadership Accountability Map saved page (`src/app/leadership-accountability-map/saved/[id]/page.tsx`) still links its primary "Next move" to `/toolbox/unified-revenue-map`, which is a placeholder resource route. The Dashboard Example thanks page (`src/app/good-agency-dashboard-example/thanks/[id]/page.tsx`) links its primary "Next move" to `/revenue-team-accountability-map`, which is also not yet a real route (it currently resolves to the generic `/toolbox/[slug]` placeholder page for the `unified-revenue-map` resource). When the real interactive Revenue Team Accountability Map tool ships, both of these links will light up automatically once the route is created — no file changes needed in the linking pages themselves since the URLs are already the target the new tool will claim.
+- **Revenue Team Accountability Map saved page** — when that tool is built, its saved page needs to recommend the Dashboard Example as a "Next move" per the original spec ("Now see what the weekly numbers look like in practice — download Clay's actual revenue team dashboard.").
 
 ---
 
 ## Infrastructure awaiting Clay / Abby (not content)
 
-- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, FCP, Messaging & Proof, Leadership Accountability Map, and Scorecard Example flows. Silent no-op until the token lands in Replit Secrets.
-- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), `FCP_SEQUENCE_ID` (FCP Worksheet), `MESSAGING_SEQUENCE_ID` (Messaging & Proof), `ACCOUNTABILITY_SEQUENCE_ID` (Leadership Accountability Map), and `SCORECARD_EXAMPLE_SEQUENCE_ID` (Scorecard Example) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
-- **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id. The Scorecard Example landing page microcopy promises "A copy has been sent to your email," but the actual send-on-intake transactional email is not yet wired — users can still download the PDF directly from the thanks page via the download button.
-- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, `src/lib/fcp/SCHEMA.sql`, `src/lib/messaging/SCHEMA.sql`, `src/lib/accountability/SCHEMA.sql`, and `src/lib/scorecard-example/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); FCP, Messaging, Accountability, and Scorecard Example schemas have no cross-feature foreign keys and can run any time after.
+- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, FCP, Messaging & Proof, Leadership Accountability Map, Scorecard Example, and Dashboard Example flows. Silent no-op until the token lands in Replit Secrets.
+- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), `FCP_SEQUENCE_ID` (FCP Worksheet), `MESSAGING_SEQUENCE_ID` (Messaging & Proof), `ACCOUNTABILITY_SEQUENCE_ID` (Leadership Accountability Map), `SCORECARD_EXAMPLE_SEQUENCE_ID` (Scorecard Example), and `DASHBOARD_EXAMPLE_SEQUENCE_ID` (Dashboard Example) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
+- **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id. The Scorecard Example and Dashboard Example landing pages promise "A copy has been sent to your email," but the actual send-on-intake transactional email is not yet wired — users can still download the PDF directly from the thanks page via the download button.
+- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, `src/lib/fcp/SCHEMA.sql`, `src/lib/messaging/SCHEMA.sql`, `src/lib/accountability/SCHEMA.sql`, `src/lib/scorecard-example/SCHEMA.sql`, and `src/lib/dashboard-example/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); FCP, Messaging, Accountability, Scorecard Example, and Dashboard Example schemas have no cross-feature foreign keys and can run any time after.
 - **Team-member optional email capture** (Health Check team mode) — Deferred, not wired; team responses stay fully anonymous unless/until Clay decides to add it.

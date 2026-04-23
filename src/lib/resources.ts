@@ -57,11 +57,12 @@ export const resources: Resource[] = [
     number: "04",
     title: "Good Agency Dashboard Example",
     hook:
-      "The actual dashboard we use to run a multi-million-dollar marketing consultancy. Steal it.",
+      "See what a weekly dashboard that actually runs a business looks like. Four real dashboards from Good Agency across Leadership, Revenue, Operations, and Administration.",
     pillar: "heading",
-    format: "Multi-page PDF, 4–5 pages",
+    format: "Reference PDF · 8 pages",
     owner: "Abby (screenshot) · Clay (narrative)",
     hubspotWorkflowKey: "resource_dashboard_example",
+    externalHref: "/good-agency-dashboard-example",
   },
   {
     slug: "fre-job-description",

@@ -13,7 +13,23 @@ export const metadata: Metadata = {
 };
 
 const pillar = "heading" as const;
-const resources = resourcesByPillar(pillar);
+const headingResources = resourcesByPillar(pillar);
+/**
+ * Reorder for the Heading hub: put the live interactive and reference tools
+ * first — FCP Worksheet, Messaging & Proof Checklist, Dashboard Example.
+ * The remaining placeholder-backed resources keep their default order after.
+ */
+const FEATURED_HEADING_SLUGS = [
+  "fcp-worksheet",
+  "messaging-proof-bundle",
+  "dashboard-example",
+];
+const resources = [
+  ...FEATURED_HEADING_SLUGS.map((slug) =>
+    headingResources.find((r) => r.slug === slug)
+  ).filter((r): r is NonNullable<typeof r> => Boolean(r)),
+  ...headingResources.filter((r) => !FEATURED_HEADING_SLUGS.includes(r.slug)),
+];
 
 export default function HeadingPage() {
   const meta = pillarMeta[pillar];
