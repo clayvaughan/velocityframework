@@ -34,11 +34,12 @@ export const resources: Resource[] = [
     number: "02",
     title: "Leadership Accountability Map",
     hook:
-      "Define who owns what on your leadership team — and eliminate the gray areas that kill execution.",
+      "Name the five seats every growing business needs to fill. Assign owners, missions, and accountability — so ownership stops falling through the cracks.",
     pillar: "heart",
-    format: "Fillable PDF, 4–6 pages",
+    format: "Interactive tool · ~15 minutes",
     owner: "Clay (content) · Lindsay (design)",
     hubspotWorkflowKey: "resource_leadership_accountability_map",
+    externalHref: "/leadership-accountability-map",
   },
   {
     slug: "unified-revenue-map",

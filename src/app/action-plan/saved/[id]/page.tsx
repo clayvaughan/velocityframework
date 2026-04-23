@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { AlertCircle, Bookmark } from "lucide-react";
@@ -103,6 +104,14 @@ export default async function SavedPage({ params }: { params: Params }) {
   const googleUrls = allCalendarUrls(calendarCtx, "google");
   const outlookUrls = allCalendarUrls(calendarCtx, "outlook");
 
+  // If the user's plan targets ownership toxins, surface the Leadership
+  // Accountability Map as the "Next move" — it's the execution layer that
+  // directly addresses those toxins from the Heart section of the book.
+  const OWNERSHIP_TOXIN_IDS: ToxinId[] = ["no_ownership", "unclear_authority"];
+  const showAccountabilityNextMove = resolved.some((r) =>
+    OWNERSHIP_TOXIN_IDS.includes(r.toxinId)
+  );
+
   const emailCtx = {
     firstName: plan.first_name,
     reassessmentDays,
@@ -196,6 +205,33 @@ export default async function SavedPage({ params }: { params: Params }) {
           </div>
         </div>
       </section>
+
+      {showAccountabilityNextMove ? (
+        <section className="section-padding bg-gradient-section">
+          <div className="container-wide max-w-5xl">
+            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+              Next move · Drill into ownership
+            </p>
+            <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
+              Your plan targets ownership. This is the tool that fixes it.
+            </h2>
+            <p className="mt-4 max-w-3xl text-muted-foreground">
+              You flagged &ldquo;no ownership&rdquo; or &ldquo;unclear
+              authority&rdquo; as a focus area. The Leadership Accountability
+              Map is the execution layer — name the seats, assign the owners,
+              lock the reflection rhythm. 15 minutes, free, no account.
+            </p>
+            <div className="mt-6">
+              <Link
+                href="/leadership-accountability-map"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
+              >
+                Build your Accountability Map →
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="section-padding bg-primary text-primary-foreground">
         <div className="container-wide max-w-3xl">

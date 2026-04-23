@@ -233,6 +233,7 @@ export async function sendQuizResultEmail(_input: {
 const ACTION_PLAN_SEQUENCE_ID: string | null = null;
 const FCP_SEQUENCE_ID: string | null = null;
 const MESSAGING_SEQUENCE_ID: string | null = null;
+const ACCOUNTABILITY_SEQUENCE_ID: string | null = null;
 
 export async function syncActionPlanContact(input: {
   email: string;
@@ -519,6 +520,106 @@ export async function syncMessagingChecklistContact(input: {
     if (MESSAGING_SEQUENCE_ID) {
       console.info(
         `[hubspot] Would enroll ${json.id} in Messaging sequence ${MESSAGING_SEQUENCE_ID}`
+      );
+    }
+
+    return { ok: true, contactId: json.id };
+  } catch (err) {
+    return {
+      ok: false,
+      skipped: false,
+      reason: "api_error",
+      error: String(err),
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Leadership Accountability Map contact sync
+// ---------------------------------------------------------------------------
+
+export async function syncAccountabilityMapContact(input: {
+  email: string;
+  firstName: string;
+  companyName: string;
+  role: string;
+  roleCount: number;
+  nextReflectionDateISO: string | null;
+}): Promise<HubSpotSyncResult> {
+  if (!token) {
+    console.warn(
+      "[hubspot] HUBSPOT_PRIVATE_APP_TOKEN not set — skipping Accountability Map sync for",
+      input.email
+    );
+    return { ok: false, skipped: true, reason: "no_token" };
+  }
+
+  const properties: Record<string, string> = {
+    email: input.email,
+    firstname: input.firstName,
+    company: input.companyName,
+    role: input.role,
+    accountability_map_completed_at: new Date().toISOString(),
+    accountability_map_role_count: String(input.roleCount),
+    lifecyclestage: "subscriber",
+  };
+  if (input.nextReflectionDateISO) {
+    // HubSpot date properties expect YYYY-MM-DD
+    properties.accountability_map_next_reflection_date =
+      input.nextReflectionDateISO.slice(0, 10);
+  }
+
+  try {
+    const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
+      method: "POST",
+      body: JSON.stringify({
+        filterGroups: [
+          {
+            filters: [
+              { propertyName: "email", operator: "EQ", value: input.email },
+            ],
+          },
+        ],
+        properties: ["email"],
+        limit: 1,
+      }),
+    });
+    if (!search.ok) {
+      const body = await search.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: search.status,
+        error: `search failed: ${body}`,
+      };
+    }
+    const searchJson = (await search.json()) as { results: { id: string }[] };
+    const existingId = searchJson.results?.[0]?.id;
+
+    const path = existingId
+      ? `/crm/v3/objects/contacts/${existingId}`
+      : `/crm/v3/objects/contacts`;
+    const method = existingId ? "PATCH" : "POST";
+    const res = await hubspotFetch(path, {
+      method,
+      body: JSON.stringify({ properties }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: res.status,
+        error: `${method} failed: ${body}`,
+      };
+    }
+    const json = (await res.json()) as { id: string };
+
+    if (ACCOUNTABILITY_SEQUENCE_ID) {
+      console.info(
+        `[hubspot] Would enroll ${json.id} in Accountability Map sequence ${ACCOUNTABILITY_SEQUENCE_ID}`
       );
     }
 

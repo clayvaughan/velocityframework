@@ -17,13 +17,20 @@ export const metadata: Metadata = {
 const pillar = "heart" as const;
 const heartResources = resourcesByPillar(pillar);
 /**
- * Reorder for the Heart hub: put the Culture Action Plan (the prescription
- * paired to the Culture Health Check diagnostic) before the rest of the
- * heart tools. Other tabs (/toolbox, /book) keep their default order.
+ * Reorder for the Heart hub: put the live interactive tools first (Culture
+ * Action Plan, then Leadership Accountability Map) — the prescription and
+ * the ownership-clarity tool paired to the Culture Health Check diagnostic.
+ * Other tabs (/toolbox, /book) keep their default order.
  */
+const FEATURED_HEART_SLUGS = [
+  "culture-action-plan",
+  "leadership-accountability-map",
+];
 const orderedHeartResources = [
-  ...heartResources.filter((r) => r.slug === "culture-action-plan"),
-  ...heartResources.filter((r) => r.slug !== "culture-action-plan"),
+  ...FEATURED_HEART_SLUGS.map((slug) =>
+    heartResources.find((r) => r.slug === slug)
+  ).filter((r): r is NonNullable<typeof r> => Boolean(r)),
+  ...heartResources.filter((r) => !FEATURED_HEART_SLUGS.includes(r.slug)),
 ];
 
 export default function HeartPage() {

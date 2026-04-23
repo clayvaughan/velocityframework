@@ -66,10 +66,40 @@ The FCP nurture sequence (`src/lib/fcp/nurture-sequence.ts`) ships with DRAFT bo
 
 ---
 
+## 5. Messaging & Proof Checklist — 4 draft nurture emails awaiting final copy
+
+The Messaging & Proof Checklist nurture sequence (`src/lib/messaging/nurture-sequence.ts`) ships with DRAFT bodies flagged `[DRAFT — awaiting Clay]`. All four email subjects and send-day cadence are Clay-approved; only the body copy is placeholder awaiting final language.
+
+| Sequence · Email | Subject (final) | Body (draft) |
+| ---------------- | --------------- | ------------ |
+| Clear Your Message, Grow Your Revenue · Email 1 (day 0) | "Your Messaging & Proof Checklist is saved — the one-liner test" | [DRAFT — awaiting Clay] |
+| · Email 2 (day 5) | "Why beautiful design means nothing without the right words" | [DRAFT — awaiting Clay] |
+| · Email 3 (day 12) | "The testimonial question that gets stories instead of praise" | [DRAFT — awaiting Clay] |
+| · Email 4 (day 21) | "Check-in: did you actually use your one-liner this week?" | [DRAFT — awaiting Clay] |
+
+**Action:** Replace the four draft bodies in `src/lib/messaging/nurture-sequence.ts` with final copy.
+
+---
+
+## 6. Leadership Accountability Map — 4 draft nurture emails awaiting final copy
+
+The Leadership Accountability Map nurture sequence (`src/lib/accountability/nurture-sequence.ts`) ships with DRAFT bodies flagged `[DRAFT — awaiting Clay]`. All four email subjects and send-day cadence are Clay-approved; only the body copy is placeholder awaiting final language.
+
+| Sequence · Email | Subject (final) | Body (draft) |
+| ---------------- | --------------- | ------------ |
+| Ownership Makes Culture Stick · Email 1 (day 0) | "Your Accountability Map is saved — here's how to run the first conversation" | [DRAFT — awaiting Clay] |
+| · Email 2 (day 7) | "The question that separates real accountability from theater" | [DRAFT — awaiting Clay] |
+| · Email 3 (day 30) | "How to tell if someone's in the wrong seat" | [DRAFT — awaiting Clay] |
+| · Email 4 (day 60) | "Two weeks out from your first reflection date — here's the prep" | [DRAFT — awaiting Clay] |
+
+**Action:** Replace the four draft bodies in `src/lib/accountability/nurture-sequence.ts` with final copy.
+
+---
+
 ## Infrastructure awaiting Clay / Abby (not content)
 
-- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, and FCP flows. Silent no-op until the token lands in Replit Secrets.
-- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), and `FCP_SEQUENCE_ID` (FCP Worksheet) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
+- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, FCP, Messaging & Proof, and Leadership Accountability Map flows. Silent no-op until the token lands in Replit Secrets.
+- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), `FCP_SEQUENCE_ID` (FCP Worksheet), `MESSAGING_SEQUENCE_ID` (Messaging & Proof), and `ACCOUNTABILITY_SEQUENCE_ID` (Leadership Accountability Map) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
 - **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id.
-- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, and `src/lib/fcp/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); FCP schema has no cross-feature foreign keys and can run any time after.
+- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, `src/lib/fcp/SCHEMA.sql`, `src/lib/messaging/SCHEMA.sql`, and `src/lib/accountability/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); FCP, Messaging, and Accountability schemas have no cross-feature foreign keys and can run any time after.
 - **Team-member optional email capture** (Health Check team mode) — Deferred, not wired; team responses stay fully anonymous unless/until Clay decides to add it.
