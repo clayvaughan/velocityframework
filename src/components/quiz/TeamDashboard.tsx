@@ -269,7 +269,7 @@ export function TeamDashboard(props: Props) {
           {/* Actions */}
           <section className="flex flex-wrap gap-4">
             <Button asChild variant="cta" size="lg">
-              <a href={pdfUrl}>Download team PDF report</a>
+              <a href={pdfUrl} download>Download team PDF report</a>
             </Button>
             <Button asChild variant="outline" size="lg">
               <a href="/workshop">Apply for FRE Workshop</a>
