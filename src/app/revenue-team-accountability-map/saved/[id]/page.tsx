@@ -3,21 +3,27 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { AlertCircle, Bookmark } from "lucide-react";
-import { ActionButtons } from "@/components/accountability/ActionButtons";
+import { ActionButtons } from "@/components/revenue-team/ActionButtons";
 import {
-  getMap,
-  getRoles,
+  getRevenueMap,
+  getRevenueRoles,
   isStorageConfigured,
-} from "@/lib/accountability/storage";
-import { DEFAULT_REFLECTION_QUESTION } from "@/lib/accountability/constants";
+} from "@/lib/revenue-team/storage";
 import {
-  allReflectionCalendarUrls,
-  leadershipEmailMailto,
-  type ReflectionCalendarContext,
-} from "@/lib/accountability/email-drafts";
+  DEFAULT_MEETING_AGENDA,
+  DEFAULT_MEETING_DAY,
+  DEFAULT_MEETING_DURATION,
+  DEFAULT_MEETING_TIME,
+  DEFAULT_REFLECTION_QUESTION,
+} from "@/lib/revenue-team/constants";
+import {
+  allRevenueCalendarUrls,
+  revenueTeamEmailMailto,
+  type RevenueCalendarContext,
+} from "@/lib/revenue-team/email-drafts";
 
 export const metadata: Metadata = {
-  title: "Your Leadership Accountability Map",
+  title: "Your Unified Revenue Team Accountability Map",
 };
 
 type Params = Promise<{ id: string }>;
@@ -33,7 +39,7 @@ function formatDate(iso: string | null): string {
   });
 }
 
-export default async function AccountabilitySavedPage({
+export default async function RevenueSavedPage({
   params,
 }: {
   params: Params;
@@ -41,61 +47,71 @@ export default async function AccountabilitySavedPage({
   const { id } = await params;
   if (!isStorageConfigured()) return <StorageNotConfigured />;
 
-  const mapRes = await getMap(id);
+  const mapRes = await getRevenueMap(id);
   if (!mapRes.ok) return <SavedError />;
   if (!mapRes.data) notFound();
   if (mapRes.data.status === "in_progress") {
-    redirect(`/leadership-accountability-map/build/${id}`);
+    redirect(`/revenue-team-accountability-map/build/${id}`);
   }
   const map = mapRes.data;
 
-  const rolesRes = await getRoles(id);
+  const rolesRes = await getRevenueRoles(id);
   if (!rolesRes.ok) return <SavedError />;
   const roles = rolesRes.data;
 
   const h = await headers();
   const proto = h.get("x-forwarded-proto") ?? "https";
   const host = h.get("x-forwarded-host") ?? h.get("host") ?? "velocityframework.com";
-  const shareUrl = `${proto}://${host}/leadership-accountability-map/saved/${id}`;
-  const pdfUrl = `/api/leadership-accountability-map/${id}/pdf`;
+  const shareUrl = `${proto}://${host}/revenue-team-accountability-map/saved/${id}`;
+  const pdfUrl = `/api/revenue-team-accountability-map/${id}/pdf`;
 
   const reflectionQuestion =
     map.reflection_question && map.reflection_question.trim().length > 0
       ? map.reflection_question
       : DEFAULT_REFLECTION_QUESTION;
 
-  const mailto = leadershipEmailMailto({
+  const mailto = revenueTeamEmailMailto({
     firstName: map.first_name,
     companyName: map.company_name,
     planUrl: shareUrl,
   });
 
-  const calendarCtx: ReflectionCalendarContext = {
+  const attendeeNames = roles
+    .map((r) => r.owner_name)
+    .filter((n): n is string => !!(n && n.trim().length > 0));
+
+  const calendarCtx: RevenueCalendarContext = {
     firstName: map.first_name,
     companyName: map.company_name,
     planUrl: shareUrl,
+    weeklyMeetingDay: map.weekly_meeting_day ?? DEFAULT_MEETING_DAY,
+    weeklyMeetingTime: map.weekly_meeting_time ?? DEFAULT_MEETING_TIME,
+    weeklyMeetingDuration:
+      map.weekly_meeting_duration ?? DEFAULT_MEETING_DURATION,
+    weeklyMeetingAgenda: map.weekly_meeting_agenda ?? DEFAULT_MEETING_AGENDA,
+    attendeeNames,
     reflectionQuestion,
     reflectionDateISO1: map.reflection_date_1 ?? "",
     reflectionDateISO2: map.reflection_date_2 ?? "",
     reflectionDateISO3: map.reflection_date_3 ?? "",
   };
 
-  const googleUrls = allReflectionCalendarUrls(calendarCtx, "google");
-  const outlookUrls = allReflectionCalendarUrls(calendarCtx, "outlook");
+  const googleUrls = allRevenueCalendarUrls(calendarCtx, "google");
+  const outlookUrls = allRevenueCalendarUrls(calendarCtx, "outlook");
 
   return (
     <>
       <section className="bg-gradient-hero section-padding">
         <div className="container-wide max-w-5xl">
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
-            Leadership Accountability Map · Saved
+            Revenue Team Accountability Map · Saved
           </p>
           <h1 className="mt-4 font-velocity text-foreground text-4xl md:text-6xl uppercase tracking-wider leading-[0.95]">
-            {map.company_name} — ownership locked.
+            {map.company_name} — revenue team mapped.
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            Bookmark this page. Share it with your leadership team. Come back
-            at each reflection date and walk the seats together.
+            Bookmark this page. Share it with your revenue team. Start
+            running the weekly rhythm on Wednesday.
           </p>
         </div>
       </section>
@@ -103,7 +119,7 @@ export default async function AccountabilitySavedPage({
       <section className="section-padding bg-background">
         <div className="container-wide max-w-5xl space-y-10">
           <div className="rounded-2xl border border-border bg-card overflow-hidden shadow-card">
-            <div className="grid grid-cols-[1.3fr_1fr_2fr_1fr] gap-4 px-5 py-3 border-b border-border bg-secondary/40">
+            <div className="grid grid-cols-[1.3fr_1fr_1.6fr_1.3fr_1fr] gap-4 px-5 py-3 border-b border-border bg-secondary/40">
               <span className="font-heading text-[0.65rem] uppercase tracking-widest text-muted-foreground">
                 Role
               </span>
@@ -114,7 +130,10 @@ export default async function AccountabilitySavedPage({
                 Mission
               </span>
               <span className="font-heading text-[0.65rem] uppercase tracking-widest text-muted-foreground">
-                Accountable to
+                Key metric #1
+              </span>
+              <span className="font-heading text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                Reports to
               </span>
             </div>
             {roles.map((r) => {
@@ -123,7 +142,7 @@ export default async function AccountabilitySavedPage({
               return (
                 <div
                   key={r.id}
-                  className="grid grid-cols-[1.3fr_1fr_2fr_1fr] gap-4 px-5 py-4 border-b border-border last:border-b-0 text-sm"
+                  className="grid grid-cols-[1.3fr_1fr_1.6fr_1.3fr_1fr] gap-4 px-5 py-4 border-b border-border last:border-b-0 text-sm"
                 >
                   <span className="font-heading text-foreground">
                     {r.role_name}
@@ -131,19 +150,39 @@ export default async function AccountabilitySavedPage({
                   <span className="text-muted-foreground">
                     {r.owner_name && r.owner_name.trim().length > 0
                       ? r.owner_name
-                      : "(Open seat)"}
+                      : "(Vacant)"}
                   </span>
                   <span className="text-muted-foreground">
                     {firstSentence?.[0] ?? mission ?? "—"}
                   </span>
                   <span className="text-muted-foreground">
-                    {r.accountable_to && r.accountable_to.trim().length > 0
-                      ? r.accountable_to
-                      : "—"}
+                    {r.metric_1 ?? "—"}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {r.accountable_to ?? "—"}
                   </span>
                 </div>
               );
             })}
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
+            <p className="font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">
+              Weekly Revenue Team Meeting
+            </p>
+            <p className="mt-3 font-heading text-lg text-foreground">
+              {map.weekly_meeting_day ?? DEFAULT_MEETING_DAY}s at{" "}
+              {map.weekly_meeting_time ?? DEFAULT_MEETING_TIME} ·{" "}
+              {map.weekly_meeting_duration ?? DEFAULT_MEETING_DURATION}
+            </p>
+            {attendeeNames.length > 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Attendees: {attendeeNames.join(", ")}
+              </p>
+            ) : null}
+            <pre className="mt-4 whitespace-pre-wrap text-sm text-muted-foreground font-sans bg-secondary/40 rounded-lg p-4">
+              {map.weekly_meeting_agenda ?? DEFAULT_MEETING_AGENDA}
+            </pre>
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
@@ -177,12 +216,12 @@ export default async function AccountabilitySavedPage({
             Make it real
           </p>
           <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider">
-            Put it in front of your team.
+            Ship it to your team.
           </h2>
           <div className="mt-8">
             <ActionButtons
               pdfUrl={pdfUrl}
-              leadershipMailtoUrl={mailto}
+              teamMailtoUrl={mailto}
               shareUrl={shareUrl}
               googleCalendarUrls={googleUrls}
               outlookCalendarUrls={outlookUrls}
@@ -197,33 +236,21 @@ export default async function AccountabilitySavedPage({
             <Bookmark className="h-3.5 w-3.5" /> Saved
           </p>
           <h2 className="mt-3 font-velocity text-primary-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
-            Next move · Unified Revenue Team Map
+            Next move · See the weekly numbers in practice
           </h2>
           <p className="mt-4 max-w-2xl text-primary-foreground/80">
-            You&rsquo;ve named the seats at the leadership level. The next
-            drill-down is the Revenue department — where marketing, sales,
-            and RevOps still report to different leaders at most growing
-            companies. Unify them into one revenue team.
+            Now see what the weekly numbers look like in practice — download
+            Clay&rsquo;s actual revenue team dashboard. Four real dashboards
+            from Good Agency, one per department.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6">
             <Link
-              href="/revenue-team-accountability-map"
+              href="/good-agency-dashboard-example"
               className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
             >
-              Open the Unified Revenue Map →
-            </Link>
-            <Link
-              href="/good-agency-scorecard-example"
-              className="inline-flex items-center gap-2 rounded-lg border border-accent/40 bg-transparent text-primary-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide transition-smooth hover:bg-accent/10 hover:border-accent"
-            >
-              Or grab the Scorecard Example →
+              Download the Dashboard Example →
             </Link>
           </div>
-          <p className="mt-4 text-xs text-primary-foreground/60 max-w-2xl">
-            The Scorecard Example turns each seat you just named into an
-            individual-level accountability tool. Same structure Good Agency
-            uses for every role on the team.
-          </p>
         </div>
       </section>
     </>

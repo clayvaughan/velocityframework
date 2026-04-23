@@ -46,11 +46,12 @@ export const resources: Resource[] = [
     number: "03",
     title: "Unified Revenue Team Accountability Map",
     hook:
-      "If marketing, sales, and RevOps still report to different leaders, you don't have a revenue team — you have three silos.",
+      "Map who owns what across your unified revenue team — marketing, sales, RevOps, and retention. Builds on the Director of Revenue / FRE structure from Chapter 7 of Velocity.",
     pillar: "heading",
-    format: "Fillable PDF, 4–6 pages",
+    format: "Interactive tool · ~15 minutes",
     owner: "Luke (content) · Clay (approve) · Lindsay (design)",
     hubspotWorkflowKey: "resource_unified_revenue_map",
+    externalHref: "/revenue-team-accountability-map",
   },
   {
     slug: "dashboard-example",

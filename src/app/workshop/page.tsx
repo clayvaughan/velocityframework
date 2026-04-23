@@ -364,6 +364,31 @@ export default function WorkshopPage() {
           </ul>
         </div>
       </section>
+
+      {/* ---------- Pre-apply callout ---------- */}
+      <section className="section-padding bg-gradient-section">
+        <div className="container-narrow max-w-3xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            Before you apply
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
+            Not sure if you have the right revenue team structure in place?
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Build your Revenue Team Accountability Map free before you apply
+            — it&rsquo;s the clearest way to see where the gaps are and
+            whether a Fractional Revenue Executive is the missing seat.
+          </p>
+          <div className="mt-6">
+            <a
+              href="/revenue-team-accountability-map"
+              className="inline-flex items-center gap-2 rounded-lg border border-accent/60 bg-transparent text-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide transition-smooth hover:bg-accent/10 hover:border-accent"
+            >
+              Build your Revenue Team Map →
+            </a>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

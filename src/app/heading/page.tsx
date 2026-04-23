@@ -22,6 +22,7 @@ const headingResources = resourcesByPillar(pillar);
 const FEATURED_HEADING_SLUGS = [
   "fcp-worksheet",
   "messaging-proof-bundle",
+  "unified-revenue-map",
   "dashboard-example",
 ];
 const resources = [

@@ -236,6 +236,7 @@ const MESSAGING_SEQUENCE_ID: string | null = null;
 const ACCOUNTABILITY_SEQUENCE_ID: string | null = null;
 const SCORECARD_EXAMPLE_SEQUENCE_ID: string | null = null;
 const DASHBOARD_EXAMPLE_SEQUENCE_ID: string | null = null;
+const REVENUE_TEAM_SEQUENCE_ID: string | null = null;
 
 export async function syncActionPlanContact(input: {
   email: string;
@@ -819,6 +820,110 @@ export async function syncDashboardExampleContact(input: {
     if (DASHBOARD_EXAMPLE_SEQUENCE_ID) {
       console.info(
         `[hubspot] Would enroll ${json.id} in Dashboard Example sequence ${DASHBOARD_EXAMPLE_SEQUENCE_ID}`
+      );
+    }
+
+    return { ok: true, contactId: json.id };
+  } catch (err) {
+    return {
+      ok: false,
+      skipped: false,
+      reason: "api_error",
+      error: String(err),
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Unified Revenue Team Accountability Map contact sync
+// ---------------------------------------------------------------------------
+
+const HAS_DOR_HUBSPOT_LABEL: Record<"yes" | "no" | "planning", string> = {
+  yes: "Yes",
+  no: "No",
+  planning: "Planning to hire",
+};
+
+export async function syncRevenueTeamMapContact(input: {
+  email: string;
+  firstName: string;
+  companyName: string;
+  role: string;
+  roleCount: number;
+  hasDirectorOfRevenue: "yes" | "no" | "planning";
+  annualRevenueRange: string;
+}): Promise<HubSpotSyncResult> {
+  if (!token) {
+    console.warn(
+      "[hubspot] HUBSPOT_PRIVATE_APP_TOKEN not set — skipping Revenue Team sync for",
+      input.email
+    );
+    return { ok: false, skipped: true, reason: "no_token" };
+  }
+
+  const properties: Record<string, string> = {
+    email: input.email,
+    firstname: input.firstName,
+    company: input.companyName,
+    role: input.role,
+    revenue_team_map_completed_at: new Date().toISOString(),
+    revenue_team_role_count: String(input.roleCount),
+    has_director_of_revenue: HAS_DOR_HUBSPOT_LABEL[input.hasDirectorOfRevenue],
+    annual_revenue_range: input.annualRevenueRange,
+    lifecyclestage: "subscriber",
+  };
+
+  try {
+    const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
+      method: "POST",
+      body: JSON.stringify({
+        filterGroups: [
+          {
+            filters: [
+              { propertyName: "email", operator: "EQ", value: input.email },
+            ],
+          },
+        ],
+        properties: ["email"],
+        limit: 1,
+      }),
+    });
+    if (!search.ok) {
+      const body = await search.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: search.status,
+        error: `search failed: ${body}`,
+      };
+    }
+    const searchJson = (await search.json()) as { results: { id: string }[] };
+    const existingId = searchJson.results?.[0]?.id;
+
+    const path = existingId
+      ? `/crm/v3/objects/contacts/${existingId}`
+      : `/crm/v3/objects/contacts`;
+    const method = existingId ? "PATCH" : "POST";
+    const res = await hubspotFetch(path, {
+      method,
+      body: JSON.stringify({ properties }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: res.status,
+        error: `${method} failed: ${body}`,
+      };
+    }
+    const json = (await res.json()) as { id: string };
+
+    if (REVENUE_TEAM_SEQUENCE_ID) {
+      console.info(
+        `[hubspot] Would enroll ${json.id} in Revenue Team sequence ${REVENUE_TEAM_SEQUENCE_ID}`
       );
     }
 
