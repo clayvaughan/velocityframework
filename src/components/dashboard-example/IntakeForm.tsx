@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { RoleSelect } from "@/components/forms/RoleSelect";
 
 const inputClass = cn(
   "w-full rounded-lg border-2 border-border bg-card px-4 py-3 text-base text-foreground",
@@ -59,13 +60,7 @@ export function IntakeForm() {
         <input name="company_name" type="text" required autoComplete="organization" className={inputClass} />
       </Field>
       <Field label="Your role" required>
-        <input
-          name="role"
-          type="text"
-          required
-          placeholder="Founder / CEO, Integrator, Director of Revenue…"
-          className={inputClass}
-        />
+        <RoleSelect required />
       </Field>
       <Field label="What's your biggest metrics challenge right now? (optional)">
         <textarea

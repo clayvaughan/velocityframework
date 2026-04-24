@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { RoleSelect } from "@/components/forms/RoleSelect";
 import { TEAM_SIZE_OPTIONS } from "@/lib/accountability/constants";
 
 const inputClass = cn(
@@ -64,13 +65,7 @@ export function IntakeForm() {
         <input name="company_name" type="text" required autoComplete="organization" className={inputClass} />
       </Field>
       <Field label="Your role" required>
-        <input
-          name="role"
-          type="text"
-          required
-          placeholder="Founder/CEO, COO, Head of Operations…"
-          className={inputClass}
-        />
+        <RoleSelect required />
       </Field>
       <Field label="Team size" required>
         <select name="team_size" required defaultValue="" className={inputClass}>

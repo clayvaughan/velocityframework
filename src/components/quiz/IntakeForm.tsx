@@ -4,20 +4,13 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { RoleSelect } from "@/components/forms/RoleSelect";
 
 /**
  * Shared email-capture form for both individual and team-owner flows.
  * Server-persisted through the `action` endpoint (an API route). On
  * success the server returns { id } and we redirect to `nextPathForId(id)`.
  */
-
-const ROLES = [
-  "Business Owner",
-  "Fractional Revenue Executive",
-  "Leader / Executive",
-  "Coach / Consultant",
-  "Reader",
-];
 
 const COMPANY_SIZES = ["1–10", "11–50", "51–200", "201–1000", "1000+"];
 
@@ -119,16 +112,7 @@ export function IntakeForm({
       </Field>
 
       <Field label="Role" required>
-        <select name="role" required defaultValue="" className={inputClass}>
-          <option value="" disabled>
-            Select your role
-          </option>
-          {ROLES.map((r) => (
-            <option key={r} value={r}>
-              {r}
-            </option>
-          ))}
-        </select>
+        <RoleSelect required />
       </Field>
 
       <Field label="Company name (optional)">

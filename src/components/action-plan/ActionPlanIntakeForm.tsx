@@ -4,14 +4,8 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { RoleSelect } from "@/components/forms/RoleSelect";
 
-const ROLES = [
-  "Business Owner",
-  "Fractional Revenue Executive",
-  "Leader / Executive",
-  "Coach / Consultant",
-  "Reader",
-];
 const TEAM_SIZES = ["1–10", "11–50", "51–200", "201–1000", "1000+"];
 
 /**
@@ -76,16 +70,7 @@ export function ActionPlanIntakeForm() {
         <input name="email" type="email" required autoComplete="email" className={inputClass} />
       </Field>
       <Field label="Role" required>
-        <select name="role" required defaultValue="" className={inputClass}>
-          <option value="" disabled>
-            Select your role
-          </option>
-          {ROLES.map((r) => (
-            <option key={r} value={r}>
-              {r}
-            </option>
-          ))}
-        </select>
+        <RoleSelect required />
       </Field>
       <Field label="Team size" required>
         <select name="team_size" required defaultValue="" className={inputClass}>

@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { RoleSelect } from "@/components/forms/RoleSelect";
 import {
   ANNUAL_REVENUE_OPTIONS,
   DIRECTOR_OF_REVENUE_OPTIONS,
@@ -69,13 +70,7 @@ export function IntakeForm() {
         <input name="company_name" type="text" required autoComplete="organization" className={inputClass} />
       </Field>
       <Field label="Your role" required>
-        <input
-          name="role"
-          type="text"
-          required
-          placeholder="Founder/CEO, COO, VP Sales…"
-          className={inputClass}
-        />
+        <RoleSelect required />
       </Field>
       <Field label="Revenue team size" required>
         <select name="team_size" required defaultValue="" className={inputClass}>

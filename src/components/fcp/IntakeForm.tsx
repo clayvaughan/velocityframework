@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { RoleSelect } from "@/components/forms/RoleSelect";
 
 /**
  * FCP intake. Same visual pattern as the Action Plan intake form.
@@ -68,13 +69,7 @@ export function IntakeForm() {
         <input name="company_name" type="text" required autoComplete="organization" className={inputClass} />
       </Field>
       <Field label="Your role" required>
-        <input
-          name="role"
-          type="text"
-          required
-          placeholder="Founder / CEO, Head of Revenue, Marketing Director…"
-          className={inputClass}
-        />
+        <RoleSelect required />
       </Field>
       <Field label="Industry" required>
         <input
