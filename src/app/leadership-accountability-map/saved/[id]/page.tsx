@@ -12,7 +12,7 @@ import {
 import { DEFAULT_REFLECTION_QUESTION } from "@/lib/accountability/constants";
 import {
   allReflectionCalendarUrls,
-  leadershipEmailMailto,
+  leadershipEmailContent,
   type ReflectionCalendarContext,
 } from "@/lib/accountability/email-drafts";
 
@@ -64,7 +64,7 @@ export default async function AccountabilitySavedPage({
       ? map.reflection_question
       : DEFAULT_REFLECTION_QUESTION;
 
-  const mailto = leadershipEmailMailto({
+  const leadershipEmail = leadershipEmailContent({
     firstName: map.first_name,
     companyName: map.company_name,
     planUrl: shareUrl,
@@ -182,7 +182,8 @@ export default async function AccountabilitySavedPage({
           <div className="mt-8">
             <ActionButtons
               pdfUrl={pdfUrl}
-              leadershipMailtoUrl={mailto}
+              pdfFilename={`velocity-accountability-map-${id}.pdf`}
+              leadershipEmail={leadershipEmail}
               shareUrl={shareUrl}
               googleCalendarUrls={googleUrls}
               outlookCalendarUrls={outlookUrls}

@@ -18,7 +18,7 @@ import {
 } from "@/lib/revenue-team/constants";
 import {
   allRevenueCalendarUrls,
-  revenueTeamEmailMailto,
+  revenueTeamEmailContent,
   type RevenueCalendarContext,
 } from "@/lib/revenue-team/email-drafts";
 
@@ -70,7 +70,7 @@ export default async function RevenueSavedPage({
       ? map.reflection_question
       : DEFAULT_REFLECTION_QUESTION;
 
-  const mailto = revenueTeamEmailMailto({
+  const teamEmail = revenueTeamEmailContent({
     firstName: map.first_name,
     companyName: map.company_name,
     planUrl: shareUrl,
@@ -221,7 +221,8 @@ export default async function RevenueSavedPage({
           <div className="mt-8">
             <ActionButtons
               pdfUrl={pdfUrl}
-              teamMailtoUrl={mailto}
+              pdfFilename={`velocity-revenue-team-map-${id}.pdf`}
+              teamEmail={teamEmail}
               shareUrl={shareUrl}
               googleCalendarUrls={googleUrls}
               outlookCalendarUrls={outlookUrls}

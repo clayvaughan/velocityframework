@@ -16,7 +16,7 @@ import {
   renderLabelFor,
 } from "@/lib/fcp/profile-sections";
 import {
-  leadershipEmailMailto,
+  leadershipEmailContent,
   revisitGoogleCalendarUrl,
 } from "@/lib/fcp/email-drafts";
 
@@ -46,7 +46,7 @@ export default async function FcpSavedPage({ params }: { params: Params }) {
   const shareUrl = `${proto}://${host}/favorite-customer-profile/saved/${id}`;
   const pdfUrl = `/api/favorite-customer-profile/${id}/pdf`;
 
-  const leadershipMailto = leadershipEmailMailto({
+  const leadershipEmail = leadershipEmailContent({
     firstName: ws.first_name,
     companyName: ws.company_name,
     fcpCount: profiles.length,
@@ -145,7 +145,8 @@ export default async function FcpSavedPage({ params }: { params: Params }) {
           <div className="mt-8">
             <ActionButtons
               pdfUrl={pdfUrl}
-              leadershipMailtoUrl={leadershipMailto}
+              pdfFilename={`velocity-fcp-${id}.pdf`}
+              leadershipEmail={leadershipEmail}
               shareUrl={shareUrl}
               revisitGoogleUrl={revisitUrl}
             />

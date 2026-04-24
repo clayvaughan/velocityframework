@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import {
   getRevenueMap,
   getRevenueRoles,
@@ -10,6 +9,7 @@ import {
   type RevenueRoleForPdf,
 } from "@/lib/pdf/RevenueTeamAccountabilityReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -17,10 +17,7 @@ type Params = Promise<{ id: string }>;
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   if (!isStorageConfigured()) {
-    return NextResponse.json(
-      { error: "Supabase is not configured." },
-      { status: 503 }
-    );
+    return pdfErrorResponse("Supabase is not configured.", 503);
   }
   const { id } = await params;
 
@@ -29,10 +26,10 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     getRevenueRoles(id),
   ]);
   if (!mapRes.ok || !mapRes.data) {
-    return NextResponse.json({ error: "Map not found." }, { status: 404 });
+    return pdfErrorResponse("Map not found.", 404);
   }
   if (!rolesRes.ok) {
-    return NextResponse.json({ error: "Role fetch failed." }, { status: 500 });
+    return pdfErrorResponse("Role fetch failed.", 500);
   }
 
   const map = mapRes.data;
@@ -57,39 +54,33 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     }));
 
   if (roles.length === 0) {
-    return NextResponse.json(
-      { error: "Map has no defined roles yet." },
-      { status: 404 }
-    );
+    return pdfErrorResponse("Map has no defined roles yet.", 404);
   }
 
-  const buffer = await renderPdfToBuffer(
-    <RevenueTeamAccountabilityReport
-      firstName={map.first_name}
-      companyName={map.company_name}
-      completedAt={map.saved_at ? new Date(map.saved_at) : new Date()}
-      roles={roles}
-      weeklyMeetingDay={map.weekly_meeting_day}
-      weeklyMeetingTime={map.weekly_meeting_time}
-      weeklyMeetingDuration={map.weekly_meeting_duration}
-      weeklyMeetingAgenda={map.weekly_meeting_agenda}
-      reflectionDate1={map.reflection_date_1}
-      reflectionDate2={map.reflection_date_2}
-      reflectionDate3={map.reflection_date_3}
-      reflectionQuestion={
-        map.reflection_question && map.reflection_question.trim().length > 0
-          ? map.reflection_question
-          : DEFAULT_REFLECTION_QUESTION
-      }
-    />
-  );
-
-  return new NextResponse(new Uint8Array(buffer), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="velocity-revenue-team-map-${id}.pdf"`,
-      "Cache-Control": "private, max-age=0, no-cache",
-    },
-  });
+  try {
+    const buffer = await renderPdfToBuffer(
+      <RevenueTeamAccountabilityReport
+        firstName={map.first_name}
+        companyName={map.company_name}
+        completedAt={map.saved_at ? new Date(map.saved_at) : new Date()}
+        roles={roles}
+        weeklyMeetingDay={map.weekly_meeting_day}
+        weeklyMeetingTime={map.weekly_meeting_time}
+        weeklyMeetingDuration={map.weekly_meeting_duration}
+        weeklyMeetingAgenda={map.weekly_meeting_agenda}
+        reflectionDate1={map.reflection_date_1}
+        reflectionDate2={map.reflection_date_2}
+        reflectionDate3={map.reflection_date_3}
+        reflectionQuestion={
+          map.reflection_question && map.reflection_question.trim().length > 0
+            ? map.reflection_question
+            : DEFAULT_REFLECTION_QUESTION
+        }
+      />
+    );
+    return pdfSuccessResponse(buffer, `velocity-revenue-team-map-${id}.pdf`);
+  } catch (e) {
+    console.error("[revenue-team/pdf] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
+  }
 }

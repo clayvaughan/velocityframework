@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertCircle, Download } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import {
   getDashboardDownload,
   isStorageConfigured,
 } from "@/lib/dashboard-example/storage";
+import { PdfDownloadInline } from "@/components/PdfDownloadButton";
 
 export const metadata: Metadata = {
   title: "Your Good Agency Dashboard Example download",
@@ -43,16 +44,14 @@ export default async function DashboardExampleThanksPage({
             then walks all four dashboards with metrics, targets, and the
             commentary that explains why each one matters.
           </p>
-          <div className="mt-8">
-            <a
-              href={pdfUrl}
-              download
-              className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
-            >
-              <Download className="h-4 w-4" />
-              Download PDF
-            </a>
-          </div>
+          <PdfDownloadInline
+            url={pdfUrl}
+            filename={`velocity-dashboard-example-${id}.pdf`}
+            size="lg"
+            className="mt-8"
+          >
+            Download PDF
+          </PdfDownloadInline>
           <p className="mt-4 text-xs text-muted-foreground">
             A copy has been sent to your email.
           </p>

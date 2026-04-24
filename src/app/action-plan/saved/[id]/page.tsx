@@ -23,8 +23,8 @@ import {
   type ActionPlanCalendarContext,
 } from "@/lib/calendar";
 import {
-  leadershipEmailMailto,
-  partnerEmailMailto,
+  leadershipEmailContent,
+  partnerEmailContent,
   type ResolvedFocusArea,
 } from "@/lib/action-plan/email-drafts";
 
@@ -121,10 +121,13 @@ export default async function SavedPage({ params }: { params: Params }) {
     planUrl,
     focusAreas: resolved,
   };
-  const leadershipMailto = leadershipEmailMailto(emailCtx);
-  const partnerMailto =
+  const leadershipEmail = leadershipEmailContent(emailCtx);
+  const partnerEmail =
     plan.send_partner_invite && plan.accountability_partner_email
-      ? partnerEmailMailto(emailCtx, plan.accountability_partner_email)
+      ? {
+          ...partnerEmailContent(emailCtx),
+          to: plan.accountability_partner_email,
+        }
       : null;
 
   return (
@@ -172,8 +175,9 @@ export default async function SavedPage({ params }: { params: Params }) {
               googleCalendarUrl={googleUrls.checkIn}
               outlookCalendarUrl={outlookUrls.checkIn}
               pdfUrl={`/api/action-plan/${id}/pdf`}
-              leadershipMailtoUrl={leadershipMailto}
-              partnerMailtoUrl={partnerMailto}
+              pdfFilename={`velocity-action-plan-${id}.pdf`}
+              leadershipEmail={leadershipEmail}
+              partnerEmail={partnerEmail}
             />
           </div>
 

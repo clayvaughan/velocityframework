@@ -34,13 +34,14 @@ function buildRevenueTeamEmailBody(
   );
 }
 
-export function revenueTeamEmailMailto(
+export function revenueTeamEmailContent(
   ctx: RevenueLeadershipEmailContext
-): string {
-  const subject =
-    "Our Unified Revenue Team Accountability Map — For review at our next meeting";
-  const body = buildRevenueTeamEmailBody(ctx);
-  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+): { subject: string; body: string } {
+  return {
+    subject:
+      "Our Unified Revenue Team Accountability Map — For review at our next meeting",
+    body: buildRevenueTeamEmailBody(ctx),
+  };
 }
 
 // ---------------------------------------------------------------------------

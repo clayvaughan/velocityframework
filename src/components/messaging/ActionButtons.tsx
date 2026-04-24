@@ -1,19 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Check, Copy, Download, Mail } from "lucide-react";
+import { Calendar, Check, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PdfDownloadButton } from "@/components/PdfDownloadButton";
+import { EmailActions } from "@/components/EmailActions";
 
 type Props = {
   pdfUrl: string;
-  leadershipMailtoUrl: string;
+  pdfFilename: string;
+  leadershipEmail: { subject: string; body: string };
   shareUrl: string;
   reviewGoogleUrl: string;
 };
 
 export function ActionButtons({
   pdfUrl,
-  leadershipMailtoUrl,
+  pdfFilename,
+  leadershipEmail,
   shareUrl,
   reviewGoogleUrl,
 }: Props) {
@@ -27,20 +31,16 @@ export function ActionButtons({
   }
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <Card
-        eyebrow="Report"
-        title="Download PDF"
+      <PdfDownloadButton
+        url={pdfUrl}
+        filename={pdfFilename}
         description="8-page branded checklist — one-liner, message map, case study, audit, CTA map."
-        icon={<Download className="h-5 w-5" />}
-        href={pdfUrl}
-        download
       />
-      <Card
-        eyebrow="Team"
+      <EmailActions
+        subject={leadershipEmail.subject}
+        body={leadershipEmail.body}
         title="Email my team"
         description="Pre-drafted note with a link to the checklist and your locked one-liner."
-        icon={<Mail className="h-5 w-5" />}
-        href={leadershipMailtoUrl}
       />
       <div className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card transition-smooth hover:shadow-elegant hover:-translate-y-0.5">
         <div className="flex items-center gap-2 font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">
@@ -57,54 +57,26 @@ export function ActionButtons({
           {copied ? "Copied" : "Copy link"}
         </Button>
       </div>
-      <Card
-        eyebrow="Calendar"
-        title="Schedule 30-day review"
-        description="Adds a Google Calendar event 30 days out to re-audit your collateral and iterate."
-        icon={<Calendar className="h-5 w-5" />}
+      <a
         href={reviewGoogleUrl}
         target="_blank"
-      />
+        rel="noopener noreferrer"
+        className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card transition-smooth hover:shadow-elegant hover:-translate-y-0.5"
+      >
+        <div className="flex items-center gap-2 font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">
+          <Calendar className="h-5 w-5" />
+          Calendar
+        </div>
+        <h3 className="font-heading text-lg uppercase tracking-wide text-foreground">
+          Schedule 30-day review
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Adds a Google Calendar event 30 days out to re-audit your collateral and iterate.
+        </p>
+        <span className="mt-auto inline-flex items-center gap-1 font-heading text-[0.7rem] uppercase tracking-widest text-accent-dark">
+          Open →
+        </span>
+      </a>
     </div>
-  );
-}
-
-function Card({
-  eyebrow,
-  title,
-  description,
-  icon,
-  href,
-  target,
-  download,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  href: string;
-  target?: string;
-  download?: boolean;
-}) {
-  return (
-    <a
-      href={href}
-      target={target}
-      rel={target === "_blank" ? "noopener noreferrer" : undefined}
-      download={download ? true : undefined}
-      className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card transition-smooth hover:shadow-elegant hover:-translate-y-0.5"
-    >
-      <div className="flex items-center gap-2 font-heading text-[0.65rem] uppercase tracking-widest text-accent-dark">
-        {icon}
-        {eyebrow}
-      </div>
-      <h3 className="font-heading text-lg uppercase tracking-wide text-foreground">
-        {title}
-      </h3>
-      <p className="text-sm text-muted-foreground">{description}</p>
-      <span className="mt-auto inline-flex items-center gap-1 font-heading text-[0.7rem] uppercase tracking-widest text-accent-dark">
-        Open →
-      </span>
-    </a>
   );
 }

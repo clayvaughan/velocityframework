@@ -34,11 +34,15 @@ function buildLeadershipBody(ctx: LeadershipEmailContext): string {
   );
 }
 
-export function leadershipEmailMailto(ctx: LeadershipEmailContext): string {
-  const subject =
-    "Our Leadership Accountability Map — For review at our next leadership meeting";
-  const body = buildLeadershipBody(ctx);
-  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+export function leadershipEmailContent(ctx: LeadershipEmailContext): {
+  subject: string;
+  body: string;
+} {
+  return {
+    subject:
+      "Our Leadership Accountability Map — For review at our next leadership meeting",
+    body: buildLeadershipBody(ctx),
+  };
 }
 
 // ---------------------------------------------------------------------------

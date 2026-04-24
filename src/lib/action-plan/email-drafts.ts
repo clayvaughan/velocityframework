@@ -72,10 +72,14 @@ function buildLeadershipBody(ctx: EmailContext): string {
   );
 }
 
-export function leadershipEmailMailto(ctx: EmailContext): string {
-  const subject = `Our Culture Action Plan — Next ${ctx.reassessmentDays} Days`;
-  const body = buildLeadershipBody(ctx);
-  return `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+export function leadershipEmailContent(ctx: EmailContext): {
+  subject: string;
+  body: string;
+} {
+  return {
+    subject: `Our Culture Action Plan — Next ${ctx.reassessmentDays} Days`,
+    body: buildLeadershipBody(ctx),
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -100,15 +104,14 @@ function buildPartnerBody(ctx: EmailContext): string {
   );
 }
 
-export function partnerEmailMailto(
-  ctx: EmailContext,
-  partnerEmail: string
-): string {
-  const subject = "Will you hold me accountable to this?";
-  const body = buildPartnerBody(ctx);
-  return `mailto:${encodeURIComponent(partnerEmail)}?subject=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
+export function partnerEmailContent(ctx: EmailContext): {
+  subject: string;
+  body: string;
+} {
+  return {
+    subject: "Will you hold me accountable to this?",
+    body: buildPartnerBody(ctx),
+  };
 }
 
 // ---------------------------------------------------------------------------

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { PdfDownloadInline } from "@/components/PdfDownloadButton";
 import {
   DIMENSION_LABEL,
   DIMENSION_TAGLINE,
@@ -268,9 +269,13 @@ export function TeamDashboard(props: Props) {
 
           {/* Actions */}
           <section className="flex flex-wrap gap-4">
-            <Button asChild variant="cta" size="lg">
-              <a href={pdfUrl} download>Download team PDF report</a>
-            </Button>
+            <PdfDownloadInline
+              url={pdfUrl}
+              filename={`velocity-team-culture-check-${teamQuizId}.pdf`}
+              size="lg"
+            >
+              Download team PDF report
+            </PdfDownloadInline>
             <Button asChild variant="outline" size="lg">
               <a href="/workshop">Apply for FRE Workshop</a>
             </Button>

@@ -15,7 +15,7 @@ import {
   type CollateralStatus,
 } from "@/lib/messaging/constants";
 import {
-  leadershipEmailMailto,
+  leadershipEmailContent,
   messagingReviewGoogleUrl,
 } from "@/lib/messaging/email-drafts";
 
@@ -53,7 +53,7 @@ export default async function MessagingSavedPage({
   const shareUrl = `${proto}://${host}/messaging-proof-checklist/saved/${id}`;
   const pdfUrl = `/api/messaging-proof-checklist/${id}/pdf`;
 
-  const mailto = leadershipEmailMailto({
+  const leadershipEmail = leadershipEmailContent({
     firstName: c.data.first_name,
     companyName: c.data.company_name,
     planUrl: shareUrl,
@@ -141,7 +141,8 @@ export default async function MessagingSavedPage({
           <div className="mt-8">
             <ActionButtons
               pdfUrl={pdfUrl}
-              leadershipMailtoUrl={mailto}
+              pdfFilename={`velocity-messaging-${id}.pdf`}
+              leadershipEmail={leadershipEmail}
               shareUrl={shareUrl}
               reviewGoogleUrl={reviewUrl}
             />

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Download, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResultsTier } from "@/components/quiz/ResultsTier";
 import { DimensionBreakdown } from "@/components/quiz/DimensionBreakdown";
 import { RecommendedResources } from "@/components/quiz/RecommendedResources";
+import { PdfDownloadInline } from "@/components/PdfDownloadButton";
 import { getQuizResult, isStorageConfigured } from "@/lib/quiz/storage";
 import { recommendationsFor } from "@/lib/quiz/recommendations";
 
@@ -138,14 +139,14 @@ export default async function ResultsPage({ params }: { params: Params }) {
               facilitator guide for running the conversation with your
               leadership team, and links to the toolbox.
             </p>
-            <div className="mt-6">
-              <Button asChild variant="cta" size="lg">
-                <a href={pdfUrl} download>
-                  <Download className="h-4 w-4" />
-                  Download PDF
-                </a>
-              </Button>
-            </div>
+            <PdfDownloadInline
+              url={pdfUrl}
+              filename={`velocity-culture-check-${row.id}.pdf`}
+              size="lg"
+              className="mt-6"
+            >
+              Download PDF
+            </PdfDownloadInline>
           </div>
           <div>
             <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent">

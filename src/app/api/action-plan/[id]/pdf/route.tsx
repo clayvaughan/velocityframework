@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import {
   getActionPlan,
   getFocusAreas,
@@ -13,6 +12,7 @@ import type { ToxinId } from "@/lib/action-plan/toxins";
 import type { VirtueId } from "@/lib/action-plan/virtues";
 import { ActionPlanReport } from "@/lib/pdf/ActionPlanReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -20,10 +20,7 @@ type Params = Promise<{ id: string }>;
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   if (!isStorageConfigured()) {
-    return NextResponse.json(
-      { error: "Supabase is not configured." },
-      { status: 503 }
-    );
+    return pdfErrorResponse("Supabase is not configured.", 503);
   }
   const { id } = await params;
 
@@ -32,10 +29,10 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     getFocusAreas(id),
   ]);
   if (!planRes.ok || !planRes.data) {
-    return NextResponse.json({ error: "Plan not found." }, { status: 404 });
+    return pdfErrorResponse("Plan not found.", 404);
   }
   if (!faRes.ok) {
-    return NextResponse.json({ error: "Focus area fetch failed." }, { status: 500 });
+    return pdfErrorResponse("Focus area fetch failed.", 500);
   }
 
   const plan = planRes.data;
@@ -72,24 +69,21 @@ export async function GET(_req: Request, { params }: { params: Params }) {
       ? weeklyLabels[0]
       : weeklyLabels.join(" · ") || "Weekly 30-minute check-in";
 
-  const buffer = await renderPdfToBuffer(
-    <ActionPlanReport
-      firstName={plan.first_name}
-      reassessmentDays={reassessmentDays}
-      reassessmentDate={reassessmentDate}
-      focusAreas={focusAreas}
-      accountabilityPartnerName={plan.accountability_partner_name}
-      weeklyCheckInLabel={weeklyCheckInLabel}
-      planUrl={`https://velocityframework.com/action-plan/saved/${id}`}
-    />
-  );
-
-  return new NextResponse(new Uint8Array(buffer), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="velocity-action-plan-${id}.pdf"`,
-      "Cache-Control": "private, max-age=0, no-cache",
-    },
-  });
+  try {
+    const buffer = await renderPdfToBuffer(
+      <ActionPlanReport
+        firstName={plan.first_name}
+        reassessmentDays={reassessmentDays}
+        reassessmentDate={reassessmentDate}
+        focusAreas={focusAreas}
+        accountabilityPartnerName={plan.accountability_partner_name}
+        weeklyCheckInLabel={weeklyCheckInLabel}
+        planUrl={`https://velocityframework.com/action-plan/saved/${id}`}
+      />
+    );
+    return pdfSuccessResponse(buffer, `velocity-action-plan-${id}.pdf`);
+  } catch (e) {
+    console.error("[action-plan/pdf] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
+  }
 }

@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import {
   getTeamQuiz,
   getTeamQuizResponses,
@@ -7,6 +6,7 @@ import {
 import { aggregateTeamResponses } from "@/lib/quiz/scoring";
 import { TeamReport } from "@/lib/pdf/TeamReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -14,10 +14,7 @@ type Params = Promise<{ id: string }>;
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   if (!isStorageConfigured()) {
-    return NextResponse.json(
-      { error: "Supabase is not configured." },
-      { status: 503 }
-    );
+    return pdfErrorResponse("Supabase is not configured.", 503);
   }
 
   const { id } = await params;
@@ -28,19 +25,16 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   ]);
 
   if (!quizRes.ok || !quizRes.data) {
-    return NextResponse.json(
-      { error: "Team quiz not found." },
-      { status: 404 }
-    );
+    return pdfErrorResponse("Team quiz not found.", 404);
   }
   if (!respRes.ok) {
     console.error("[team/pdf] responses fetch failed", respRes);
-    return NextResponse.json({ error: "PDF unavailable." }, { status: 500 });
+    return pdfErrorResponse("PDF unavailable.", 500);
   }
   if (respRes.data.length === 0) {
-    return NextResponse.json(
-      { error: "No responses yet. Share the link with your team to collect responses first." },
-      { status: 404 }
+    return pdfErrorResponse(
+      "No responses yet. Share the link with your team to collect responses first.",
+      404
     );
   }
 
@@ -52,21 +46,18 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     }))
   );
 
-  const buffer = await renderPdfToBuffer(
-    <TeamReport
-      teamName={quizRes.data.team_name}
-      ownerFirstName={quizRes.data.owner_first_name}
-      completedAt={new Date()}
-      aggregate={aggregate}
-    />
-  );
-
-  return new NextResponse(new Uint8Array(buffer), {
-    status: 200,
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="velocity-team-culture-check-${id}.pdf"`,
-      "Cache-Control": "private, max-age=0, no-cache",
-    },
-  });
+  try {
+    const buffer = await renderPdfToBuffer(
+      <TeamReport
+        teamName={quizRes.data.team_name}
+        ownerFirstName={quizRes.data.owner_first_name}
+        completedAt={new Date()}
+        aggregate={aggregate}
+      />
+    );
+    return pdfSuccessResponse(buffer, `velocity-team-culture-check-${id}.pdf`);
+  } catch (e) {
+    console.error("[team/pdf] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
+  }
 }
