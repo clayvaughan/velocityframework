@@ -107,9 +107,10 @@ export const resources: Resource[] = [
     hook:
       "Three tools to clarify your message and prove your value — one-liner, message map, case study template.",
     pillar: "heading",
-    format: "Bundle PDF, 10–12 pages",
+    format: "Interactive tool · ~15 minutes",
     owner: "Clay · Luke · Abby",
     hubspotWorkflowKey: "resource_messaging_proof_bundle",
+    externalHref: "/messaging-proof-checklist",
   },
   {
     slug: "messaging-examples",
