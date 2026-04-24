@@ -139,10 +139,32 @@ The Revenue Team Map nurture sequence (`src/lib/revenue-team/nurture-sequence.ts
 
 ---
 
+## 10. Bellamere Trust-Building Script — 3 draft nurture emails awaiting final copy
+
+The Trust-Building Script nurture sequence (`src/lib/trust-building-script/nurture-sequence.ts`) ships with DRAFT bodies flagged `[DRAFT — awaiting Clay]`. All three email subjects and send-day cadence are Clay-approved; only the body copy is placeholder awaiting final language.
+
+| Sequence · Email | Subject (final) | Body (draft) |
+| ---------------- | --------------- | ------------ |
+| Sales That Feel Like Service · Email 1 (day 0) | "The Bellamere script is in — here's how to read it the first time" | [DRAFT — awaiting Clay] |
+| · Email 2 (day 7) | "The one question that separates a closer from a trust-builder" | [DRAFT — awaiting Clay] |
+| · Email 3 (day 21) | "Your turn — adapt this script to your industry in 30 days" | [DRAFT — awaiting Clay] |
+
+**Action:** Replace the three draft bodies in `src/lib/trust-building-script/nurture-sequence.ts` with final copy.
+
+---
+
 ## Infrastructure awaiting Clay / Abby (not content)
 
-- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, FCP, Messaging & Proof, Leadership Accountability Map, Scorecard Example, Dashboard Example, and Revenue Team Map flows. Silent no-op until the token lands in Replit Secrets.
-- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), `FCP_SEQUENCE_ID` (FCP Worksheet), `MESSAGING_SEQUENCE_ID` (Messaging & Proof), `ACCOUNTABILITY_SEQUENCE_ID` (Leadership Accountability Map), `SCORECARD_EXAMPLE_SEQUENCE_ID` (Scorecard Example), `DASHBOARD_EXAMPLE_SEQUENCE_ID` (Dashboard Example), and `REVENUE_TEAM_SEQUENCE_ID` (Revenue Team Map) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
-- **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id. The Scorecard Example and Dashboard Example landing pages promise "A copy has been sent to your email," but the actual send-on-intake transactional email is not yet wired — users can still download the PDF directly from the thanks page via the download button.
-- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, `src/lib/fcp/SCHEMA.sql`, `src/lib/messaging/SCHEMA.sql`, `src/lib/accountability/SCHEMA.sql`, `src/lib/scorecard-example/SCHEMA.sql`, `src/lib/dashboard-example/SCHEMA.sql`, and `src/lib/revenue-team/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); all other schemas have no cross-feature foreign keys and can run any time after.
+- **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, FCP, Messaging & Proof, Leadership Accountability Map, Scorecard Example, Dashboard Example, Revenue Team Map, and Trust-Building Script flows. Silent no-op until the token lands in Replit Secrets.
+- **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), `FCP_SEQUENCE_ID` (FCP Worksheet), `MESSAGING_SEQUENCE_ID` (Messaging & Proof), `ACCOUNTABILITY_SEQUENCE_ID` (Leadership Accountability Map), `SCORECARD_EXAMPLE_SEQUENCE_ID` (Scorecard Example), `DASHBOARD_EXAMPLE_SEQUENCE_ID` (Dashboard Example), `REVENUE_TEAM_SEQUENCE_ID` (Revenue Team Map), and `TRUST_BUILDING_SCRIPT_SEQUENCE_ID` (Bellamere Trust-Building Script) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
+- **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id. The Scorecard Example, Dashboard Example, and Trust-Building Script landing pages all promise "A copy has been sent to your email," but the actual send-on-intake transactional email is not yet wired — users can still download the PDF directly from the thanks page via the download button.
+- **Supabase schema** — Run `src/lib/quiz/SCHEMA.sql`, `src/lib/action-plan/SCHEMA.sql`, `src/lib/fcp/SCHEMA.sql`, `src/lib/messaging/SCHEMA.sql`, `src/lib/accountability/SCHEMA.sql`, `src/lib/scorecard-example/SCHEMA.sql`, `src/lib/dashboard-example/SCHEMA.sql`, `src/lib/revenue-team/SCHEMA.sql`, and `src/lib/trust-building-script/SCHEMA.sql` in the velocityframework Supabase SQL editor. Health Check schema first (the Action Plan schema's `health_check_id` foreign key references `quiz_responses`); all other schemas have no cross-feature foreign keys and can run any time after.
 - **Team-member optional email capture** (Health Check team mode) — Deferred, not wired; team responses stay fully anonymous unless/until Clay decides to add it.
+
+---
+
+## Operational dependency — Bellamere Trust-Building Script Google Doc
+
+The Trust-Building Script PDF endpoint fetches content from Google Doc `1-so7nDEbFNnBS_YtmYlaO_Vv6Xk3xFwLvrSdBJTkjPA` at render time (5-minute in-memory cache per server instance). The document is currently set to **"Anyone with the link can view."** If sharing permissions are tightened to "restricted" or "organization-only," the public export URL will 403/404 and the PDF endpoint will serve a graceful fallback page ("This document is temporarily unavailable…") instead of the script content.
+
+**If Luke or Clay ever switch the source doc:** update `TRUST_BUILDING_SCRIPT_DOC_ID` in `src/lib/trust-building-script/constants.ts`. The new doc must also be publicly viewable for the export URL to work.

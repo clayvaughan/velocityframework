@@ -237,6 +237,7 @@ const ACCOUNTABILITY_SEQUENCE_ID: string | null = null;
 const SCORECARD_EXAMPLE_SEQUENCE_ID: string | null = null;
 const DASHBOARD_EXAMPLE_SEQUENCE_ID: string | null = null;
 const REVENUE_TEAM_SEQUENCE_ID: string | null = null;
+const TRUST_BUILDING_SCRIPT_SEQUENCE_ID: string | null = null;
 
 export async function syncActionPlanContact(input: {
   email: string;
@@ -924,6 +925,106 @@ export async function syncRevenueTeamMapContact(input: {
     if (REVENUE_TEAM_SEQUENCE_ID) {
       console.info(
         `[hubspot] Would enroll ${json.id} in Revenue Team sequence ${REVENUE_TEAM_SEQUENCE_ID}`
+      );
+    }
+
+    return { ok: true, contactId: json.id };
+  } catch (err) {
+    return {
+      ok: false,
+      skipped: false,
+      reason: "api_error",
+      error: String(err),
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bellamere Trust-Building Script download contact sync
+// ---------------------------------------------------------------------------
+
+export async function syncTrustBuildingScriptContact(input: {
+  email: string;
+  firstName: string;
+  companyName: string;
+  role: string;
+  highestStakesSale: string | null;
+}): Promise<HubSpotSyncResult> {
+  if (!token) {
+    console.warn(
+      "[hubspot] HUBSPOT_PRIVATE_APP_TOKEN not set — skipping Trust-Building Script sync for",
+      input.email
+    );
+    return { ok: false, skipped: true, reason: "no_token" };
+  }
+
+  const properties: Record<string, string> = {
+    email: input.email,
+    firstname: input.firstName,
+    company: input.companyName,
+    role: input.role,
+    trust_building_script_downloaded_at: new Date().toISOString(),
+    // Append to the multi-value resources_downloaded property. HubSpot
+    // merges semicolon-separated values when the property is configured as
+    // a multi-checkbox.
+    resources_downloaded: "Bellamere Trust-Building Script",
+    lifecyclestage: "subscriber",
+  };
+  if (input.highestStakesSale && input.highestStakesSale.trim().length > 0) {
+    properties.highest_stakes_sale = input.highestStakesSale.slice(0, 1000);
+  }
+
+  try {
+    const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
+      method: "POST",
+      body: JSON.stringify({
+        filterGroups: [
+          {
+            filters: [
+              { propertyName: "email", operator: "EQ", value: input.email },
+            ],
+          },
+        ],
+        properties: ["email"],
+        limit: 1,
+      }),
+    });
+    if (!search.ok) {
+      const body = await search.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: search.status,
+        error: `search failed: ${body}`,
+      };
+    }
+    const searchJson = (await search.json()) as { results: { id: string }[] };
+    const existingId = searchJson.results?.[0]?.id;
+
+    const path = existingId
+      ? `/crm/v3/objects/contacts/${existingId}`
+      : `/crm/v3/objects/contacts`;
+    const method = existingId ? "PATCH" : "POST";
+    const res = await hubspotFetch(path, {
+      method,
+      body: JSON.stringify({ properties }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      return {
+        ok: false,
+        skipped: false,
+        reason: "api_error",
+        status: res.status,
+        error: `${method} failed: ${body}`,
+      };
+    }
+    const json = (await res.json()) as { id: string };
+
+    if (TRUST_BUILDING_SCRIPT_SEQUENCE_ID) {
+      console.info(
+        `[hubspot] Would enroll ${json.id} in Trust-Building Script sequence ${TRUST_BUILDING_SCRIPT_SEQUENCE_ID}`
       );
     }
 

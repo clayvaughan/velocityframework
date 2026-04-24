@@ -137,24 +137,26 @@ export const resources: Resource[] = [
   {
     slug: "trust-building-script",
     number: "11",
-    title: "Trust-Building Script Example",
+    title: "Bellamere Trust-Building Script",
     hook:
-      "An actual trust-building script we've used to open high-stakes sales conversations. Study it, adapt it.",
+      "The exact sales script Luke Frazier built for a boutique wedding venue — 10 coached sections covering pre-arrival hospitality through final farewell. The living example every FRE Clay certifies studies first.",
     pillar: "hustle",
-    format: "3–4 page PDF, annotated",
-    owner: "Luke",
+    format: "Reference PDF · Living document",
+    owner: "Luke (script) · Clay (coaching)",
     hubspotWorkflowKey: "resource_trust_building_script",
+    externalHref: "/bellamere-trust-building-script",
   },
   {
     slug: "complete-sales-script",
     number: "12",
     title: "Complete Sales Script",
     hook:
-      "The complete end-to-end sales conversation — first hello to signed proposal. Adapt it to your business.",
+      "The complete end-to-end sales conversation — first hello to signed proposal. Adapt it to your business. Shares the same source as the Bellamere Trust-Building Script: ten coached sections, live from Luke's Google Doc.",
     pillar: "hustle",
-    format: "Fillable PDF, 10–12 pages",
-    owner: "Luke",
+    format: "Reference PDF · Living document",
+    owner: "Luke (script) · Clay (coaching)",
     hubspotWorkflowKey: "resource_complete_sales_script",
+    externalHref: "/bellamere-trust-building-script",
   },
   {
     slug: "culture-action-plan",

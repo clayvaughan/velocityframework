@@ -156,16 +156,15 @@ export default async function MessagingSavedPage({
             <Bookmark className="h-3.5 w-3.5" /> Saved
           </p>
           <h2 className="mt-3 font-velocity text-primary-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
-            Next move · Trust-Building Script
+            Next move · Bellamere Trust-Building Script
           </h2>
           <p className="mt-4 max-w-2xl text-primary-foreground/80">
-            Your messaging is locked. The Trust-Building Script is the sales
-            conversation that turns it into revenue — the one place in the
-            Hustle pillar that depends most on messaging clarity.
+            Now put the messaging into conversation. Download the script
+            that turns a prospect meeting into a trusted relationship.
           </p>
           <div className="mt-6">
             <Link
-              href="/toolbox/trust-building-script"
+              href="/bellamere-trust-building-script"
               className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
             >
               Open the Trust-Building Script →

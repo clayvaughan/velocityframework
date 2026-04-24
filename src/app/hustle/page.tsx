@@ -20,7 +20,7 @@ const hustleResources = resourcesByPillar(pillar);
  * anchor that the other Hustle tools (sales script, dashboards, etc.) build
  * around. Other tabs (/toolbox) keep their default order.
  */
-const FEATURED_HUSTLE_SLUGS = ["scorecard-example"];
+const FEATURED_HUSTLE_SLUGS = ["scorecard-example", "trust-building-script"];
 const resources = [
   ...FEATURED_HUSTLE_SLUGS.map((slug) =>
     hustleResources.find((r) => r.slug === slug)

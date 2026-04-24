@@ -80,6 +80,10 @@ export default async function RevenueSavedPage({
     .map((r) => r.owner_name)
     .filter((n): n is string => !!(n && n.trim().length > 0));
 
+  const hasSalesLead = roles.some(
+    (r) => r.role_type === "sales_lead" && r.role_name && r.role_name.trim().length > 0
+  );
+
   const calendarCtx: RevenueCalendarContext = {
     firstName: map.first_name,
     companyName: map.company_name,
@@ -254,6 +258,33 @@ export default async function RevenueSavedPage({
           </div>
         </div>
       </section>
+
+      {hasSalesLead ? (
+        <section className="section-padding bg-gradient-section">
+          <div className="container-wide max-w-3xl">
+            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+              Also recommended · For your Sales Lead
+            </p>
+            <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
+              Give your Sales Lead the script they need.
+            </h2>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              The Bellamere Trust-Building Script is the living example
+              every FRE Clay certifies studies first. Ten coached sections
+              covering pre-arrival hospitality through the final farewell —
+              same bones any Sales Lead can adapt to your business.
+            </p>
+            <div className="mt-6">
+              <Link
+                href="/bellamere-trust-building-script"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
+              >
+                Open the Trust-Building Script →
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
     </>
   );
 }
