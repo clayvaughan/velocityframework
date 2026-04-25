@@ -80,6 +80,13 @@ export default async function RevenueSavedPage({
     .map((r) => r.owner_name)
     .filter((n): n is string => !!(n && n.trim().length > 0));
 
+  const hasDirectorOfRevenue = roles.some(
+    (r) =>
+      r.role_type === "director_of_revenue" &&
+      r.role_name &&
+      r.role_name.trim().length > 0
+  );
+
   const hasSalesLead = roles.some(
     (r) => r.role_type === "sales_lead" && r.role_name && r.role_name.trim().length > 0
   );
@@ -259,6 +266,33 @@ export default async function RevenueSavedPage({
         </div>
       </section>
 
+      {hasDirectorOfRevenue ? (
+        <section className="section-padding bg-background">
+          <div className="container-wide max-w-3xl">
+            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+              Also recommended · For your Director of Revenue / FRE
+            </p>
+            <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
+              Building this role into your business?
+            </h2>
+            <p className="mt-4 max-w-2xl text-muted-foreground">
+              Download the full FRE Job Description — responsibilities,
+              competencies, and what clients should expect from the seat.
+              Use it to define the role internally, post the position, or
+              hand it to a candidate you&rsquo;re already evaluating.
+            </p>
+            <div className="mt-6">
+              <Link
+                href="/fre-job-description"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
+              >
+                Download the FRE Job Description →
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {hasSalesLead ? (
         <section className="section-padding bg-gradient-section">
           <div className="container-wide max-w-3xl">
@@ -269,14 +303,14 @@ export default async function RevenueSavedPage({
               Give your Sales Lead the script they need.
             </h2>
             <p className="mt-4 max-w-2xl text-muted-foreground">
-              The Bellamere Trust-Building Script is the living example
+              The Sample Trust-Building Script is the living example
               every FRE Clay certifies studies first. Ten coached sections
               covering pre-arrival hospitality through the final farewell —
               same bones any Sales Lead can adapt to your business.
             </p>
             <div className="mt-6">
               <Link
-                href="/bellamere-trust-building-script"
+                href="/sample-trust-building-script"
                 className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
               >
                 Open the Trust-Building Script →

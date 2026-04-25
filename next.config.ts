@@ -15,6 +15,28 @@ const nextConfig: NextConfig = {
     "*.picard.replit.dev",
     "*.replit.dev",
   ],
+  async redirects() {
+    return [
+      // Bellamere → Sample Trust-Building Script: rename was cosmetic
+      // (Bellamere stays inside the script content as the example client),
+      // but any links shared from the original launch must keep working.
+      {
+        source: "/bellamere-trust-building-script",
+        destination: "/sample-trust-building-script",
+        permanent: true,
+      },
+      {
+        source: "/bellamere-trust-building-script/:path*",
+        destination: "/sample-trust-building-script/:path*",
+        permanent: true,
+      },
+      {
+        source: "/api/bellamere-trust-building-script/:path*",
+        destination: "/api/sample-trust-building-script/:path*",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

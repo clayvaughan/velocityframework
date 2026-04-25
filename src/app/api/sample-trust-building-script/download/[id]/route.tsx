@@ -59,7 +59,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
       );
       return pdfSuccessResponse(
         buffer,
-        `velocity-bellamere-trust-building-script-${id}.pdf`
+        `velocity-sample-trust-building-script-${id}.pdf`
       );
     }
 
@@ -72,7 +72,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     );
     return pdfSuccessResponse(
       buffer,
-      `velocity-bellamere-trust-building-script-${id}.pdf`
+      `velocity-sample-trust-building-script-${id}.pdf`
     );
   } catch (e) {
     console.error("[trust-building-script/download] render failed", e);

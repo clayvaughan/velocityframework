@@ -24,6 +24,7 @@ const FEATURED_HEADING_SLUGS = [
   "messaging-proof-bundle",
   "unified-revenue-map",
   "dashboard-example",
+  "fre-job-description",
 ];
 const resources = [
   ...FEATURED_HEADING_SLUGS.map((slug) =>

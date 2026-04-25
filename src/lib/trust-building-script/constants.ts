@@ -1,5 +1,5 @@
 /**
- * Bellamere Trust-Building Script — source-of-truth Google Doc.
+ * Sample Trust-Building Script — source-of-truth Google Doc.
  *
  * The PDF endpoint fetches this doc at render time via Google's plain-text
  * export URL, parses the 10 coached sections, and renders them into the

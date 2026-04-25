@@ -26,11 +26,10 @@ export function IntakeForm() {
       email: (fd.get("email") as string)?.trim().toLowerCase(),
       company_name: (fd.get("company_name") as string)?.trim(),
       role: (fd.get("role") as string)?.trim(),
-      highest_stakes_sale:
-        (fd.get("highest_stakes_sale") as string)?.trim() || undefined,
+      download_reason: (fd.get("download_reason") as string)?.trim() || undefined,
     };
     try {
-      const res = await fetch("/api/sample-trust-building-script/intake", {
+      const res = await fetch("/api/fre-job-description/intake", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -41,7 +40,7 @@ export function IntakeForm() {
         setSubmitting(false);
         return;
       }
-      router.push(`/sample-trust-building-script/thanks/${json.id}`);
+      router.push(`/fre-job-description/thanks/${json.id}`);
     } catch {
       setError("Network error. Please try again.");
       setSubmitting(false);
@@ -62,11 +61,11 @@ export function IntakeForm() {
       <Field label="Your role" required>
         <RoleSelect required />
       </Field>
-      <Field label="What's the highest-stakes sales conversation you run? (optional)">
+      <Field label="Why are you downloading this? (optional)">
         <textarea
-          name="highest_stakes_sale"
+          name="download_reason"
           rows={3}
-          placeholder="E.g. $50K+ enterprise contracts, $20K venue tours, six-figure retainer pitches…"
+          placeholder="Hiring an FRE, considering becoming one, or just curious — whatever's true for you."
           className={inputClass}
         />
       </Field>
@@ -83,7 +82,7 @@ export function IntakeForm() {
       ) : null}
 
       <Button type="submit" variant="cta" size="lg" disabled={submitting}>
-        {submitting ? "Preparing your download…" : "Download the Trust-Building Script"}
+        {submitting ? "Preparing your download…" : "Download the FRE Job Description"}
       </Button>
     </form>
   );

@@ -1,4 +1,4 @@
--- Bellamere Trust-Building Script — Supabase schema
+-- Sample Trust-Building Script — Supabase schema
 --
 -- Run in the Supabase SQL editor for the velocityframework project.
 -- Service-role-only RLS matches the other Velocity tools.

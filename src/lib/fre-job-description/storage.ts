@@ -1,7 +1,6 @@
 /**
- * Supabase storage wrapper for the Sample Trust-Building Script download
- * log. Graceful no-op when Supabase env vars are missing. Mirrors the
- * Scorecard Example pattern exactly.
+ * Supabase storage wrapper for the FRE Job Description download log.
+ * Mirrors the Sample Trust-Building Script storage layer.
  */
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
@@ -24,16 +23,16 @@ export function isStorageConfigured(): boolean {
   return Boolean(supabaseUrl && serviceRoleKey);
 }
 
-export type TrustBuildingScriptIntake = {
+export type FreJobDescriptionIntake = {
   id: string;
   email: string;
   first_name: string;
   company_name: string;
   role: string;
-  highest_stakes_sale: string | null;
+  download_reason: string | null;
 };
 
-export type TrustBuildingScriptRow = TrustBuildingScriptIntake & {
+export type FreJobDescriptionRow = FreJobDescriptionIntake & {
   downloaded_at: string | null;
   created_at: string;
 };
@@ -42,46 +41,46 @@ type StorageResult<T> =
   | { ok: true; data: T }
   | { ok: false; reason: "not_configured" | "db_error" | "not_found"; error?: unknown };
 
-export async function createTrustBuildingScriptDownload(
-  intake: TrustBuildingScriptIntake
+export async function createFreJobDescriptionDownload(
+  intake: FreJobDescriptionIntake
 ): Promise<StorageResult<{ id: string }>> {
   const client = getClient();
   if (!client) return { ok: false, reason: "not_configured" };
   const { error } = await client
-    .from("trust_building_script_downloads")
+    .from("fre_job_description_downloads")
     .insert({
       id: intake.id,
       email: intake.email,
       first_name: intake.first_name,
       company_name: intake.company_name,
       role: intake.role,
-      highest_stakes_sale: intake.highest_stakes_sale,
+      download_reason: intake.download_reason,
     });
   if (error) return { ok: false, reason: "db_error", error };
   return { ok: true, data: { id: intake.id } };
 }
 
-export async function getTrustBuildingScriptDownload(
+export async function getFreJobDescriptionDownload(
   id: string
-): Promise<StorageResult<TrustBuildingScriptRow | null>> {
+): Promise<StorageResult<FreJobDescriptionRow | null>> {
   const client = getClient();
   if (!client) return { ok: false, reason: "not_configured" };
   const { data, error } = await client
-    .from("trust_building_script_downloads")
+    .from("fre_job_description_downloads")
     .select("*")
     .eq("id", id)
     .maybeSingle();
   if (error) return { ok: false, reason: "db_error", error };
-  return { ok: true, data: data as TrustBuildingScriptRow | null };
+  return { ok: true, data: data as FreJobDescriptionRow | null };
 }
 
-export async function markTrustBuildingScriptDownloaded(
+export async function markFreJobDescriptionDownloaded(
   id: string
 ): Promise<StorageResult<null>> {
   const client = getClient();
   if (!client) return { ok: false, reason: "not_configured" };
   const { error } = await client
-    .from("trust_building_script_downloads")
+    .from("fre_job_description_downloads")
     .update({ downloaded_at: new Date().toISOString() })
     .eq("id", id)
     .is("downloaded_at", null);

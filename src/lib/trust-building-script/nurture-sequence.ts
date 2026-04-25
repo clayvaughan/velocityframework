@@ -1,6 +1,6 @@
 /**
  * "Sales That Feel Like Service" — 3-email, 21-day nurture sequence fired
- * when a user downloads the Bellamere Trust-Building Script. All three
+ * when a user downloads the Sample Trust-Building Script. All three
  * email bodies ship as DRAFT placeholders awaiting Clay's final copy —
  * subjects and cadence are approved as-is.
  */
@@ -18,7 +18,7 @@ export const SALES_THAT_FEEL_LIKE_SERVICE_SEQUENCE: {
     {
       sendOnDay: 0,
       subject:
-        "The Bellamere script is in — here's how to read it the first time",
+        "The Sample Trust-Building Script is in — here's how to read it the first time",
       body: "[DRAFT — awaiting Clay]\n\nThe PDF is attached. Read it once, all the way through, before you try to adapt anything. Notice the rhythm — hospitality first, discovery second, information only after the relationship is set. The sections are the structure. The script lines are the examples. The coaching tips are the real product.",
     },
     {

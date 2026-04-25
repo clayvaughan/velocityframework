@@ -1,18 +1,16 @@
 /**
- * Fetch + cache the Sample Trust-Building Script Google Doc as plain text.
+ * Fetch + cache the FRE Job Description Google Doc as plain text.
  *
- * - 5-minute in-memory cache per server instance (simple Map, no Redis).
- * - 8-second timeout — a Google Docs hang must not take down the PDF
- *   endpoint for everyone else.
- * - Follows Google's 307 redirect to the googleusercontent.com export host.
- * - On any failure, returns { ok: false, reason } so the PDF renderer can
- *   show a graceful fallback page instead of crashing.
+ * Mirrors the Sample Trust-Building Script fetcher: 5-minute in-memory
+ * cache per server instance, 8-second timeout, follows Google's 307
+ * redirect, returns a typed result so the renderer can show a graceful
+ * fallback instead of crashing on network errors.
  */
 
 import {
   DOC_CACHE_TTL_MS,
   DOC_FETCH_TIMEOUT_MS,
-  trustBuildingScriptTxtExportUrl,
+  freJobDescriptionTxtExportUrl,
 } from "./constants";
 
 type CacheEntry = { content: string; fetchedAt: number };
@@ -26,7 +24,7 @@ export type DocFetchResult =
       status?: number;
     };
 
-export async function fetchTrustBuildingScriptDoc(
+export async function fetchFreJobDescriptionDoc(
   docId: string
 ): Promise<DocFetchResult> {
   const cached = cache.get(docId);
@@ -38,7 +36,7 @@ export async function fetchTrustBuildingScriptDoc(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), DOC_FETCH_TIMEOUT_MS);
   try {
-    const res = await fetch(trustBuildingScriptTxtExportUrl(docId), {
+    const res = await fetch(freJobDescriptionTxtExportUrl(docId), {
       signal: controller.signal,
       redirect: "follow",
     });

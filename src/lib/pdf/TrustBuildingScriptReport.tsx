@@ -1,5 +1,5 @@
 /**
- * Bellamere Trust-Building Script — dynamically-sourced PDF.
+ * Sample Trust-Building Script — dynamically-sourced PDF.
  *
  * Structure:
  *   1. Cover (with dynamic "last updated" timestamp)
@@ -282,7 +282,7 @@ function Header({ title }: { title?: string }) {
     >
       <Text style={{ ...pdfStyles.display, fontSize: 14 }}>Velocity</Text>
       <Text style={pdfStyles.eyebrow}>
-        {title ?? "Bellamere Trust-Building Script"}
+        {title ?? "Sample Trust-Building Script"}
       </Text>
     </View>
   );
@@ -390,12 +390,13 @@ export function TrustBuildingScriptReport({
         <View style={s.coverHero}>
           <Text style={s.coverEyebrow}>Hustle pillar</Text>
           <Text style={s.coverTitle}>
-            The Bellamere{"\n"}Trust-Building{"\n"}Script
+            The Sample{"\n"}Trust-Building{"\n"}Script
           </Text>
           <Text style={s.coverSub}>
             A living example of a high-trust, high-conversion sales
-            conversation. Built by Luke Frazier. Used by every FRE Clay
-            certifies.
+            conversation. Built by Luke Frazier using a real client
+            engagement (a boutique wedding venue) as the example. Used
+            by every FRE Clay certifies.
           </Text>
           <Text style={s.coverMeta}>Last updated: {lastUpdated}</Text>
           <Text style={[pdfStyles.muted, { marginTop: 30 }]}>
@@ -435,9 +436,9 @@ export function TrustBuildingScriptReport({
         </Text>
         <View style={s.objective}>
           <Text style={s.objectiveBody}>
-            The rest of this document is the actual script Bellamere uses.
-            Names and specifics are from a real wedding venue tour; the
-            patterns work in any high-trust sale.
+            The rest of this document is the actual script the example
+            client uses. Names and specifics are from a real wedding
+            venue tour; the patterns work in any high-trust sale.
           </Text>
         </View>
         <Footer />
@@ -453,7 +454,7 @@ export function TrustBuildingScriptReport({
               This script is temporarily unavailable.
             </Text>
             <Text style={[pdfStyles.body, { marginTop: 14 }]}>
-              We couldn&rsquo;t load the latest version of the Bellamere
+              We couldn&rsquo;t load the latest version of the Sample
               Trust-Building Script from its source. This is almost always a
               transient network issue on our end — please try downloading
               again in a few minutes.

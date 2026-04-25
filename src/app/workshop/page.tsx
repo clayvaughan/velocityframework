@@ -123,6 +123,15 @@ export default function WorkshopPage() {
                 <Link href="#program">See the program</Link>
               </Button>
             </div>
+            <p className="pt-3 text-sm text-primary-foreground/70">
+              Want the full FRE job description first?{" "}
+              <Link
+                href="/fre-job-description"
+                className="underline underline-offset-2 hover:text-accent transition-smooth"
+              >
+                Download it free.
+              </Link>
+            </p>
           </div>
           <div className="lg:col-span-5">
             <VisualPlaceholder

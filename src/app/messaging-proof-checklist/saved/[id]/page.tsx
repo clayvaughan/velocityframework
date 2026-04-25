@@ -156,7 +156,7 @@ export default async function MessagingSavedPage({
             <Bookmark className="h-3.5 w-3.5" /> Saved
           </p>
           <h2 className="mt-3 font-velocity text-primary-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
-            Next move · Bellamere Trust-Building Script
+            Next move · Sample Trust-Building Script
           </h2>
           <p className="mt-4 max-w-2xl text-primary-foreground/80">
             Now put the messaging into conversation. Download the script
@@ -164,7 +164,7 @@ export default async function MessagingSavedPage({
           </p>
           <div className="mt-6">
             <Link
-              href="/bellamere-trust-building-script"
+              href="/sample-trust-building-script"
               className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
             >
               Open the Trust-Building Script →

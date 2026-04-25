@@ -1,5 +1,5 @@
 /**
- * Parse the Bellamere Trust-Building Script plain-text export.
+ * Parse the Sample Trust-Building Script plain-text export.
  *
  * Google Docs' plain-text export preserves labels we can rely on
  * (`Objective:`, `Script:`, `Coaching Tip:`) and emits numbered lists as

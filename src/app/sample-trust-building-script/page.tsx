@@ -3,12 +3,12 @@ import { BookOpen, Building2, RefreshCw } from "lucide-react";
 import { IntakeForm } from "@/components/trust-building-script/IntakeForm";
 
 export const metadata: Metadata = {
-  title: "The Bellamere Trust-Building Script",
+  title: "The Sample Trust-Building Script",
   description:
     "The exact sales script Luke Frazier built for a boutique wedding venue — 10 coached sections covering pre-arrival hospitality through final farewell. The living example every FRE Clay certifies studies first.",
 };
 
-export default function BellamereTrustBuildingScriptLanding() {
+export default function SampleTrustBuildingScriptLanding() {
   return (
     <>
       <section className="bg-gradient-hero section-padding">
@@ -20,7 +20,7 @@ export default function BellamereTrustBuildingScriptLanding() {
             The exact sales script that turned a venue tour into a trusted relationship.
           </h1>
           <p className="mt-6 max-w-3xl text-lg md:text-xl leading-relaxed text-muted-foreground">
-            Most sales scripts sound like sales scripts. The Bellamere
+            Most sales scripts sound like sales scripts. The Sample
             Trust-Building Script sounds like a thoughtful conversation
             between two people — because that&rsquo;s what it is. Luke
             Frazier built this for a boutique wedding venue as a living
@@ -50,7 +50,7 @@ export default function BellamereTrustBuildingScriptLanding() {
             <InsideCard
               icon={<Building2 className="h-6 w-6 text-accent-dark" />}
               title="Built for a real business"
-              body="This isn't a generic template. It's the actual script Bellamere uses during a venue tour — a $20K+ decision often made in 90 minutes. Adapt the structure to your industry; the principles work anywhere trust matters."
+              body="This isn't a generic template. It's the actual script the example client uses during a venue tour — a $20K+ decision often made in 90 minutes. Adapt the structure to your industry; the principles work anywhere trust matters."
             />
             <InsideCard
               icon={<RefreshCw className="h-6 w-6 text-accent-dark" />}

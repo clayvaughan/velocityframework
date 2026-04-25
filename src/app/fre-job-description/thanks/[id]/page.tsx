@@ -3,18 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AlertCircle } from "lucide-react";
 import {
-  getTrustBuildingScriptDownload,
+  getFreJobDescriptionDownload,
   isStorageConfigured,
-} from "@/lib/trust-building-script/storage";
+} from "@/lib/fre-job-description/storage";
 import { PdfDownloadInline } from "@/components/PdfDownloadButton";
 
 export const metadata: Metadata = {
-  title: "Your Bellamere Trust-Building Script download",
+  title: "Your FRE Job Description download",
 };
 
 type Params = Promise<{ id: string }>;
 
-export default async function TrustBuildingScriptThanksPage({
+export default async function FreJobDescriptionThanksPage({
   params,
 }: {
   params: Params;
@@ -22,12 +22,12 @@ export default async function TrustBuildingScriptThanksPage({
   const { id } = await params;
   if (!isStorageConfigured()) return <StorageNotConfigured />;
 
-  const res = await getTrustBuildingScriptDownload(id);
+  const res = await getFreJobDescriptionDownload(id);
   if (!res.ok) return <ThanksError />;
   if (!res.data) notFound();
   const row = res.data;
 
-  const pdfUrl = `/api/bellamere-trust-building-script/download/${id}`;
+  const pdfUrl = `/api/fre-job-description/download/${id}`;
 
   return (
     <>
@@ -37,17 +37,16 @@ export default async function TrustBuildingScriptThanksPage({
             Your download is ready
           </p>
           <h1 className="mt-4 font-velocity text-foreground text-4xl md:text-6xl uppercase tracking-wider leading-[0.95]">
-            Here&rsquo;s the Bellamere Trust-Building Script.
+            Here&rsquo;s the FRE Job Description.
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            Thanks, {row.first_name}. The PDF opens with the How-To-Use
-            intro, walks through all ten coached sections of the actual
-            venue-tour script, and closes with the best practices Luke has
-            refined across every FRE rollout.
+            Thanks, {row.first_name}. The PDF opens with the case for the
+            role and walks the full responsibilities, competencies, and
+            character requirements an FRE brings to a leadership team.
           </p>
           <PdfDownloadInline
             url={pdfUrl}
-            filename={`velocity-bellamere-trust-building-script-${id}.pdf`}
+            filename={`velocity-fre-job-description-${id}.pdf`}
             size="lg"
             className="mt-8"
           >
@@ -62,23 +61,23 @@ export default async function TrustBuildingScriptThanksPage({
       <section className="section-padding bg-primary text-primary-foreground">
         <div className="container-wide max-w-3xl">
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent">
-            Next move · Messaging & Proof Checklist
+            Next move · FRE Certification Workshop
           </p>
           <h2 className="mt-3 font-velocity text-primary-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
-            The script only works if your messaging is dialed.
+            Considering becoming an FRE — or certifying a hire?
           </h2>
           <p className="mt-4 max-w-2xl text-primary-foreground/80">
-            Build your Messaging & Proof Checklist to make sure your
-            one-liner, case studies, and CTAs all point in the same
-            direction. Then take the Bellamere script into your next
-            high-stakes conversation.
+            If you&rsquo;re considering becoming an FRE — or you want to
+            certify someone you&rsquo;re hiring — the path is the FRE
+            Certification Workshop. Two days in Austin with Clay and
+            Luke. Twelve seats.
           </p>
           <div className="mt-6">
             <Link
-              href="/messaging-proof-checklist"
+              href="/workshop"
               className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
             >
-              Build your Messaging Checklist →
+              Apply for FRE Certification →
             </Link>
           </div>
         </div>
