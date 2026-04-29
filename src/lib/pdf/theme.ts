@@ -5,7 +5,8 @@
  *   BigNoodleTitling (display) · NexaBold (headings) · Montserrat (body)
  */
 
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { Font, StyleSheet } from "@react-pdf/renderer";
 
 export const COLOR = {
@@ -23,32 +24,105 @@ export const COLOR = {
 } as const;
 
 /**
- * Register local font files with @react-pdf/renderer. Safe to call multiple
- * times — Font.register dedupes internally.
+ * Resolve the on-disk public/fonts directory at runtime. process.cwd() is
+ * the canonical answer when `next start` is invoked from project root, but
+ * some deploy environments (e.g. Replit Autoscale) can run the server with
+ * a different working directory. Try a small set of candidates and pick
+ * the first one that actually contains the fonts.
+ */
+function resolveFontsDir(): string {
+  const candidates: string[] = [
+    path.join(process.cwd(), "public", "fonts"),
+  ];
+  // __dirname is provided by Next.js's server bundle. Fall back to paths
+  // anchored to this compiled module's location in case cwd is wrong.
+  const dirname =
+    typeof __dirname === "string" ? __dirname : null;
+  if (dirname) {
+    candidates.push(
+      path.resolve(dirname, "../../../public/fonts"),
+      path.resolve(dirname, "../../public/fonts"),
+      path.resolve(dirname, "../public/fonts"),
+      path.resolve(dirname, "../../../../public/fonts")
+    );
+  }
+  for (const dir of candidates) {
+    if (fs.existsSync(path.join(dir, "Montserrat-Regular.ttf"))) {
+      return dir;
+    }
+  }
+  throw new Error(
+    `[velocity-pdf] Could not locate public/fonts directory. Tried: ${candidates.join(", ")}`
+  );
+}
+
+/**
+ * Read a font file and return it as a base64 data URL. @react-pdf/font
+ * handles `data:*;base64,` sources by decoding the bytes directly into
+ * fontkit, which avoids any runtime filesystem lookup at render time —
+ * Font.register can't fail on a missing path because there's no path.
+ */
+function loadFontDataUrl(
+  fontsDir: string,
+  filename: string,
+  mimeType: string
+): string {
+  const fullPath = path.join(fontsDir, filename);
+  const bytes = fs.readFileSync(fullPath);
+  return `data:${mimeType};base64,${bytes.toString("base64")}`;
+}
+
+/**
+ * Register local font files with @react-pdf/renderer. Reads font bytes
+ * once at module-init time and embeds them as data URLs so renders don't
+ * depend on the working directory. Safe to call multiple times —
+ * Font.register dedupes internally.
  */
 let fontsRegistered = false;
 export function registerFonts() {
   if (fontsRegistered) return;
-  const fontsDir = path.join(process.cwd(), "public", "fonts");
+  const fontsDir = resolveFontsDir();
+
+  const bigNoodle = loadFontDataUrl(
+    fontsDir,
+    "big_noodle_titling.ttf",
+    "font/ttf"
+  );
+  const bigNoodleOblique = loadFontDataUrl(
+    fontsDir,
+    "big_noodle_titling_oblique.ttf",
+    "font/ttf"
+  );
+  const nexaBold = loadFontDataUrl(fontsDir, "Nexa_Bold.otf", "font/otf");
+  const montserrat = loadFontDataUrl(
+    fontsDir,
+    "Montserrat-Regular.ttf",
+    "font/ttf"
+  );
 
   Font.register({
     family: "BigNoodleTitling",
     fonts: [
-      { src: path.join(fontsDir, "big_noodle_titling.ttf") },
-      {
-        src: path.join(fontsDir, "big_noodle_titling_oblique.ttf"),
-        fontStyle: "italic",
-      },
+      { src: bigNoodle },
+      { src: bigNoodleOblique, fontStyle: "italic" },
     ],
   });
   Font.register({
     family: "NexaBold",
-    src: path.join(fontsDir, "Nexa_Bold.otf"),
+    src: nexaBold,
     fontWeight: 700,
   });
+  // Register Montserrat with both upright and italic style sources. The
+  // current italic source is the regular file (visually upright until
+  // Lindsay delivers a real Montserrat-Italic), but the registration is
+  // required — without it, @react-pdf throws "Could not resolve font" the
+  // moment any text styled `fontStyle: italic` lands on the body font.
   Font.register({
     family: "Montserrat",
-    src: path.join(fontsDir, "Montserrat-Regular.ttf"),
+    fonts: [
+      { src: montserrat },
+      { src: montserrat, fontStyle: "italic" },
+    ],
   });
 
   // Disable @react-pdf's word-break hyphenation — we want clean line breaks
