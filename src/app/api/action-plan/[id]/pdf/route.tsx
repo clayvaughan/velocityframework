@@ -12,7 +12,11 @@ import type { ToxinId } from "@/lib/action-plan/toxins";
 import type { VirtueId } from "@/lib/action-plan/virtues";
 import { ActionPlanReport } from "@/lib/pdf/ActionPlanReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
+import {
+  logAndReturnPdfRenderError,
+  pdfErrorResponse,
+  pdfSuccessResponse,
+} from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -83,7 +87,6 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     );
     return pdfSuccessResponse(buffer, `velocity-action-plan-${id}.pdf`);
   } catch (e) {
-    console.error("[action-plan/pdf] render failed", e);
-    return pdfErrorResponse("PDF render failed.", 500);
+    return logAndReturnPdfRenderError("action-plan/pdf", e);
   }
 }

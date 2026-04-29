@@ -2,7 +2,11 @@ import { getQuizResult, isStorageConfigured } from "@/lib/quiz/storage";
 import { recommendationsFor } from "@/lib/quiz/recommendations";
 import { IndividualReport } from "@/lib/pdf/IndividualReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
+import {
+  logAndReturnPdfRenderError,
+  pdfErrorResponse,
+  pdfSuccessResponse,
+} from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -49,7 +53,6 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     );
     return pdfSuccessResponse(buffer, `velocity-culture-check-${id}.pdf`);
   } catch (e) {
-    console.error("[pdf] render failed", e);
-    return pdfErrorResponse("PDF render failed.", 500);
+    return logAndReturnPdfRenderError("pdf", e);
   }
 }

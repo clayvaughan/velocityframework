@@ -5,7 +5,11 @@ import {
 } from "@/lib/scorecard-example/storage";
 import { ScorecardExampleReport } from "@/lib/pdf/ScorecardExampleReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
+import {
+  logAndReturnPdfRenderError,
+  pdfErrorResponse,
+  pdfSuccessResponse,
+} from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -35,7 +39,6 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     const buffer = await renderPdfToBuffer(<ScorecardExampleReport />);
     return pdfSuccessResponse(buffer, `velocity-scorecard-example-${id}.pdf`);
   } catch (e) {
-    console.error("[scorecard-example/download] render failed", e);
-    return pdfErrorResponse("PDF render failed.", 500);
+    return logAndReturnPdfRenderError("scorecard-example/download", e);
   }
 }
