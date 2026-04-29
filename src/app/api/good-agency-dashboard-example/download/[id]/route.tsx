@@ -5,11 +5,7 @@ import {
 } from "@/lib/dashboard-example/storage";
 import { DashboardExampleReport } from "@/lib/pdf/DashboardExampleReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import {
-  logAndReturnPdfRenderError,
-  pdfErrorResponse,
-  pdfSuccessResponse,
-} from "@/lib/pdf/response";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -38,6 +34,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     const buffer = await renderPdfToBuffer(<DashboardExampleReport />);
     return pdfSuccessResponse(buffer, `velocity-dashboard-example-${id}.pdf`);
   } catch (e) {
-    return logAndReturnPdfRenderError("dashboard-example/download", e);
+    console.error("[dashboard-example/download] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
   }
 }

@@ -8,11 +8,7 @@ import { fetchTrustBuildingScriptDoc } from "@/lib/trust-building-script/doc-fet
 import { parseTrustBuildingScript } from "@/lib/trust-building-script/parser";
 import { TrustBuildingScriptReport } from "@/lib/pdf/TrustBuildingScriptReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import {
-  logAndReturnPdfRenderError,
-  pdfErrorResponse,
-  pdfSuccessResponse,
-} from "@/lib/pdf/response";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -79,6 +75,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
       `velocity-sample-trust-building-script-${id}.pdf`
     );
   } catch (e) {
-    return logAndReturnPdfRenderError("trust-building-script/download", e);
+    console.error("[trust-building-script/download] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
   }
 }

@@ -9,11 +9,7 @@ import {
   type RevenueRoleForPdf,
 } from "@/lib/pdf/RevenueTeamAccountabilityReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import {
-  logAndReturnPdfRenderError,
-  pdfErrorResponse,
-  pdfSuccessResponse,
-} from "@/lib/pdf/response";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -84,6 +80,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     );
     return pdfSuccessResponse(buffer, `velocity-revenue-team-map-${id}.pdf`);
   } catch (e) {
-    return logAndReturnPdfRenderError("revenue-team/pdf", e);
+    console.error("[revenue-team/pdf] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
   }
 }

@@ -8,11 +8,7 @@ import { fetchFreJobDescriptionDoc } from "@/lib/fre-job-description/doc-fetcher
 import { parseFreJobDescription } from "@/lib/fre-job-description/parser";
 import { FreJobDescriptionReport } from "@/lib/pdf/FreJobDescriptionReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import {
-  logAndReturnPdfRenderError,
-  pdfErrorResponse,
-  pdfSuccessResponse,
-} from "@/lib/pdf/response";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -72,6 +68,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     );
     return pdfSuccessResponse(buffer, `velocity-fre-job-description-${id}.pdf`);
   } catch (e) {
-    return logAndReturnPdfRenderError("fre-job-description/download", e);
+    console.error("[fre-job-description/download] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
   }
 }

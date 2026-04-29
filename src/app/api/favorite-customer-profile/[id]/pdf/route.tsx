@@ -6,11 +6,7 @@ import {
 } from "@/lib/fcp/storage";
 import { FCPReport, type FCPResolvedProfile } from "@/lib/pdf/FCPReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
-import {
-  logAndReturnPdfRenderError,
-  pdfErrorResponse,
-  pdfSuccessResponse,
-} from "@/lib/pdf/response";
+import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
 export const runtime = "nodejs";
 
@@ -66,6 +62,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     );
     return pdfSuccessResponse(buffer, `velocity-fcp-${id}.pdf`);
   } catch (e) {
-    return logAndReturnPdfRenderError("fcp/pdf", e);
+    console.error("[fcp/pdf] render failed", e);
+    return pdfErrorResponse("PDF render failed.", 500);
   }
 }
