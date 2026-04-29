@@ -13,6 +13,7 @@ import {
   MessagingReport,
   type MessagingCollateralRow,
 } from "@/lib/pdf/MessagingReport";
+import { PolishedMessagingReport } from "@/lib/pdf/PolishedMessagingReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
 import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
@@ -34,6 +35,30 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     return pdfErrorResponse("Checklist not found.", 404);
   }
   const checklist = clRes.data;
+
+  // If the user has saved an AI-polished version, render that instead of
+  // the raw-answers report. The polished Markdown lives in the same row
+  // (polished_version column); raw answers remain in Supabase regardless.
+  if (checklist.polished_version) {
+    try {
+      const buffer = await renderPdfToBuffer(
+        <PolishedMessagingReport
+          firstName={checklist.first_name}
+          companyName={checklist.company_name}
+          generatedAt={
+            checklist.updated_at
+              ? new Date(checklist.updated_at)
+              : new Date()
+          }
+          polishedMarkdown={checklist.polished_version}
+        />
+      );
+      return pdfSuccessResponse(buffer, `velocity-messaging-${id}.pdf`);
+    } catch (e) {
+      console.error("[messaging/pdf] polished render failed", e);
+      return pdfErrorResponse("PDF render failed.", 500);
+    }
+  }
 
   const items = ciRes.ok ? ciRes.data : [];
   const statuses: Record<string, CollateralStatus> = {};

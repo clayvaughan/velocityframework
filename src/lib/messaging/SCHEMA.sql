@@ -47,8 +47,17 @@ create table if not exists public.messaging_checklists (
     check (status in ('in_progress', 'saved', 'completed', 'abandoned')),
   created_at                  timestamptz not null default now(),
   updated_at                  timestamptz not null default now(),
-  saved_at                    timestamptz
+  saved_at                    timestamptz,
+
+  -- AI Polish: when set, the PDF endpoint renders this Markdown instead of
+  -- the original raw answers. Populated when the user clicks "Add to my PDF"
+  -- on an AI-generated cleanup version. Null means PDF uses raw answers.
+  polished_version            text
 );
+
+-- Idempotent migration for existing tables: add polished_version if missing.
+alter table public.messaging_checklists
+  add column if not exists polished_version text;
 
 create index if not exists messaging_checklists_email_idx on public.messaging_checklists (email);
 create index if not exists messaging_checklists_status_idx on public.messaging_checklists (status);

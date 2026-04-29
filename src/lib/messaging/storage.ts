@@ -66,6 +66,8 @@ export type ChecklistRow = ChecklistIntake & {
   created_at: string;
   updated_at: string;
   saved_at: string | null;
+  /** Markdown of the AI-Polished version the user added to their PDF, or null. */
+  polished_version: string | null;
 };
 
 export type ChecklistMetaPatch = Partial<
@@ -121,6 +123,28 @@ export async function updateChecklist(
   if (!client) return { ok: false, reason: "not_configured" };
   const row = { ...patch, updated_at: patch.updated_at ?? new Date().toISOString() };
   const { error } = await client.from("messaging_checklists").update(row).eq("id", id);
+  if (error) return { ok: false, reason: "db_error", error };
+  return { ok: true, data: null };
+}
+
+/**
+ * Persist an AI-polished Markdown version onto the user's checklist row.
+ * Subsequent PDF renders use this in place of the raw answers. Pass null
+ * to clear (not currently surfaced in the UI but supported here).
+ */
+export async function savePolishedVersion(
+  checklistId: string,
+  polished: string | null
+): Promise<StorageResult<null>> {
+  const client = getClient();
+  if (!client) return { ok: false, reason: "not_configured" };
+  const { error } = await client
+    .from("messaging_checklists")
+    .update({
+      polished_version: polished,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", checklistId);
   if (error) return { ok: false, reason: "db_error", error };
   return { ok: true, data: null };
 }
