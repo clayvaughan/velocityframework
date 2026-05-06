@@ -37,9 +37,9 @@ export default async function ReviewThanksPage({ params }: { params: Params }) {
             href="/action-plan"
           />
           <NextCard
-            title="Book a call with Clay"
-            description="Thirty minutes to hear what you&rsquo;re dealing with."
-            href="[CLAY_CALENDAR_URL]"
+            title="Book a strategy call"
+            description="Walk through your plan with Luke Frazier, Growth Lead at Good Agency."
+            href="https://meetings.hubspot.com/luke911/velocity-strategy-call"
             external
           />
         </div>

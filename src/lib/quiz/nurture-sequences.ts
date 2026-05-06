@@ -135,7 +135,7 @@ const CRITICAL: NurtureSequence = {
       sendOnDay: 21,
       subject: "Want to talk?",
       body:
-        "If you want to talk through your specific situation with me directly, here's my calendar: [CLAY_CALENDAR_URL]. No pitch, no sales process — just 30 minutes to hear what you're dealing with and point you at the move that fits your business. Reply if you'd rather have me reach out to you.",
+        "This email only goes to leaders who scored Critical on the Health Check, so let me say one practical thing: at this tier, the right next move is usually a conversation — not another download. If you want to walk through your situation with someone, Luke Frazier — Growth Lead at Good Agency — runs these strategy calls. He'll go through your Health Check results with you, hear what's actually broken, and explore where Good Agency might fit. No pitch, no sales process — just 30 minutes to point you at the right move. Book a strategy call: https://meetings.hubspot.com/luke911/velocity-strategy-call. Or reply to this email if you'd rather Luke reach out to you.",
     },
   ],
 };
