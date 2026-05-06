@@ -365,10 +365,9 @@ export async function syncFcpContact(input: {
   fcpProfileCount: 1 | 2 | 3;
   fcpHasScopeFilters: boolean;
 }): Promise<HubSpotSyncResult> {
-  console.log("[hubspot-debug] syncFcpContact CALLED for:", input.email);
   if (!token) {
     console.warn(
-      "[hubspot-debug] HUBSPOT_PRIVATE_APP_TOKEN not set — skipping FCP sync for",
+      "[hubspot] HUBSPOT_PRIVATE_APP_TOKEN not set — skipping FCP sync for",
       input.email
     );
     return { ok: false, skipped: true, reason: "no_token" };
@@ -388,11 +387,6 @@ export async function syncFcpContact(input: {
   const mappedRole = hubspotRoleValue(input.role);
   if (mappedRole) properties.role = mappedRole;
 
-  console.log(
-    "[hubspot-debug] Sending properties:",
-    JSON.stringify(properties, null, 2)
-  );
-
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
       method: "POST",
@@ -408,15 +402,8 @@ export async function syncFcpContact(input: {
         limit: 1,
       }),
     });
-    console.log("[hubspot-debug] Search response status:", search.status);
     if (!search.ok) {
       const body = await search.text();
-      console.error(
-        "[hubspot-debug] HubSpot SEARCH FAILED — status:",
-        search.status,
-        "body:",
-        body
-      );
       return {
         ok: false,
         skipped: false,
@@ -427,10 +414,6 @@ export async function syncFcpContact(input: {
     }
     const searchJson = (await search.json()) as { results: { id: string }[] };
     const existingId = searchJson.results?.[0]?.id;
-    console.log(
-      "[hubspot-debug] Search found existingId:",
-      existingId ?? "none — will create"
-    );
 
     const path = existingId
       ? `/crm/v3/objects/contacts/${existingId}`
@@ -440,29 +423,17 @@ export async function syncFcpContact(input: {
       method,
       body: JSON.stringify({ properties }),
     });
-    const upsertBody = await res.text();
     if (!res.ok) {
-      console.error(
-        "[hubspot-debug] HubSpot API FAILED — status:",
-        res.status,
-        "body:",
-        upsertBody
-      );
+      const body = await res.text();
       return {
         ok: false,
         skipped: false,
         reason: "api_error",
         status: res.status,
-        error: `${method} failed: ${upsertBody}`,
+        error: `${method} failed: ${body}`,
       };
     }
-    console.log(
-      "[hubspot-debug] HubSpot API SUCCESS — status:",
-      res.status,
-      "body:",
-      upsertBody
-    );
-    const json = JSON.parse(upsertBody) as { id: string };
+    const json = (await res.json()) as { id: string };
 
     if (FCP_SEQUENCE_ID) {
       console.info(
@@ -472,12 +443,6 @@ export async function syncFcpContact(input: {
 
     return { ok: true, contactId: json.id };
   } catch (err) {
-    console.error(
-      "[hubspot-debug] HubSpot API EXCEPTION — message:",
-      err instanceof Error ? err.message : String(err),
-      "stack:",
-      err instanceof Error ? err.stack : "no stack"
-    );
     return {
       ok: false,
       skipped: false,
