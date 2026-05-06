@@ -85,6 +85,10 @@ export async function syncContactWithQuizResult(
     email: input.email,
     firstname: input.firstName,
     role: input.role,
+    tool_used: "culture_health_check",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "culture_health_check",
+    nurture_status: "active",
   };
   if (input.company) properties.company = input.company;
   if (input.companySize) properties.company_size = input.companySize;
@@ -265,6 +269,10 @@ export async function syncActionPlanContact(input: {
     action_plan_virtues: input.virtues.join(";"),
     action_plan_status: "In Progress",
     lifecyclestage: "subscriber",
+    tool_used: "culture_action_plan",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "culture_action_plan",
+    nurture_status: "active",
   };
   if (input.teamSize) properties.company_size = input.teamSize;
   if (input.reassessmentDate)
@@ -373,6 +381,10 @@ export async function syncFcpContact(input: {
     fcp_profile_count: String(input.fcpProfileCount),
     fcp_has_scope_filters: input.fcpHasScopeFilters ? "true" : "false",
     lifecyclestage: "subscriber",
+    tool_used: "favorite_customer_profile",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "favorite_customer_profile",
+    nurture_status: "active",
   };
 
   try {
@@ -468,6 +480,10 @@ export async function syncMessagingChecklistContact(input: {
     messaging_checklist_completed_at: new Date().toISOString(),
     messaging_collateral_score: String(input.collateralScore),
     lifecyclestage: "subscriber",
+    tool_used: "messaging_proof_checklist",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "messaging_proof_checklist",
+    nurture_status: "active",
   };
   if (input.onelinerFinal && input.onelinerFinal.trim().length > 0) {
     // HubSpot text properties cap ~65k chars but practically we want the one-liner short.
@@ -567,6 +583,10 @@ export async function syncAccountabilityMapContact(input: {
     accountability_map_completed_at: new Date().toISOString(),
     accountability_map_role_count: String(input.roleCount),
     lifecyclestage: "subscriber",
+    tool_used: "leadership_accountability_map",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "leadership_accountability_map",
+    nurture_status: "active",
   };
   if (input.nextReflectionDateISO) {
     // HubSpot date properties expect YYYY-MM-DD
@@ -669,6 +689,10 @@ export async function syncScorecardExampleContact(input: {
     // multi-checkbox.
     resources_downloaded: "Good Agency Scorecard Example",
     lifecyclestage: "subscriber",
+    tool_used: "scorecard_example",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "scorecard_example",
+    nurture_status: "active",
   };
   if (input.scorecardTargetRole && input.scorecardTargetRole.trim().length > 0) {
     properties.scorecard_target_role = input.scorecardTargetRole.slice(0, 1000);
@@ -766,6 +790,10 @@ export async function syncDashboardExampleContact(input: {
     dashboard_example_downloaded_at: new Date().toISOString(),
     resources_downloaded: "Good Agency Dashboard Example",
     lifecyclestage: "subscriber",
+    tool_used: "dashboard_example",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "dashboard_example",
+    nurture_status: "active",
   };
   if (input.metricsChallenge && input.metricsChallenge.trim().length > 0) {
     properties.metrics_challenge = input.metricsChallenge.slice(0, 1000);
@@ -873,6 +901,10 @@ export async function syncRevenueTeamMapContact(input: {
     has_director_of_revenue: HAS_DOR_HUBSPOT_LABEL[input.hasDirectorOfRevenue],
     annual_revenue_range: input.annualRevenueRange,
     lifecyclestage: "subscriber",
+    tool_used: "unified_revenue_team_map",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "unified_revenue_team_map",
+    nurture_status: "active",
   };
 
   try {
@@ -970,6 +1002,10 @@ export async function syncTrustBuildingScriptContact(input: {
     // a multi-checkbox.
     resources_downloaded: "Sample Trust-Building Script",
     lifecyclestage: "subscriber",
+    tool_used: "sample_trust_building_script",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "sample_trust_building_script",
+    nurture_status: "active",
   };
   if (input.highestStakesSale && input.highestStakesSale.trim().length > 0) {
     properties.highest_stakes_sale = input.highestStakesSale.slice(0, 1000);
@@ -1070,6 +1106,10 @@ export async function syncFreJobDescriptionContact(input: {
     // a multi-checkbox.
     resources_downloaded: "FRE Job Description",
     lifecyclestage: "subscriber",
+    tool_used: "fre_job_description",
+    tool_downloaded_date: new Date().toISOString().slice(0, 10),
+    nurture_track: "fre_job_description",
+    nurture_status: "active",
   };
   if (input.downloadReason && input.downloadReason.trim().length > 0) {
     properties.fre_download_reason = input.downloadReason.slice(0, 1000);
