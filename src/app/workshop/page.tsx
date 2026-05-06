@@ -1,214 +1,391 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check, MapPin, CalendarDays, Users2, BadgeDollarSign } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarDays,
+  Check,
+  ChevronDown,
+  Monitor,
+  Clock,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { VisualPlaceholder } from "@/components/VisualPlaceholder";
-import { SectionHeader } from "@/components/SectionHeader";
-import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
-import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "FRE Certification Workshop",
+  title: "Velocity Workshop",
   description:
-    "Two days with Clay Vaughan and Luke Frazier in Austin. Twelve seats. Become a certified Fractional Revenue Executive.",
+    "Two days deploying the Velocity Framework in your business. Virtual via Google Meet, July 1–2, 2026. Built for owners and leaders who want predictable revenue without the chaos.",
 };
 
-/**
- * Workshop page — Phase 1.
- *
- * Content is a reasonable-defaults migration from velocitybook.com/workshop
- * per Clay's direction (migrate verbatim where source content is available;
- * fill with sensible defaults otherwise). Final polish to come from Luke.
- *
- * The source page is a Lovable SPA — raw HTML doesn't expose body content,
- * so this version pulls from the facts Clay confirmed:
- *   - $5,000 per attendee · Austin · June 25–26, 2026 · 12 seats
- *   - $1,500/year certification renewal
- *   - EARLYBIRD2026 saves $1,000 through May 31, 2026
- * Luke refines copy post-migration.
- */
-const programDays = [
+// =============================================================================
+// TODO: Replace https://stripe.com with the real Stripe payment link before
+// launch. This placeholder is used by every "Register" CTA on this page (hero,
+// investment card, final CTA, mobile sticky bar). Updating this single constant
+// updates all four locations.
+// =============================================================================
+const WORKSHOP_STRIPE_LINK = "https://stripe.com";
+
+const LUKE_EMAIL = "luke@goodagency.com";
+
+// ---------------------------------------------------------------------------
+// Static content
+// ---------------------------------------------------------------------------
+
+const heroChecks = [
+  "Complete digital workbook",
+  "Recordings available for 30 days",
+  "Direct interaction with Clay throughout",
+] as const;
+
+const personas = [
+  {
+    title: "Business Owners",
+    body: "You're running a company between $1M and $20M in revenue and you know your team can run smoother than it does today.",
+  },
+  {
+    title: "Executive Leaders",
+    body: "You're a CEO, COO, or CRO who wants to install systems that survive without you in every meeting.",
+  },
+  {
+    title: "Sales and Marketing Leaders",
+    body: "You want your team unified under one revenue strategy instead of two competing departments.",
+  },
+] as const;
+
+const frameworkColumns = [
+  {
+    pillar: "Heart",
+    subtitle: "Culture That Fuels Growth",
+    bullets: [
+      "Define what good business means for your team",
+      "Build norms around hospitality, humility, and hustle",
+      "Create internal accountability standards",
+      "Remove cultural toxins and install virtues",
+      "Establish response standards and wow-moment protocols",
+    ],
+  },
+  {
+    pillar: "Heading",
+    subtitle: "Systems That Build Momentum",
+    bullets: [
+      "Merge marketing and sales into one revenue department",
+      "Set clear baselines and 90-day goals",
+      "Build foundational sales collateral and trust-building scripts",
+      "Train your team with consultative sales methodology",
+      "Create repeatable processes that drive predictable growth",
+    ],
+  },
+  {
+    pillar: "Hustle",
+    subtitle: "Rhythms That Sustain Growth",
+    bullets: [
+      "Weekly 90-minute revenue meetings with clear accountability",
+      "Monthly 1:1 reviews for coaching and development",
+      "Quarterly strategy offsites to recalibrate",
+      "Annual vision resets to align long-term goals",
+      "Healthy hustle policies that prevent burnout",
+    ],
+  },
+] as const;
+
+type AgendaSession = {
+  time: string;
+  title: string;
+  bullets: string[];
+};
+
+type AgendaDay = {
+  day: string;
+  date: string;
+  sessions: AgendaSession[];
+};
+
+const agenda: AgendaDay[] = [
   {
     day: "Day 1",
-    subtitle: "Heart + Heading",
-    bullets: [
-      "Accountability Maps — defining ownership at the leadership level",
-      "Unified Revenue — collapsing marketing, sales, and RevOps into one team",
-      "Favorite Customer Profile — built from reality, not aspiration",
-      "Messaging & Proof — the one-liner, the message map, and the case study",
+    date: "Wednesday, July 1",
+    sessions: [
+      {
+        time: "Morning · 9 AM to 12 PM Central",
+        title: "Heart",
+        bullets: [
+          "Building the cultural foundation that drives every revenue decision",
+          "Defining what good business means for your specific team",
+          "Installing the virtues that hold up under pressure",
+          "Live exercise: Map your current culture against the Velocity Heart standard",
+        ],
+      },
+      {
+        time: "Afternoon · 1 PM to 4 PM Central",
+        title: "Heading",
+        bullets: [
+          "Unifying marketing and sales into one revenue department",
+          "Setting clear baselines and 90-day revenue goals",
+          "Building the foundational sales and marketing assets you need",
+          "Live exercise: Draft your unified revenue accountability map",
+        ],
+      },
     ],
   },
   {
     day: "Day 2",
-    subtitle: "Hustle + Certification",
-    bullets: [
-      "Scorecards — the weekly pulse that rolls up to quarterly goals",
-      "Sales conversation design — the 6-part structure that wins",
-      "Dashboards — what's on, what's off, and why",
-      "FRE role playbook — first 90 days inside a client business",
-      "Certification assessment + cohort Q&A",
+    date: "Thursday, July 2",
+    sessions: [
+      {
+        time: "Morning · 9 AM to 12 PM Central",
+        title: "Hustle",
+        bullets: [
+          "Installing the meeting cadence that creates accountability",
+          "Weekly, monthly, quarterly, and annual rhythms that sustain growth",
+          "Hustle without burnout — the policies that protect your team",
+          "Live exercise: Build your weekly revenue meeting agenda",
+        ],
+      },
+      {
+        time: "Afternoon · 1 PM to 4 PM Central",
+        title: "Implementation Planning",
+        bullets: [
+          "Personalized planning for deploying Velocity in your specific business",
+          "90-day implementation roadmap with clear milestones",
+          "Q&A with Clay on your specific challenges",
+          "Live exercise: Walk away with a written 90-day deployment plan",
+        ],
+      },
     ],
   },
 ];
 
-const faqs = [
+const walkAwayLeader = [
+  "Clear vision of what good business looks like in your specific industry",
+  "Confidence to lead unified marketing and sales conversations",
+  "The exact meeting cadence to install in your team next Monday",
+  "A 90-day deployment roadmap customized to your business",
+] as const;
+
+const walkAwayBusiness = [
+  "A unified revenue strategy instead of two competing departments",
+  "Clear accountability standards that survive without you",
+  "Predictable rhythms that create predictable growth",
+  "A culture that attracts and retains the right people",
+] as const;
+
+const workshopRow = [
+  "For business owners and leaders",
+  "$997 per person",
+  "Virtual, July 1–2, 2026",
+  "Learn to deploy Velocity in your business",
+  "You leave with a 90-day plan for your company",
+] as const;
+
+const certificationRow = [
+  "For agency owners, consultants, and fractional executives",
+  "$5,000 per person",
+  "In-person, June 25–26, 2026, Austin, TX",
+  "Get certified to deploy Velocity for clients",
+  "You leave certified to charge $10K to $20K monthly retainers",
+] as const;
+
+const investmentIncludes = [
+  "Two full days of live training with Clay (July 1–2, 2026)",
+  "Complete digital workbook with frameworks and templates",
+  "Live exercises and personalized feedback",
+  "Recordings available for 30 days after the workshop",
+  "Q&A with Clay throughout both days",
+  "Walk away with your 90-day deployment plan",
+] as const;
+
+type Faq = { q: string; a: string };
+
+const programFaqs: Faq[] = [
   {
-    q: "Do I need to have read Velocity before attending?",
-    a: "Yes — the book is required reading. If you haven't read it, we'll send you a copy once you're accepted so you can work through it before the workshop.",
+    q: "Who should attend this workshop?",
+    a: "Business owners, executive leaders, and sales or marketing leaders who want to deploy the Velocity Framework in their own business. If you're running a company between $1M and $20M in revenue and you want a system that brings predictability and clarity to your team, this is for you.",
   },
   {
-    q: "Who is this for?",
-    a: "Revenue leaders, heads of growth, fractional operators, and consultants who want to run the full Heart → Heading → Hustle operating system inside a client business — not just advise on pieces of it.",
+    q: "Is this the same as the Velocity Fractional Certification?",
+    a: "No. This workshop teaches you how to deploy Velocity in your own business. The Fractional Certification trains consultants and agency owners to deploy it for OTHER businesses. After this workshop, you'll know how to do this work yourself. If you want help, you can always hire a Certified Fractional Revenue Executive.",
   },
   {
-    q: "What does the $5,000 include?",
-    a: "Two full days of working sessions with Clay and Luke, all materials, lunch both days, one year of FRE certification, access to the FRE network, and follow-up office hours after the workshop.",
+    q: "Do I get certified by attending this workshop?",
+    a: "No. This workshop teaches you the framework so you can deploy it in your business. If you want to be certified to deploy Velocity professionally for other businesses, you'd want the Velocity Fractional Certification.",
   },
   {
-    q: "How does certification renewal work?",
-    a: "Certification renews annually at $1,500/year and keeps you listed in the FRE network, with continuing access to new tools, cohort office hours, and updates to the framework.",
-  },
-  {
-    q: "Is there a discount?",
-    a: "Use EARLYBIRD2026 at checkout to save $1,000. Expires May 31, 2026.",
-  },
-  {
-    q: "Can I get a refund?",
-    a: "Full refund up to 30 days before the workshop. Cancellations after that receive credit toward a future cohort.",
+    q: "Do I need to read the book first?",
+    a: "No, but it helps. The book gives you the conceptual foundation. The workshop is where you put it into action with your specific business in mind.",
   },
 ];
+
+const logisticsFaqs: Faq[] = [
+  {
+    q: "When and where is the workshop?",
+    a: "July 1–2, 2026 (Wednesday and Thursday). It's virtual via Google Meet. Sessions run from 9 AM to 4 PM Central Time both days. The Google Meet link will be sent to you after registration.",
+  },
+  {
+    q: "Will the sessions be recorded?",
+    a: "Yes. Recordings will be available for 30 days after the workshop for review or to share with team members who couldn't attend live.",
+  },
+  {
+    q: "What if I can't attend the live sessions?",
+    a: "We strongly recommend attending live for the interactive exercises and Q&A. If you have to miss part of it, the recordings are available for 30 days afterward.",
+  },
+  {
+    q: "Can I bring team members?",
+    a: "Each registration covers one person. If you want to bring multiple people from your team, register them individually.",
+  },
+  {
+    q: "What materials are included?",
+    a: "A complete digital workbook with all the frameworks, templates, and exercises from the workshop. You'll receive it before the workshop starts.",
+  },
+];
+
+const investmentFaqs: Faq[] = [
+  {
+    q: "Is there a refund policy?",
+    a: "Because this is a live virtual event with limited capacity, registration is non-refundable. If you can't attend live, you'll have full access to the recordings for 30 days.",
+  },
+  {
+    q: "Why is there no refund?",
+    a: "Live virtual events have real preparation costs and limited capacity. To keep the room focused on people who are committed to doing the work, registration is final. You get the recordings either way.",
+  },
+  {
+    q: "Who do I contact if I have questions before registering?",
+    a: "Email luke@goodagency.com. Luke will help you decide if this workshop is the right fit for your situation.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Page
+// ---------------------------------------------------------------------------
 
 export default function WorkshopPage() {
   return (
     <>
-      {/* ---------- Hero ---------- */}
+      {/* ------------------------------------------------------------------ */}
+      {/* 1. Hero                                                            */}
+      {/* ------------------------------------------------------------------ */}
       <section className="bg-primary text-primary-foreground section-padding">
-        <div className="container-wide grid gap-12 lg:grid-cols-12 items-center">
-          <div className="lg:col-span-7 space-y-6">
-            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent">
-              FRE Certification Workshop
-            </p>
-            <h1 className="font-velocity text-5xl md:text-6xl lg:text-7xl uppercase tracking-wider leading-[0.95]">
-              Become a Fractional Revenue Executive
-            </h1>
-            <p className="text-lg md:text-xl leading-relaxed text-primary-foreground/80 max-w-2xl">
-              Two days with Clay Vaughan and Luke Frazier in Austin. Twelve
-              seats total. Built for revenue leaders who want to run the
-              Velocity framework inside a client business — not just quote
-              from it.
-            </p>
-            <ul className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 text-sm font-heading uppercase tracking-wider text-primary-foreground/80">
-              <li className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 text-accent" />
-                Jun 25–26, 2026
-              </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-accent" />
-                Austin, TX
-              </li>
-              <li className="flex items-center gap-2">
-                <Users2 className="h-4 w-4 text-accent" />
-                12 seats
-              </li>
-              <li className="flex items-center gap-2">
-                <BadgeDollarSign className="h-4 w-4 text-accent" />
-                $5,000
-              </li>
-            </ul>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Button asChild variant="cta" size="lg">
-                <Link href="#apply">Apply now</Link>
-              </Button>
-              <Button asChild variant="gold-outline" size="lg">
-                <Link href="#program">See the program</Link>
-              </Button>
-            </div>
-            <p className="pt-3 text-sm text-primary-foreground/70">
-              Want the full FRE job description first?{" "}
+        <div className="container-wide max-w-5xl">
+          <div className="inline-flex flex-wrap items-center gap-2 rounded-full bg-accent/15 border border-accent/30 px-4 py-1.5 text-[0.65rem] font-heading uppercase tracking-widest text-accent">
+            <Monitor className="h-3.5 w-3.5" />
+            Virtual workshop
+            <span aria-hidden="true">·</span>
+            <CalendarDays className="h-3.5 w-3.5" />
+            July 1–2, 2026
+            <span aria-hidden="true">·</span>
+            <Clock className="h-3.5 w-3.5" />
+            9 AM to 4 PM Central
+          </div>
+          <h1 className="mt-6 font-velocity text-5xl md:text-6xl lg:text-7xl uppercase tracking-wider leading-[0.95]">
+            The Velocity Workshop
+          </h1>
+          <p className="mt-6 max-w-3xl text-lg md:text-xl leading-relaxed text-primary-foreground/85">
+            Two days deploying the Velocity Framework in your business. Built
+            for owners and leaders who want predictable revenue without the
+            chaos.
+          </p>
+
+          <div className="mt-8">
+            <Button asChild variant="cta" size="lg">
+              {/* TODO: Replace https://stripe.com with real Stripe payment link before launch */}
               <Link
-                href="/fre-job-description"
-                className="underline underline-offset-2 hover:text-accent transition-smooth"
+                href={WORKSHOP_STRIPE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                Download it free.
+                Register now
+                <ArrowRight className="h-4 w-4" />
               </Link>
-            </p>
+            </Button>
           </div>
-          <div className="lg:col-span-5">
-            <VisualPlaceholder
-              filename="cohort-hero-1200x900.jpg"
-              width={1200}
-              height={900}
-              label="FRE cohort — workshop hero"
-              rounded="xl"
-            />
-          </div>
-        </div>
-      </section>
 
-      {/* ---------- Founder note ---------- */}
-      <section className="section-padding bg-background">
-        <div className="container-wide grid gap-10 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-4">
-            <VisualPlaceholder
-              filename="clay-workshop-portrait-800x1000.jpg"
-              width={800}
-              height={1000}
-              label="Clay Vaughan — workshop portrait"
-              rounded="xl"
-            />
-          </div>
-          <div className="lg:col-span-8 space-y-5">
-            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
-              A note from Clay
-            </p>
-            <h2 className="font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider">
-              Why this workshop exists
-            </h2>
-            <div className="space-y-4 text-base md:text-lg leading-relaxed text-muted-foreground">
-              <p>
-                I wrote <em>Velocity</em> because I was tired of watching good
-                operators try to duct-tape growth together from disconnected
-                frameworks. Heart, Heading, and Hustle work together — or they
-                don&rsquo;t work at all.
-              </p>
-              <p>
-                The FRE Certification is for the people who want to walk into a
-                client business and run the whole operating system. Luke and I
-                built it for twelve people at a time because that&rsquo;s as
-                many as we can coach directly in two days.
-              </p>
-              <p className="font-heading uppercase tracking-wide text-foreground">
-                — Clay Vaughan
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- Program ---------- */}
-      <section id="program" className="section-padding bg-gradient-section">
-        <div className="container-wide">
-          <SectionHeader
-            eyebrow="The program"
-            title="Two days, fully worked through"
-            description="No slide marathons. Every hour is hands-on work against the Velocity tools, in a room with eleven other revenue leaders."
-          />
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {programDays.map((d) => (
-              <div
-                key={d.day}
-                className="rounded-xl border border-border bg-card p-8 shadow-card"
+          <ul className="mt-10 grid gap-3 sm:grid-cols-3 max-w-3xl">
+            {heroChecks.map((c) => (
+              <li
+                key={c}
+                className="flex items-start gap-2 text-sm text-primary-foreground/85"
               >
-                <p className="font-heading text-xs uppercase tracking-widest text-accent-dark">
-                  {d.day}
-                </p>
-                <h3 className="mt-2 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider">
-                  {d.subtitle}
+                <Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-accent" />
+                <span>{c}</span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-10 text-sm text-primary-foreground/70">
+            Limited virtual seats. Register early to secure your spot.
+          </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 2. Who This Is For                                                 */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-background">
+        <div className="container-wide max-w-5xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            Who it&rsquo;s for
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            Who This Workshop Is For
+          </h2>
+          <p className="mt-4 text-base md:text-lg text-muted-foreground italic">
+            Built for owners and leaders ready to do the work.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {personas.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card"
+              >
+                <h3 className="font-heading text-lg md:text-xl uppercase tracking-wide text-foreground">
+                  {p.title}
                 </h3>
+                <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+                  {p.body}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-10 max-w-3xl text-base md:text-lg leading-relaxed text-foreground italic">
+            If you embody hospitality, humility, and hustle, this room is for
+            you.
+          </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 3. What You'll Learn (Velocity Framework)                          */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-gradient-subtle">
+        <div className="container-wide">
+          <div className="max-w-3xl">
+            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+              The framework
+            </p>
+            <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+              What You&rsquo;ll Learn
+            </h2>
+            <p className="mt-4 text-base md:text-lg text-muted-foreground">
+              Two days. Three pillars. One unified system.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {frameworkColumns.map((col) => (
+              <div
+                key={col.pillar}
+                className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card"
+              >
+                <p className="font-velocity text-3xl md:text-4xl uppercase tracking-wider text-foreground">
+                  {col.pillar}
+                </p>
+                <p className="mt-2 font-heading text-sm uppercase tracking-wide text-accent-dark">
+                  {col.subtitle}
+                </p>
                 <ul className="mt-6 space-y-3">
-                  {d.bullets.map((b) => (
-                    <li key={b} className="flex gap-3 text-sm leading-relaxed">
-                      <Check className="h-4 w-4 mt-1 flex-shrink-0 text-accent-dark" />
+                  {col.bullets.map((b) => (
+                    <li key={b} className="flex gap-3 text-sm leading-relaxed text-foreground">
+                      <Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-accent-dark" />
                       <span>{b}</span>
                     </li>
                   ))}
@@ -216,188 +393,409 @@ export default function WorkshopPage() {
               </div>
             ))}
           </div>
+
+          <div className="mt-12 rounded-xl border-2 border-accent/40 bg-accent/5 p-6 md:p-8 text-center">
+            <p className="font-velocity text-2xl md:text-3xl uppercase tracking-wider text-foreground">
+              Culture + Systems + Rhythm = Predictable Growth
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ---------- Social proof ---------- */}
+      {/* ------------------------------------------------------------------ */}
+      {/* 4. The Two-Day Agenda                                              */}
+      {/* ------------------------------------------------------------------ */}
       <section className="section-padding bg-background">
         <div className="container-wide">
-          <SectionHeader
-            eyebrow="FRE Network"
-            title="Certified FREs work with"
-            description="Once certified, FREs are listed in the network and referred to companies under $50M in revenue looking for embedded revenue leadership."
-          />
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <VisualPlaceholder
-                key={i}
-                filename={`fre-client-logo-${i + 1}-240x120.png`}
-                width={240}
-                height={120}
-                label={`FRE client logo #${i + 1}`}
-                rounded="md"
-              />
+          <div className="max-w-3xl">
+            <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+              The schedule
+            </p>
+            <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+              The Two-Day Agenda
+            </h2>
+            <p className="mt-4 text-base md:text-lg text-muted-foreground">
+              Live, virtual, focused. No filler.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-2">
+            {agenda.map((d) => (
+              <div
+                key={d.day}
+                className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card"
+              >
+                <p className="font-heading text-xs uppercase tracking-widest text-accent-dark">
+                  {d.day}
+                </p>
+                <h3 className="mt-2 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider">
+                  {d.date}
+                </h3>
+                <div className="mt-6 space-y-8">
+                  {d.sessions.map((s) => (
+                    <div key={s.title}>
+                      <p className="font-heading text-[0.65rem] uppercase tracking-widest text-muted-foreground">
+                        {s.time}
+                      </p>
+                      <p className="mt-1 font-heading text-base md:text-lg uppercase tracking-wide text-foreground">
+                        {s.title}
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {s.bullets.map((b) => (
+                          <li
+                            key={b}
+                            className="flex gap-3 text-sm leading-relaxed text-foreground"
+                          >
+                            <Check className="h-4 w-4 mt-0.5 flex-shrink-0 text-accent-dark" />
+                            <span>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
+          </div>
+
+          <p className="mt-10 max-w-3xl text-sm md:text-base text-muted-foreground">
+            All sessions live via Google Meet. Recordings available for 30
+            days after the workshop for review and team sharing.
+          </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 5. What You'll Walk Away With                                      */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-gradient-section">
+        <div className="container-wide">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            The outcome
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            What You&rsquo;ll Walk Away With
+          </h2>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
+              <h3 className="font-heading text-lg md:text-xl uppercase tracking-wide text-foreground">
+                For You as a Leader
+              </h3>
+              <ul className="mt-6 space-y-3">
+                {walkAwayLeader.map((b) => (
+                  <li
+                    key={b}
+                    className="flex gap-3 text-sm md:text-base leading-relaxed text-foreground"
+                  >
+                    <Check className="h-4 w-4 mt-1 flex-shrink-0 text-accent-dark" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
+              <h3 className="font-heading text-lg md:text-xl uppercase tracking-wide text-foreground">
+                For Your Business
+              </h3>
+              <ul className="mt-6 space-y-3">
+                {walkAwayBusiness.map((b) => (
+                  <li
+                    key={b}
+                    className="flex gap-3 text-sm md:text-base leading-relaxed text-foreground"
+                  >
+                    <Check className="h-4 w-4 mt-1 flex-shrink-0 text-accent-dark" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ---------- Apply / Pay ---------- */}
-      <section id="apply" className="section-padding bg-gradient-section">
-        <div className="container-wide grid gap-8 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <SectionHeader
-              eyebrow="Apply for the cohort"
-              title="Start with an application"
-              description="At $5,000, Luke wants a short conversation before collecting payment — it's a tighter cohort and better fit for everyone. Submit the application and we'll respond within 2 business days."
-            />
-            <div className="mt-8">
-              <HubSpotFormSlot
-                formKey="workshop_application"
-                heading="Workshop application"
-                subheading="Routes to Luke Frazier for review. Applicants added to HubSpot with lifecycle stage 'Workshop Applicant'."
-                fields={[
-                  { name: "firstname", label: "First name", required: true },
-                  { name: "lastname", label: "Last name", required: true },
-                  { name: "email", label: "Email", type: "email", required: true },
-                  { name: "phone", label: "Phone", type: "tel" },
-                  { name: "company", label: "Company", required: true },
-                  { name: "role", label: "Your role", required: true },
-                  {
-                    name: "years_leadership",
-                    label: "Years in revenue leadership",
-                    type: "select",
-                  },
-                  {
-                    name: "why_certification",
-                    label: "Why do you want to be certified as an FRE?",
-                    type: "textarea",
-                    required: true,
-                  },
-                  {
-                    name: "apply_to",
-                    label: "Where would you apply this? (clients, own business, other)",
-                    type: "textarea",
-                  },
-                ]}
-                workflow="workshop_applicant_intake_v1"
-                submitLabel="Submit application"
-              />
+      {/* ------------------------------------------------------------------ */}
+      {/* 6. How This Differs From the Certification                         */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-background">
+        <div className="container-wide max-w-5xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            Comparing the two
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            How This Is Different From the Certification
+          </h2>
+          <p className="mt-6 text-base md:text-lg leading-relaxed text-muted-foreground">
+            If you&rsquo;re trying to figure out which is right for you,
+            here&rsquo;s the simple version: this workshop is for deploying
+            Velocity in <strong className="text-foreground">your</strong>{" "}
+            business. The Velocity Fractional Certification is for consultants
+            and agency owners who want to deploy it for{" "}
+            <strong className="text-foreground">other</strong> businesses.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="rounded-2xl border-2 border-accent/40 bg-accent/5 p-6 md:p-8">
+              <p className="font-heading text-xs uppercase tracking-widest text-accent-dark">
+                The Velocity Workshop · You&rsquo;re here
+              </p>
+              <ul className="mt-6 space-y-3">
+                {workshopRow.map((b) => (
+                  <li
+                    key={b}
+                    className="flex gap-3 text-sm md:text-base leading-relaxed text-foreground"
+                  >
+                    <Check className="h-4 w-4 mt-1 flex-shrink-0 text-accent-dark" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
+              <p className="font-heading text-xs uppercase tracking-widest text-muted-foreground">
+                The Velocity Fractional Certification
+              </p>
+              <ul className="mt-6 space-y-3">
+                {certificationRow.map((b) => (
+                  <li
+                    key={b}
+                    className="flex gap-3 text-sm md:text-base leading-relaxed text-foreground"
+                  >
+                    <Check className="h-4 w-4 mt-1 flex-shrink-0 text-muted-foreground" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
-              <p className="font-heading text-xs uppercase tracking-widest text-accent-dark">
-                Already talked with Luke?
-              </p>
-              <h3 className="mt-2 font-heading text-xl uppercase tracking-wide">
-                Secure your seat
+          <div className="mt-10 rounded-xl border border-border bg-secondary/40 p-6 md:p-8">
+            <p className="text-base md:text-lg leading-relaxed text-foreground">
+              After this workshop, you&rsquo;ll know how to deploy Velocity
+              in your own business. If you want to scale faster or you
+              don&rsquo;t have the bandwidth to do it yourself, you can
+              always hire a Certified Fractional Revenue Executive who&rsquo;s
+              been certified through the Velocity Fractional Certification to
+              help you deploy it. Either path works. Pick the one that fits
+              where you are.
+            </p>
+          </div>
+
+          <div className="mt-8">
+            <Link
+              href="/certification"
+              className="inline-flex items-center gap-2 font-heading text-sm uppercase tracking-wider text-accent-dark hover:text-foreground transition-smooth"
+            >
+              Learn about the certification
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 7. About Clay                                                       */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-gradient-section">
+        <div className="container-wide max-w-4xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            Your guide
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            Who You&rsquo;ll Be Learning From
+          </h2>
+          <p className="mt-6 text-base md:text-lg leading-relaxed text-muted-foreground">
+            Clay Vaughan is the founder of Good Agency, author of Velocity,
+            and creator of the Heart → Heading → Hustle framework. He&rsquo;s
+            spent over a decade helping business owners build revenue systems
+            that scale without chaos. The Velocity Framework is what
+            he&rsquo;s used with his own clients to help them grow predictably
+            without burning out their teams.
+          </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 8. Investment                                                      */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-background">
+        <div className="container-wide max-w-5xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            Investment
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            Your Investment
+          </h2>
+          <p className="mt-4 text-base md:text-lg text-muted-foreground italic">
+            Two days. One framework. A clearer path forward.
+          </p>
+
+          <div className="mt-10 rounded-2xl border-2 border-accent/40 bg-card p-6 md:p-10 shadow-card">
+            <div className="text-center">
+              <h3 className="font-heading text-sm uppercase tracking-widest text-accent-dark">
+                Workshop Registration
               </h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                If you&rsquo;ve already had the call and Luke has confirmed your
-                fit, you can complete registration with the Stripe checkout
-                below.
+              <p className="mt-3 font-velocity text-6xl md:text-7xl tracking-wider text-foreground">
+                $997
               </p>
-              {/*
-                Stripe Payment Link checkout. Live URL is configured in
-                `siteConfig.stripeWorkshopPaymentLink`. Opens in a new tab so
-                the user doesn't lose their place on /workshop. EARLYBIRD2026
-                promo is enabled on the Payment Link itself (no client-side
-                code needed). If we ever switch to embedded checkout, swap
-                this anchor for Stripe Elements + NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.
-              */}
-              <div className="mt-5 rounded-lg border border-border bg-secondary/40 px-4 py-6 text-center">
-                <p className="font-velocity text-3xl tracking-wider">
-                  $5,000
-                </p>
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Use promo code <span className="font-mono text-foreground">EARLYBIRD2026</span>{" "}
-                  for $1,000 off (expires May 31, 2026).
-                </p>
-                <a
-                  href={siteConfig.stripeWorkshopPaymentLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-stripe-payment-link
-                  data-product="fre-certification-austin-2026-06"
-                  className="mt-5 inline-flex h-12 items-center justify-center rounded-lg bg-accent px-6 font-heading uppercase tracking-wide text-accent-foreground shadow-card transition hover:bg-accent-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark"
-                >
-                  Secure your seat →
-                </a>
-                <p className="mt-3 text-[0.65rem] font-mono uppercase tracking-widest text-muted-foreground">
-                  Secure checkout via Stripe · opens in a new tab
-                </p>
-              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Per person. Virtual format.
+              </p>
             </div>
 
-            <div id="hire-an-fre" className="rounded-xl border border-border bg-primary text-primary-foreground p-6">
-              <p className="font-heading text-xs uppercase tracking-widest text-accent">
-                Looking to hire, not attend?
-              </p>
-              <h3 className="mt-2 font-heading text-xl uppercase tracking-wide">
-                Engage a certified FRE
-              </h3>
-              <p className="mt-3 text-sm text-primary-foreground/80">
-                Certified FREs embed with companies under $50M in revenue to
-                run the full framework. Typical engagement: $10k–$20k/month,
-                10–20 hours/week, multi-year.
-              </p>
-              <Button asChild variant="cta" size="md" className="mt-5">
-                <Link href="/contact?inquiry=hire-fre">Tell us what you need</Link>
+            <ul className="mt-8 grid gap-3 md:grid-cols-2 max-w-2xl mx-auto">
+              {investmentIncludes.map((b) => (
+                <li
+                  key={b}
+                  className="flex gap-3 text-sm md:text-base leading-relaxed text-foreground"
+                >
+                  <Check className="h-4 w-4 mt-1 flex-shrink-0 text-accent-dark" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-10 flex flex-col items-center gap-4">
+              <Button asChild variant="cta" size="lg">
+                {/* TODO: Replace https://stripe.com with real Stripe payment link before launch */}
+                <Link
+                  href={WORKSHOP_STRIPE_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Register now
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
+
+          <p className="mt-8 text-sm md:text-base text-muted-foreground text-center max-w-3xl mx-auto">
+            Because this is a live virtual event with limited capacity,
+            registration is non-refundable. If you can&rsquo;t attend live,
+            you&rsquo;ll have access to the recordings for 30 days.
+          </p>
         </div>
       </section>
 
-      {/* ---------- FAQ ---------- */}
-      <section className="section-padding bg-background">
-        <div className="container-narrow">
-          <SectionHeader
-            align="center"
-            eyebrow="FAQ"
-            title="Questions, answered"
-          />
-          <ul className="mt-10 divide-y divide-border border-y border-border">
-            {faqs.map((item) => (
-              <li key={item.q} className="py-6">
-                <h3 className="font-heading text-lg uppercase tracking-wide">
-                  {item.q}
-                </h3>
-                <p className="mt-3 text-sm md:text-base leading-relaxed text-muted-foreground">
-                  {item.a}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ---------- Pre-apply callout ---------- */}
-      <section className="section-padding bg-gradient-section">
-        <div className="container-narrow max-w-3xl">
+      {/* ------------------------------------------------------------------ */}
+      {/* 9. FAQ                                                              */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-gradient-subtle">
+        <div className="container-wide max-w-4xl">
           <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
-            Before you apply
+            FAQ
           </p>
-          <h2 className="mt-3 font-velocity text-foreground text-3xl md:text-4xl uppercase tracking-wider leading-tight">
-            Not sure if you have the right revenue team structure in place?
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            Frequently Asked Questions
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            Build your Revenue Team Accountability Map free before you apply
-            — it&rsquo;s the clearest way to see where the gaps are and
-            whether a Fractional Revenue Executive is the missing seat.
-          </p>
-          <div className="mt-6">
+
+          <FaqGroup heading="Program Details" faqs={programFaqs} />
+          <FaqGroup heading="Logistics" faqs={logisticsFaqs} />
+          <FaqGroup heading="Investment & Policies" faqs={investmentFaqs} />
+
+          <p className="mt-12 text-base md:text-lg text-muted-foreground">
+            Still have questions? Email{" "}
             <a
-              href="/revenue-team-accountability-map"
-              className="inline-flex items-center gap-2 rounded-lg border border-accent/60 bg-transparent text-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide transition-smooth hover:bg-accent/10 hover:border-accent"
+              href={`mailto:${LUKE_EMAIL}`}
+              className="underline underline-offset-2 text-accent-dark hover:text-foreground transition-smooth"
             >
-              Build your Revenue Team Map →
-            </a>
-          </div>
+              {LUKE_EMAIL}
+            </a>{" "}
+            or check the{" "}
+            <Link
+              href="/certification"
+              className="underline underline-offset-2 text-accent-dark hover:text-foreground transition-smooth"
+            >
+              certification page
+            </Link>{" "}
+            if you&rsquo;re trying to decide which option is right for you.
+          </p>
         </div>
       </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 10. Final CTA                                                       */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-primary text-primary-foreground">
+        <div className="container-wide max-w-3xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent">
+            July 1–2, 2026 · Virtual via Google Meet
+          </p>
+          <h2 className="mt-3 font-velocity text-primary-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            Two days. One framework. A clearer path forward for your business.
+          </h2>
+          <div className="mt-8">
+            <Button asChild variant="cta" size="lg">
+              {/* TODO: Replace https://stripe.com with real Stripe payment link before launch */}
+              <Link
+                href={WORKSHOP_STRIPE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Register now
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <p className="mt-8 text-sm text-primary-foreground/70">
+            Limited virtual seats. Registration is non-refundable. Recordings
+            included for 30 days after the workshop.
+          </p>
+        </div>
+      </section>
+
+      {/* Mobile bottom-padding spacer so the sticky CTA doesn't cover the
+          last line of the final section. md:h-0 zeroes it out on tablet+. */}
+      <div className="h-20 md:h-0" aria-hidden="true" />
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 11. Mobile sticky CTA                                              */}
+      {/* ------------------------------------------------------------------ */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-border bg-background/95 backdrop-blur shadow-lg">
+        <div className="px-4 py-3">
+          {/* TODO: Replace https://stripe.com with real Stripe payment link before launch */}
+          <Link
+            href={WORKSHOP_STRIPE_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent text-accent-foreground px-6 py-3 font-heading text-sm uppercase tracking-wide shadow-card transition-smooth hover:bg-accent-dark hover:shadow-glow"
+          >
+            Register — July 1–2
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
     </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// FAQ subcomponent — native <details>/<summary> for zero-JS collapsing
+// ---------------------------------------------------------------------------
+
+function FaqGroup({ heading, faqs }: { heading: string; faqs: Faq[] }) {
+  return (
+    <div className="mt-12">
+      <h3 className="font-heading text-sm uppercase tracking-widest text-accent-dark">
+        {heading}
+      </h3>
+      <div className="mt-4 space-y-3">
+        {faqs.map((f) => (
+          <details
+            key={f.q}
+            className="group rounded-xl border border-border bg-card overflow-hidden"
+          >
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-heading text-sm md:text-base uppercase tracking-wide text-foreground hover:bg-secondary/50 transition-smooth">
+              <span>{f.q}</span>
+              <ChevronDown className="h-4 w-4 flex-shrink-0 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="px-5 pb-5 text-sm md:text-base leading-relaxed text-muted-foreground">
+              {f.a}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
   );
 }
