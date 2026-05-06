@@ -5,7 +5,7 @@ import { VisualPlaceholder } from "@/components/VisualPlaceholder";
 import { PillarCard } from "@/components/PillarCard";
 import { ResourceCard } from "@/components/ResourceCard";
 import { SectionHeader } from "@/components/SectionHeader";
-import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
+import { ToolboxCTASection } from "@/components/ToolboxCTASection";
 import { resources } from "@/lib/resources";
 import { siteConfig } from "@/config/site";
 
@@ -245,30 +245,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- Newsletter capture ---------- */}
-      <section className="section-padding bg-gradient-subtle">
-        <div className="container-narrow">
-          <SectionHeader
-            align="center"
-            eyebrow="Get new releases"
-            title="Get the next resource first"
-            description="One short email when a new worksheet, script, or scorecard goes live. No spam, no drip, no funnel tricks — just a heads-up."
-          />
-          <div className="mt-10 mx-auto max-w-xl">
-            <HubSpotFormSlot
-              formKey="homepage_newsletter"
-              heading="Release notifications"
-              subheading="Tagged as book_reader_source: homepage"
-              fields={[
-                { name: "firstname", label: "First name", required: true },
-                { name: "email", label: "Email", type: "email", required: true },
-              ]}
-              workflow="welcome_sequence_v1"
-              submitLabel="Subscribe"
-            />
-          </div>
-        </div>
-      </section>
+      <ToolboxCTASection background="bg-gradient-subtle" />
     </>
   );
 }

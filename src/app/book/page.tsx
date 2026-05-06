@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { VisualPlaceholder } from "@/components/VisualPlaceholder";
 import { SectionHeader } from "@/components/SectionHeader";
 import { PillarCard } from "@/components/PillarCard";
-import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
+import { ToolboxCTASection } from "@/components/ToolboxCTASection";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -115,39 +115,7 @@ export default function BookPage() {
         </div>
       </section>
 
-      <section className="section-padding bg-gradient-section">
-        <div className="container-narrow">
-          <SectionHeader
-            align="center"
-            eyebrow="Readers"
-            title="Already read it? Start here."
-            description="Tell us what you read and we'll route you straight to the worksheet for the chapter you're working on."
-          />
-          <div className="mt-10 mx-auto max-w-xl">
-            <HubSpotFormSlot
-              formKey="book_reader_intake"
-              heading="I've read the book — now what?"
-              subheading="Tagged as book_reader_source: book_page · multi_pillar_interest"
-              fields={[
-                { name: "firstname", label: "First name", required: true },
-                { name: "email", label: "Email", type: "email", required: true },
-                {
-                  name: "pillar_interest",
-                  label: "Which pillar are you working on? (multi-select)",
-                  type: "checkbox",
-                },
-                {
-                  name: "role",
-                  label: "Your role",
-                  type: "text",
-                },
-              ]}
-              workflow="reader_intake_v1"
-              submitLabel="Get my next step"
-            />
-          </div>
-        </div>
-      </section>
+      <ToolboxCTASection />
     </>
   );
 }

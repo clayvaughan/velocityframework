@@ -4,7 +4,7 @@ import { ArrowRight, ClipboardCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/SectionHeader";
 import { ResourceCard } from "@/components/ResourceCard";
-import { HubSpotFormSlot } from "@/components/HubSpotFormSlot";
+import { ToolboxCTASection } from "@/components/ToolboxCTASection";
 import { PillarTag } from "@/components/PillarTag";
 import { resourcesByPillar, pillarMeta } from "@/lib/resources";
 
@@ -108,29 +108,7 @@ export default function HeartPage() {
         </div>
       </section>
 
-      <section className="section-padding bg-gradient-section">
-        <div className="container-narrow">
-          <SectionHeader
-            align="center"
-            eyebrow="Read the pillar email"
-            title="A short email series on Heart"
-            description="Four short emails from Clay across two weeks — one core idea per email, drawn from the Heart section of the book."
-          />
-          <div className="mt-10 mx-auto max-w-xl">
-            <HubSpotFormSlot
-              formKey="heart_nurture_subscribe"
-              heading="Subscribe to the Heart series"
-              subheading="Tagged as pillar_interest: heart"
-              fields={[
-                { name: "firstname", label: "First name", required: true },
-                { name: "email", label: "Email", type: "email", required: true },
-              ]}
-              workflow="heart_pillar_nurture_v1"
-              submitLabel="Send me the series"
-            />
-          </div>
-        </div>
-      </section>
+      <ToolboxCTASection />
     </>
   );
 }
