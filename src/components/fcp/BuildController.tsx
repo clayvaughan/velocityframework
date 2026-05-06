@@ -112,9 +112,14 @@ export function BuildController({
     try {
       await persist();
       if (step === 0) setStep(1);
-      else if (step === 1) setStep(2);
-      else if (step === 2) setStep(3);
-      else if (step === 3) setStep(summaryStep);
+      else if (step >= 1 && step < summaryStep) {
+        // After the last filled profile slot, jump to summary instead of
+        // landing on a blank step. profiles.length is 1, 2, or 3 — so
+        // when step has caught up to it, the user has reviewed every FCP
+        // they've defined and the next move is the final review.
+        if (step >= profiles.length) setStep(summaryStep);
+        else setStep(step + 1);
+      }
       else if (step === summaryStep) {
         const saveRes = await fetch(
           `/api/favorite-customer-profile/${worksheetId}/save`,
@@ -137,11 +142,15 @@ export function BuildController({
   function handleBack() {
     if (step === 0) return;
     if (step === 1) setStep(hasScope ? 0 : 1);
-    else if (step === summaryStep) setStep(3);
+    else if (step === summaryStep) setStep(Math.max(1, profiles.length));
     else setStep(step - 1);
   }
 
   const profileIndex = step >= 1 && step <= 3 ? step - 1 : -1;
+  // True when the user is on the last profile they've defined, so the next
+  // click jumps to summary rather than to another blank profile slot.
+  const goingToSummaryNext =
+    profileIndex >= 0 && step >= profiles.length;
   const canNext =
     step === 0
       ? true
@@ -240,7 +249,7 @@ export function BuildController({
               Save my worksheet
               <ArrowRight className="h-4 w-4" />
             </>
-          ) : step === 3 ? (
+          ) : goingToSummaryNext ? (
             <>
               Review &amp; save
               <ArrowRight className="h-4 w-4" />
