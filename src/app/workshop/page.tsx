@@ -168,6 +168,19 @@ const walkAwayBusiness = [
   "A culture that attracts and retains the right people",
 ] as const;
 
+const privateIncludes = [
+  "Two-day intensive deployment for your leadership team",
+  "Pre-work to customize the framework to your specific business and industry",
+  "On-site delivery at your location (or virtual if preferred)",
+  "Implementation framework tailored to your company's stage and challenges",
+  "Post-workshop check-in 30 days after delivery to verify rhythms are sticking",
+  "Direct access to Clay throughout the engagement",
+  "Complete workbook and templates customized for your team",
+] as const;
+
+const LUKE_CALENDAR_URL =
+  "https://meetings.hubspot.com/luke911/velocity-strategy-call";
+
 const workshopRow = [
   "For business owners and leaders",
   "$997 per person",
@@ -594,7 +607,119 @@ export default function WorkshopPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 7. About Clay                                                       */}
+      {/* 7. Private Workshops                                                */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="section-padding bg-gradient-subtle">
+        <div className="container-wide max-w-5xl">
+          <p className="font-heading text-xs uppercase tracking-[0.3em] text-accent-dark">
+            Another way to do this
+          </p>
+          <h2 className="mt-3 font-velocity text-foreground text-4xl md:text-5xl uppercase tracking-wider leading-[0.95]">
+            Want Velocity for Your Whole Team?
+          </h2>
+          <p className="mt-6 max-w-3xl text-base md:text-lg leading-relaxed text-muted-foreground">
+            Some leaders don&rsquo;t want to wait for a public workshop, and
+            they don&rsquo;t want their team learning the framework
+            piecemeal. They want Velocity deployed in their business, with
+            their team, customized to their specific revenue goals. For
+            those companies, we run private workshops.
+          </p>
+
+          {/* What's included */}
+          <div className="mt-10 rounded-2xl border border-border bg-card p-6 md:p-8 shadow-card">
+            <h3 className="font-heading text-base md:text-lg uppercase tracking-wide text-foreground">
+              What&rsquo;s included in a private workshop
+            </h3>
+            <ul className="mt-6 grid gap-3 md:grid-cols-2">
+              {privateIncludes.map((b) => (
+                <li
+                  key={b}
+                  className="flex gap-3 text-sm md:text-base leading-relaxed text-foreground"
+                >
+                  <Check className="h-4 w-4 mt-1 flex-shrink-0 text-accent-dark" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Investment card */}
+          <div className="mt-10 rounded-2xl border-2 border-accent/40 bg-card p-6 md:p-10 shadow-card">
+            <div className="text-center">
+              <h3 className="font-heading text-sm uppercase tracking-widest text-accent-dark">
+                Investment
+              </h3>
+              <p className="mt-3 font-velocity text-5xl md:text-6xl tracking-wider text-foreground">
+                Starts at $35,000
+              </p>
+              <p className="mt-4 max-w-2xl mx-auto text-sm md:text-base text-muted-foreground">
+                Includes up to 10 attendees. Additional team members at $750
+                per person. Maximum 25 attendees per private workshop.
+              </p>
+              <p className="mt-4 max-w-2xl mx-auto text-xs md:text-sm text-muted-foreground italic">
+                Travel and venue costs not included for on-site engagements.
+                Virtual private workshops available without travel costs.
+              </p>
+            </div>
+          </div>
+
+          {/* Who this is for */}
+          <div className="mt-10 rounded-xl border border-border bg-secondary/40 p-6 md:p-8">
+            <h3 className="font-heading text-sm uppercase tracking-widest text-accent-dark">
+              Who private workshops work best for
+            </h3>
+            <p className="mt-3 text-base md:text-lg leading-relaxed text-foreground">
+              Private workshops work best for companies between $2 million
+              and $50 million in revenue with leadership teams ready to do
+              hard work. If you&rsquo;re earlier than that, the public
+              workshop or the toolbox is probably a better starting point.
+              We&rsquo;re not trying to upsell you. We&rsquo;re trying to
+              make sure you get value from this.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="mt-12 text-center">
+            <h3 className="font-velocity text-3xl md:text-4xl uppercase tracking-wider text-foreground">
+              Ready to talk?
+            </h3>
+            <p className="mt-4 max-w-3xl mx-auto text-base md:text-lg leading-relaxed text-muted-foreground">
+              Luke runs intake calls for private workshops. He&rsquo;ll ask
+              you about your situation, your team, and your revenue goals to
+              confirm it&rsquo;s the right fit. There&rsquo;s no pitch. Just
+              a conversation about whether this makes sense for where your
+              business is right now.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <Button asChild variant="gold-outline" size="lg">
+                <Link
+                  href={LUKE_CALENDAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Schedule a conversation with Luke
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground italic">
+              Most private workshops are scheduled 30 days out to allow for
+              proper preparation.
+            </p>
+          </div>
+
+          {/* Honest framing footer */}
+          <p className="mt-12 max-w-3xl text-base md:text-lg leading-relaxed text-muted-foreground">
+            Private workshops aren&rsquo;t right for every business. If
+            you&rsquo;re not sure which option fits, the public workshop on
+            July 1–2 is the easiest entry point and gives you everything
+            you need to deploy Velocity yourself.
+          </p>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* 8. About Clay                                                       */}
       {/* ------------------------------------------------------------------ */}
       <section className="section-padding bg-gradient-section">
         <div className="container-wide max-w-4xl">
@@ -616,7 +741,7 @@ export default function WorkshopPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 8. Investment                                                      */}
+      {/* 9. Investment                                                      */}
       {/* ------------------------------------------------------------------ */}
       <section className="section-padding bg-background">
         <div className="container-wide max-w-5xl">
@@ -679,7 +804,7 @@ export default function WorkshopPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 9. FAQ                                                              */}
+      {/* 10. FAQ                                                             */}
       {/* ------------------------------------------------------------------ */}
       <section className="section-padding bg-gradient-subtle">
         <div className="container-wide max-w-4xl">
@@ -715,7 +840,7 @@ export default function WorkshopPage() {
       </section>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 10. Final CTA                                                       */}
+      {/* 11. Final CTA                                                       */}
       {/* ------------------------------------------------------------------ */}
       <section className="section-padding bg-primary text-primary-foreground">
         <div className="container-wide max-w-3xl">
@@ -750,7 +875,7 @@ export default function WorkshopPage() {
       <div className="h-20 md:h-0" aria-hidden="true" />
 
       {/* ------------------------------------------------------------------ */}
-      {/* 11. Mobile sticky CTA                                              */}
+      {/* 12. Mobile sticky CTA                                              */}
       {/* ------------------------------------------------------------------ */}
       <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-border bg-background/95 backdrop-blur shadow-lg">
         <div className="px-4 py-3">
