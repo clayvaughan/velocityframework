@@ -95,13 +95,36 @@ export async function syncContactWithQuizResult(
     return { ok: false, skipped: true, reason: "no_token" };
   }
 
+  // Tier-aware nurture routing — both tool_used and nurture_track get the
+  // same tier-specific value so HubSpot's three Health Check sequences
+  // (Healthy / At Risk / Critical) can trigger off nurture_track directly
+  // without an extra match-on-tier step. Team-mode participants are routed
+  // to the at_risk middle-tier sequence as a safe default — they're not a
+  // buyer signal, so we don't want to assume their leader's tier maps to
+  // theirs. Defensive trailing fallback covers any unexpected stored
+  // value without breaking the API call.
+  const trackValue: string = (() => {
+    if (input.asTeamParticipant) return "culture_health_check_at_risk";
+    const tier = input.cultureHealthTier;
+    if (tier === "healthy") return "culture_health_check_healthy";
+    if (tier === "at_risk") return "culture_health_check_at_risk";
+    if (tier === "critical") return "culture_health_check_critical";
+    return "culture_health_check_at_risk";
+  })();
+  console.log(
+    "[health-check-tier] Routing to:",
+    trackValue,
+    "for email:",
+    input.email
+  );
+
   const properties: Record<string, string> = {
     email: input.email,
     firstname: input.firstName,
     lifecyclestage: "subscriber",
-    tool_used: "culture_health_check",
+    tool_used: trackValue,
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
-    nurture_track: "culture_health_check",
+    nurture_track: trackValue,
     nurture_status: "active",
   };
   if (input.company) properties.company = input.company;
