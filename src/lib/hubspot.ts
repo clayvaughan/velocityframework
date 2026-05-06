@@ -34,11 +34,25 @@ export function isHubSpotConfigured(): boolean {
 // Contact sync
 // ---------------------------------------------------------------------------
 
-const TIER_HUBSPOT_LABEL: Record<Tier, string> = {
-  healthy: "Healthy",
-  at_risk: "At Risk",
-  critical: "Critical",
+/**
+ * Map the user-facing role label (as captured by <RoleSelect />) to the
+ * internal value HubSpot's `role` dropdown expects. If a label doesn't
+ * map (HubSpot allowed-list changes, or stored data drift), the caller
+ * should omit `role` rather than send an invalid value — invalid options
+ * trigger HubSpot 400 VALIDATION_ERROR and reject the entire contact
+ * write atomically (no properties land).
+ */
+const ROLE_LABEL_TO_HUBSPOT_VALUE: Record<string, string> = {
+  "Business Owner": "business_owner",
+  "Fractional Revenue Executive": "fractional_revenue_executive",
+  "Leader / Executive": "leader_or_executive",
+  "Coach / Consultant": "coach_or_consultant",
+  "Reader": "reader",
 };
+
+function hubspotRoleValue(label: string): string | undefined {
+  return ROLE_LABEL_TO_HUBSPOT_VALUE[label];
+}
 
 export type QuizContactInput = {
   email: string;
@@ -84,22 +98,15 @@ export async function syncContactWithQuizResult(
   const properties: Record<string, string> = {
     email: input.email,
     firstname: input.firstName,
-    role: input.role,
+    lifecyclestage: "subscriber",
     tool_used: "culture_health_check",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "culture_health_check",
     nurture_status: "active",
   };
   if (input.company) properties.company = input.company;
-  if (input.companySize) properties.company_size = input.companySize;
-  if (input.asTeamParticipant) {
-    properties.team_quiz_participant = "true";
-  } else {
-    properties.culture_health_score = String(input.cultureHealthScore);
-    properties.culture_health_tier = TIER_HUBSPOT_LABEL[input.cultureHealthTier];
-    properties.resources_requested = input.recommendedResourceSlugs.join(";");
-    properties.lifecyclestage = "subscriber";
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   // Upsert by email. HubSpot's search-and-update pattern:
   try {
@@ -264,19 +271,14 @@ export async function syncActionPlanContact(input: {
   const properties: Record<string, string> = {
     email: input.email,
     firstname: input.firstName,
-    role: input.role,
-    action_plan_focus_areas: input.focusAreaTitles.join(";"),
-    action_plan_virtues: input.virtues.join(";"),
-    action_plan_status: "In Progress",
     lifecyclestage: "subscriber",
     tool_used: "culture_action_plan",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "culture_action_plan",
     nurture_status: "active",
   };
-  if (input.teamSize) properties.company_size = input.teamSize;
-  if (input.reassessmentDate)
-    properties.action_plan_reassessment_date = input.reassessmentDate;
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -376,17 +378,15 @@ export async function syncFcpContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
     industry: input.industry,
-    fcp_completed_at: new Date().toISOString(),
-    fcp_profile_count: String(input.fcpProfileCount),
-    fcp_has_scope_filters: input.fcpHasScopeFilters ? "true" : "false",
     lifecyclestage: "subscriber",
     tool_used: "favorite_customer_profile",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "favorite_customer_profile",
     nurture_status: "active",
   };
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   console.log(
     "[hubspot-debug] Sending properties:",
@@ -511,19 +511,14 @@ export async function syncMessagingChecklistContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    messaging_checklist_completed_at: new Date().toISOString(),
-    messaging_collateral_score: String(input.collateralScore),
     lifecyclestage: "subscriber",
     tool_used: "messaging_proof_checklist",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "messaging_proof_checklist",
     nurture_status: "active",
   };
-  if (input.onelinerFinal && input.onelinerFinal.trim().length > 0) {
-    // HubSpot text properties cap ~65k chars but practically we want the one-liner short.
-    properties.messaging_oneliner = input.onelinerFinal.slice(0, 1000);
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -614,20 +609,14 @@ export async function syncAccountabilityMapContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    accountability_map_completed_at: new Date().toISOString(),
-    accountability_map_role_count: String(input.roleCount),
     lifecyclestage: "subscriber",
     tool_used: "leadership_accountability_map",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "leadership_accountability_map",
     nurture_status: "active",
   };
-  if (input.nextReflectionDateISO) {
-    // HubSpot date properties expect YYYY-MM-DD
-    properties.accountability_map_next_reflection_date =
-      input.nextReflectionDateISO.slice(0, 10);
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -717,21 +706,14 @@ export async function syncScorecardExampleContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    scorecard_example_downloaded_at: new Date().toISOString(),
-    // Append to the multi-value resources_downloaded property. HubSpot merges
-    // semicolon-separated values when the property is configured as a
-    // multi-checkbox.
-    resources_downloaded: "Good Agency Scorecard Example",
     lifecyclestage: "subscriber",
     tool_used: "scorecard_example",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "scorecard_example",
     nurture_status: "active",
   };
-  if (input.scorecardTargetRole && input.scorecardTargetRole.trim().length > 0) {
-    properties.scorecard_target_role = input.scorecardTargetRole.slice(0, 1000);
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -821,18 +803,14 @@ export async function syncDashboardExampleContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    dashboard_example_downloaded_at: new Date().toISOString(),
-    resources_downloaded: "Good Agency Dashboard Example",
     lifecyclestage: "subscriber",
     tool_used: "dashboard_example",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "dashboard_example",
     nurture_status: "active",
   };
-  if (input.metricsChallenge && input.metricsChallenge.trim().length > 0) {
-    properties.metrics_challenge = input.metricsChallenge.slice(0, 1000);
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -903,12 +881,6 @@ export async function syncDashboardExampleContact(input: {
 // Unified Revenue Team Accountability Map contact sync
 // ---------------------------------------------------------------------------
 
-const HAS_DOR_HUBSPOT_LABEL: Record<"yes" | "no" | "planning", string> = {
-  yes: "Yes",
-  no: "No",
-  planning: "Planning to hire",
-};
-
 export async function syncRevenueTeamMapContact(input: {
   email: string;
   firstName: string;
@@ -930,17 +902,14 @@ export async function syncRevenueTeamMapContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    revenue_team_map_completed_at: new Date().toISOString(),
-    revenue_team_role_count: String(input.roleCount),
-    has_director_of_revenue: HAS_DOR_HUBSPOT_LABEL[input.hasDirectorOfRevenue],
-    annual_revenue_range: input.annualRevenueRange,
     lifecyclestage: "subscriber",
     tool_used: "unified_revenue_team_map",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "unified_revenue_team_map",
     nurture_status: "active",
   };
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -1030,21 +999,14 @@ export async function syncTrustBuildingScriptContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    trust_building_script_downloaded_at: new Date().toISOString(),
-    // Append to the multi-value resources_downloaded property. HubSpot
-    // merges semicolon-separated values when the property is configured as
-    // a multi-checkbox.
-    resources_downloaded: "Sample Trust-Building Script",
     lifecyclestage: "subscriber",
     tool_used: "sample_trust_building_script",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "sample_trust_building_script",
     nurture_status: "active",
   };
-  if (input.highestStakesSale && input.highestStakesSale.trim().length > 0) {
-    properties.highest_stakes_sale = input.highestStakesSale.slice(0, 1000);
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
@@ -1134,21 +1096,14 @@ export async function syncFreJobDescriptionContact(input: {
     email: input.email,
     firstname: input.firstName,
     company: input.companyName,
-    role: input.role,
-    fre_job_description_downloaded_at: new Date().toISOString(),
-    // Append to the multi-value resources_downloaded property. HubSpot
-    // merges semicolon-separated values when the property is configured as
-    // a multi-checkbox.
-    resources_downloaded: "FRE Job Description",
     lifecyclestage: "subscriber",
     tool_used: "fre_job_description",
     tool_downloaded_date: new Date().toISOString().slice(0, 10),
     nurture_track: "fre_job_description",
     nurture_status: "active",
   };
-  if (input.downloadReason && input.downloadReason.trim().length > 0) {
-    properties.fre_download_reason = input.downloadReason.slice(0, 1000);
-  }
+  const mappedRole = hubspotRoleValue(input.role);
+  if (mappedRole) properties.role = mappedRole;
 
   try {
     const search = await hubspotFetch(`/crm/v3/objects/contacts/search`, {
