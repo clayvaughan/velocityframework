@@ -59,6 +59,8 @@ export type ActionPlanRow = ActionPlanIntake & {
   created_at: string;
   saved_at: string | null;
   completed_at: string | null;
+  /** Markdown of the AI-Polished version the user added to their PDF, or null. */
+  polished_version: string | null;
 };
 
 export type FocusAreaInput = {
@@ -147,6 +149,24 @@ export async function replaceFocusAreas(
   const rows = focusAreas.map((f) => ({ ...f, action_plan_id: planId }));
   const { error: insErr } = await client.from("action_plan_focus_areas").insert(rows);
   if (insErr) return { ok: false, reason: "db_error", error: insErr };
+  return { ok: true, data: null };
+}
+
+/**
+ * Persist an AI-polished Markdown version onto the user's plan row.
+ * Subsequent PDF renders use this in place of the raw answers.
+ */
+export async function savePolishedVersion(
+  planId: string,
+  polished: string | null
+): Promise<StorageResult<null>> {
+  const client = getClient();
+  if (!client) return { ok: false, reason: "not_configured" };
+  const { error } = await client
+    .from("action_plans")
+    .update({ polished_version: polished })
+    .eq("id", planId);
+  if (error) return { ok: false, reason: "db_error", error };
   return { ok: true, data: null };
 }
 

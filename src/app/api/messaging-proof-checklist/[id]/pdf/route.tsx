@@ -13,7 +13,7 @@ import {
   MessagingReport,
   type MessagingCollateralRow,
 } from "@/lib/pdf/MessagingReport";
-import { PolishedMessagingReport } from "@/lib/pdf/PolishedMessagingReport";
+import { PolishedReport } from "@/lib/pdf/PolishedReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
 import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
@@ -42,7 +42,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   if (checklist.polished_version) {
     try {
       const buffer = await renderPdfToBuffer(
-        <PolishedMessagingReport
+        <PolishedReport
           firstName={checklist.first_name}
           companyName={checklist.company_name}
           generatedAt={
@@ -51,6 +51,9 @@ export async function GET(_req: Request, { params }: { params: Params }) {
               : new Date()
           }
           polishedMarkdown={checklist.polished_version}
+          eyebrow="Messaging & Proof · AI-Polished"
+          title="Your polished messaging."
+          intro="What follows is an AI-polished version of your saved Messaging & Proof Checklist. Treat suggested edits as starting points, not final copy. The original raw answers remain saved on velocityframework.com if you ever need to revisit them."
         />
       );
       return pdfSuccessResponse(buffer, `velocity-messaging-${id}.pdf`);

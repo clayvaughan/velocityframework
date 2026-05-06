@@ -29,8 +29,16 @@ create table if not exists public.action_plans (
   send_partner_invite             boolean not null default false,
   created_at                      timestamptz not null default now(),
   saved_at                        timestamptz,
-  completed_at                    timestamptz
+  completed_at                    timestamptz,
+  -- AI-Polished Markdown version, written when the user clicks "Add to my PDF"
+  -- on the AI Polish flow. PDF endpoint renders this in place of raw answers
+  -- when set; raw answers are never deleted.
+  polished_version                text
 );
+
+-- Idempotent migration for existing deploys (safe to run repeatedly):
+alter table public.action_plans
+  add column if not exists polished_version text;
 
 create index if not exists action_plans_email_idx       on public.action_plans (email);
 create index if not exists action_plans_created_at_idx  on public.action_plans (created_at desc);

@@ -17,9 +17,39 @@ import {
   isStorageConfigured as isMessagingStorageConfigured,
   savePolishedVersion as saveMessagingPolishedVersion,
 } from "@/lib/messaging/storage";
+import { buildMessagingChecklistPrompt } from "./prompt-templates/messaging-checklist";
+
 import {
-  buildMessagingChecklistPrompt,
-} from "./prompt-templates/messaging-checklist";
+  getWorksheet as getFcpWorksheet,
+  getProfiles as getFcpProfiles,
+  isStorageConfigured as isFcpStorageConfigured,
+  savePolishedVersion as saveFcpPolishedVersion,
+} from "@/lib/fcp/storage";
+import { buildFcpPrompt } from "./prompt-templates/fcp";
+
+import {
+  getMap as getLeadershipMap,
+  getRoles as getLeadershipRoles,
+  isStorageConfigured as isLeadershipStorageConfigured,
+  savePolishedVersion as saveLeadershipPolishedVersion,
+} from "@/lib/accountability/storage";
+import { buildLeadershipPrompt } from "./prompt-templates/leadership-accountability";
+
+import {
+  getRevenueMap,
+  getRevenueRoles,
+  isStorageConfigured as isRevenueStorageConfigured,
+  savePolishedVersion as saveRevenuePolishedVersion,
+} from "@/lib/revenue-team/storage";
+import { buildRevenueTeamPrompt } from "./prompt-templates/revenue-team";
+
+import {
+  getActionPlan,
+  getFocusAreas,
+  isStorageConfigured as isActionPlanStorageConfigured,
+  savePolishedVersion as saveActionPlanPolishedVersion,
+} from "@/lib/action-plan/storage";
+import { buildActionPlanPrompt } from "./prompt-templates/action-plan";
 
 export type BuildPromptResult =
   | { ok: true; system: string; user: string; combined: string }
@@ -68,12 +98,154 @@ const TOOLS: Record<string, ToolHandler> = {
       if (!isMessagingStorageConfigured()) {
         return { ok: false, reason: "not_configured" };
       }
-      // Verify the row exists before writing — better error surfaces than
-      // a silent UPDATE-zero-rows.
       const cl = await getChecklist(userId);
       if (!cl.ok) return { ok: false, reason: "db_error" };
       if (!cl.data) return { ok: false, reason: "not_found" };
       const result = await saveMessagingPolishedVersion(userId, text);
+      if (!result.ok) {
+        return {
+          ok: false,
+          reason: result.reason === "not_configured" ? "not_configured" : "db_error",
+        };
+      }
+      return { ok: true };
+    },
+  },
+
+  fcp: {
+    buildPrompt: async (userId) => {
+      if (!isFcpStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const ws = await getFcpWorksheet(userId);
+      if (!ws.ok) return { ok: false, reason: "db_error" };
+      if (!ws.data) return { ok: false, reason: "not_found" };
+      const profilesRes = await getFcpProfiles(userId);
+      const profiles = profilesRes.ok ? profilesRes.data : [];
+      const built = buildFcpPrompt({ worksheet: ws.data, profiles });
+      return {
+        ok: true,
+        system: built.system,
+        user: built.user,
+        combined: built.combined,
+      };
+    },
+    savePolishedVersion: async (userId, text) => {
+      if (!isFcpStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const ws = await getFcpWorksheet(userId);
+      if (!ws.ok) return { ok: false, reason: "db_error" };
+      if (!ws.data) return { ok: false, reason: "not_found" };
+      const result = await saveFcpPolishedVersion(userId, text);
+      if (!result.ok) {
+        return {
+          ok: false,
+          reason: result.reason === "not_configured" ? "not_configured" : "db_error",
+        };
+      }
+      return { ok: true };
+    },
+  },
+
+  "leadership-accountability-map": {
+    buildPrompt: async (userId) => {
+      if (!isLeadershipStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const m = await getLeadershipMap(userId);
+      if (!m.ok) return { ok: false, reason: "db_error" };
+      if (!m.data) return { ok: false, reason: "not_found" };
+      const rolesRes = await getLeadershipRoles(userId);
+      const roles = rolesRes.ok ? rolesRes.data : [];
+      const built = buildLeadershipPrompt({ map: m.data, roles });
+      return {
+        ok: true,
+        system: built.system,
+        user: built.user,
+        combined: built.combined,
+      };
+    },
+    savePolishedVersion: async (userId, text) => {
+      if (!isLeadershipStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const m = await getLeadershipMap(userId);
+      if (!m.ok) return { ok: false, reason: "db_error" };
+      if (!m.data) return { ok: false, reason: "not_found" };
+      const result = await saveLeadershipPolishedVersion(userId, text);
+      if (!result.ok) {
+        return {
+          ok: false,
+          reason: result.reason === "not_configured" ? "not_configured" : "db_error",
+        };
+      }
+      return { ok: true };
+    },
+  },
+
+  "revenue-team-map": {
+    buildPrompt: async (userId) => {
+      if (!isRevenueStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const m = await getRevenueMap(userId);
+      if (!m.ok) return { ok: false, reason: "db_error" };
+      if (!m.data) return { ok: false, reason: "not_found" };
+      const rolesRes = await getRevenueRoles(userId);
+      const roles = rolesRes.ok ? rolesRes.data : [];
+      const built = buildRevenueTeamPrompt({ map: m.data, roles });
+      return {
+        ok: true,
+        system: built.system,
+        user: built.user,
+        combined: built.combined,
+      };
+    },
+    savePolishedVersion: async (userId, text) => {
+      if (!isRevenueStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const m = await getRevenueMap(userId);
+      if (!m.ok) return { ok: false, reason: "db_error" };
+      if (!m.data) return { ok: false, reason: "not_found" };
+      const result = await saveRevenuePolishedVersion(userId, text);
+      if (!result.ok) {
+        return {
+          ok: false,
+          reason: result.reason === "not_configured" ? "not_configured" : "db_error",
+        };
+      }
+      return { ok: true };
+    },
+  },
+
+  "action-plan": {
+    buildPrompt: async (userId) => {
+      if (!isActionPlanStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const p = await getActionPlan(userId);
+      if (!p.ok) return { ok: false, reason: "db_error" };
+      if (!p.data) return { ok: false, reason: "not_found" };
+      const faRes = await getFocusAreas(userId);
+      const focusAreas = faRes.ok ? faRes.data : [];
+      const built = buildActionPlanPrompt({ plan: p.data, focusAreas });
+      return {
+        ok: true,
+        system: built.system,
+        user: built.user,
+        combined: built.combined,
+      };
+    },
+    savePolishedVersion: async (userId, text) => {
+      if (!isActionPlanStorageConfigured()) {
+        return { ok: false, reason: "not_configured" };
+      }
+      const p = await getActionPlan(userId);
+      if (!p.ok) return { ok: false, reason: "db_error" };
+      if (!p.data) return { ok: false, reason: "not_found" };
+      const result = await saveActionPlanPolishedVersion(userId, text);
       if (!result.ok) {
         return {
           ok: false,

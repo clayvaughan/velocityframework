@@ -8,6 +8,7 @@ import {
   LeadershipAccountabilityReport,
   type AccountabilityRoleForPdf,
 } from "@/lib/pdf/LeadershipAccountabilityReport";
+import { PolishedReport } from "@/lib/pdf/PolishedReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
 import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
@@ -30,6 +31,31 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   }
 
   const map = mapRes.data;
+
+  // If the user saved an AI-polished version, render that in place of the
+  // raw-answers report. Raw answers stay intact in Supabase.
+  if (map.polished_version) {
+    try {
+      const buffer = await renderPdfToBuffer(
+        <PolishedReport
+          firstName={map.first_name}
+          companyName={map.company_name}
+          generatedAt={
+            map.updated_at ? new Date(map.updated_at) : new Date()
+          }
+          polishedMarkdown={map.polished_version}
+          eyebrow="Leadership Accountability Map · AI-Polished"
+          title="Your polished accountability map."
+          intro="What follows is an AI-polished version of your saved Leadership Accountability Map. Treat suggested edits as starting points, not final copy. The original raw answers remain saved on velocityframework.com if you ever need to revisit them."
+        />
+      );
+      return pdfSuccessResponse(buffer, `velocity-accountability-map-${id}.pdf`);
+    } catch (e) {
+      console.error("[accountability/pdf] polished render failed", e);
+      return pdfErrorResponse("PDF render failed.", 500);
+    }
+  }
+
   const roles: AccountabilityRoleForPdf[] = rolesRes.data
     .filter((r) => r.role_name && r.role_name.trim().length > 0)
     .map((r) => ({

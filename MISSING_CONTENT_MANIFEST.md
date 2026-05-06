@@ -172,14 +172,17 @@ The FRE Job Description nurture sequence (`src/lib/fre-job-description/nurture-s
 ## Infrastructure awaiting Clay / Abby (not content)
 
 - **Anthropic API key** (`ANTHROPIC_API_KEY`) — Required for the AI Polish "Generate AI Cleanup" button on the Messaging & Proof Checklist saved page. Source it from `console.anthropic.com → API keys`. Must be added to BOTH the dev Replit Secret store AND the deployment Replit Secret store (Autoscale). Without the key, the saved page hides the "Generate AI Cleanup" button and only shows "Copy AI Prompt" — that path always works because it generates plain text on the server with no API call. Cost-protected at three layers (10 req/IP/hour, 25 req/IP/day, 500 req/global/day) so a leaked key cannot silently rack up cost; see `src/lib/ai/rate-limiter.ts` for the constants.
-- **Schema migration — `messaging_checklists.polished_version`** — One-line column add to support AI-Polish "Add to my PDF". Run in the velocityframework Supabase SQL editor:
+- **Schema migration — `polished_version` column on five interactive-tool tables** — One-line column add per tool to support AI Polish "Add to my PDF". Run in the velocityframework Supabase SQL editor:
 
   ```sql
-  alter table public.messaging_checklists
-    add column if not exists polished_version text;
+  alter table public.messaging_checklists  add column if not exists polished_version text;
+  alter table public.fcp_worksheets        add column if not exists polished_version text;
+  alter table public.accountability_maps   add column if not exists polished_version text;
+  alter table public.revenue_team_maps     add column if not exists polished_version text;
+  alter table public.action_plans          add column if not exists polished_version text;
   ```
 
-  The column is also baked into `src/lib/messaging/SCHEMA.sql` so it'll be present on a fresh schema run. When the column is null, the PDF endpoint renders the original raw-answers report. When set, it renders an AI-Polished report with a "Generated [date]" footer note, while raw answers remain in their original columns untouched.
+  Each column is also baked into the corresponding `SCHEMA.sql` so it'll be present on a fresh schema run. When the column is null, the PDF endpoint renders the original raw-answers report. When set, it renders an AI-Polished report with a "Generated [date]" footer note, while raw answers remain in their original columns untouched. AI Polish ships on: Messaging & Proof Checklist, Favorite Customer Profile, Leadership Accountability Map, Unified Revenue Team Accountability Map, and Culture Action Plan. The reference-PDF tools (Dashboard Example, Scorecard Example, Trust-Building Script, FRE Job Description, Health Check) do not need this — they have no user-written text to polish.
 - **HubSpot Private App Token** (`HUBSPOT_PRIVATE_APP_TOKEN`) — Contact sync code is live in `src/lib/hubspot.ts` for Health Check, Action Plan, FCP, Messaging & Proof, Leadership Accountability Map, Scorecard Example, Dashboard Example, Revenue Team Map, Trust-Building Script, and FRE Job Description flows. Silent no-op until the token lands in Replit Secrets.
 - **HubSpot sequence IDs** — Populate `NURTURE_SEQUENCE_IDS` (Health Check), `ACTION_PLAN_SEQUENCE_ID` (Action Plan), `FCP_SEQUENCE_ID` (FCP Worksheet), `MESSAGING_SEQUENCE_ID` (Messaging & Proof), `ACCOUNTABILITY_SEQUENCE_ID` (Leadership Accountability Map), `SCORECARD_EXAMPLE_SEQUENCE_ID` (Scorecard Example), `DASHBOARD_EXAMPLE_SEQUENCE_ID` (Dashboard Example), `REVENUE_TEAM_SEQUENCE_ID` (Revenue Team Map), `TRUST_BUILDING_SCRIPT_SEQUENCE_ID` (Sample Trust-Building Script), and `FRE_JOB_DESCRIPTION_SEQUENCE_ID` (FRE Job Description) in `hubspot.ts` once Abby has created the corresponding HubSpot sequences with the final email copy.
 - **HubSpot transactional email for PDF delivery** — `sendQuizResultEmail` remains stubbed awaiting Abby's transactional template id. The Scorecard Example, Dashboard Example, Trust-Building Script, and FRE Job Description landing pages all promise "A copy has been sent to your email," but the actual send-on-intake transactional email is not yet wired — users can still download the PDF directly from the thanks page via the download button.

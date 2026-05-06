@@ -8,6 +8,7 @@ import {
   RevenueTeamAccountabilityReport,
   type RevenueRoleForPdf,
 } from "@/lib/pdf/RevenueTeamAccountabilityReport";
+import { PolishedReport } from "@/lib/pdf/PolishedReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
 import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
@@ -33,6 +34,31 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   }
 
   const map = mapRes.data;
+
+  // If the user saved an AI-polished version, render that in place of the
+  // raw-answers report. Raw answers stay intact in Supabase.
+  if (map.polished_version) {
+    try {
+      const buffer = await renderPdfToBuffer(
+        <PolishedReport
+          firstName={map.first_name}
+          companyName={map.company_name}
+          generatedAt={
+            map.updated_at ? new Date(map.updated_at) : new Date()
+          }
+          polishedMarkdown={map.polished_version}
+          eyebrow="Revenue Team Map · AI-Polished"
+          title="Your polished revenue team map."
+          intro="What follows is an AI-polished version of your saved Unified Revenue Team Accountability Map. Treat suggested edits as starting points, not final copy. The original raw answers remain saved on velocityframework.com if you ever need to revisit them."
+        />
+      );
+      return pdfSuccessResponse(buffer, `velocity-revenue-team-map-${id}.pdf`);
+    } catch (e) {
+      console.error("[revenue-team/pdf] polished render failed", e);
+      return pdfErrorResponse("PDF render failed.", 500);
+    }
+  }
+
   const roles: RevenueRoleForPdf[] = rolesRes.data
     .filter((r) => r.role_name && r.role_name.trim().length > 0)
     .map((r) => ({

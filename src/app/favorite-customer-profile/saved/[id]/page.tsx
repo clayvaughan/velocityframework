@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { AlertCircle, Bookmark } from "lucide-react";
 import { ActionButtons } from "@/components/fcp/ActionButtons";
+import { AIAssist } from "@/components/ai/AIAssist";
+import { isAiConfigured } from "@/lib/ai/anthropic-client";
 import {
   getProfiles,
   getWorksheet,
@@ -131,6 +133,18 @@ export default async function FcpSavedPage({ params }: { params: Params }) {
               </li>
             ))}
           </ol>
+        </div>
+      </section>
+
+      {/* AI Polish — placed before "Make It Real" so it gets first attention. */}
+      <section className="section-padding bg-background">
+        <div className="container-wide max-w-5xl">
+          <AIAssist
+            tool="fcp"
+            userId={id}
+            aiCleanupAvailable={isAiConfigured()}
+            initialSavedText={ws.polished_version ?? null}
+          />
         </div>
       </section>
 

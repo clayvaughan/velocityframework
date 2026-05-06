@@ -23,8 +23,16 @@ create table if not exists public.fcp_worksheets (
     check (status in ('in_progress', 'saved', 'completed', 'abandoned')),
   created_at           timestamptz not null default now(),
   updated_at           timestamptz not null default now(),
-  saved_at             timestamptz
+  saved_at             timestamptz,
+  -- AI-Polished Markdown version, written when the user clicks "Add to my PDF"
+  -- on the AI Polish flow. PDF endpoint renders this in place of raw answers
+  -- when set; raw answers are never deleted.
+  polished_version     text
 );
+
+-- Idempotent migration for existing deploys (safe to run repeatedly):
+alter table public.fcp_worksheets
+  add column if not exists polished_version text;
 
 create index if not exists fcp_worksheets_email_idx on public.fcp_worksheets (email);
 create index if not exists fcp_worksheets_status_idx on public.fcp_worksheets (status);

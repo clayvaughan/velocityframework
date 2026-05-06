@@ -1,11 +1,13 @@
 /**
- * Polished Messaging & Proof Checklist — PDF.
+ * Generic AI-Polished PDF — used by every tool that opts into AI Polish.
  *
- * Used in place of MessagingReport when the user has clicked "Add to my PDF"
- * on an AI Polish version. Single-page-flow document with Velocity branding
- * + a footer note that names this as the AI-polished variant. The original
- * raw answers are still preserved in Supabase if the user ever needs them
- * (they're never deleted on save).
+ * Replaces a tool's raw-answers PDF when the user has clicked "Add to my PDF"
+ * on an AI-generated cleanup. Single, branded layout parameterized by the
+ * tool's eyebrow, title, and intro paragraph so each tool reads as its own
+ * deliverable while sharing one component.
+ *
+ * The original raw answers always remain in Supabase (the tool-specific
+ * `polished_version` column is the only thing this layer sets).
  */
 
 import {
@@ -20,11 +22,18 @@ import { MarkdownView } from "./markdown-to-pdf";
 
 registerFonts();
 
-type Props = {
+export type PolishedReportProps = {
   firstName: string;
-  companyName: string;
+  /** Optional — omit for tools that don't capture a company on intake (e.g. Culture Action Plan). */
+  companyName?: string | null;
   generatedAt: Date;
   polishedMarkdown: string;
+  /** Top-right eyebrow, e.g. "Messaging & Proof · AI-Polished". */
+  eyebrow: string;
+  /** Display title under the eyebrow, e.g. "Your polished messaging." */
+  title: string;
+  /** One-paragraph intro under the title. Renders verbatim. */
+  intro: string;
 };
 
 const s = StyleSheet.create({
@@ -93,43 +102,37 @@ function formatDate(d: Date): string {
   });
 }
 
-export function PolishedMessagingReport({
+export function PolishedReport({
   firstName,
   companyName,
   generatedAt,
   polishedMarkdown,
-}: Props) {
+  eyebrow,
+  title,
+  intro,
+}: PolishedReportProps) {
   const dateLabel = formatDate(generatedAt);
   return (
     <Document>
       <Page size="LETTER" style={s.page} wrap>
-        {/* Brand row at top of first page only */}
         <View style={s.topRow}>
           <Text style={s.brand}>Velocity</Text>
-          <Text style={s.brandEyebrow}>
-            Messaging &amp; Proof · AI-Polished
-          </Text>
+          <Text style={s.brandEyebrow}>{eyebrow}</Text>
         </View>
 
-        {/* Title block */}
         <View style={s.titleBlock}>
           <Text style={s.titleEyebrow}>
-            For {firstName} at {companyName}
+            {companyName && companyName.trim().length > 0
+              ? `For ${firstName} at ${companyName}`
+              : `For ${firstName}`}
           </Text>
-          <Text style={s.title}>Your polished messaging.</Text>
+          <Text style={s.title}>{title}</Text>
           <View style={s.goldRule} />
-          <Text style={s.titleSub}>
-            What follows is an AI-polished version of your saved Messaging
-            &amp; Proof Checklist. Treat suggested edits as starting points,
-            not final copy. The original raw answers remain saved on
-            velocityframework.com if you ever need to revisit them.
-          </Text>
+          <Text style={s.titleSub}>{intro}</Text>
         </View>
 
-        {/* Body — flows across pages automatically */}
         <MarkdownView markdown={polishedMarkdown} />
 
-        {/* Footer fixed on every page */}
         <View style={s.footer} fixed>
           <Text>AI-polished · Generated {dateLabel}</Text>
           <Text

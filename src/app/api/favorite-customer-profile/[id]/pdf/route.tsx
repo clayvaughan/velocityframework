@@ -5,6 +5,7 @@ import {
   type ScopeGuardrails,
 } from "@/lib/fcp/storage";
 import { FCPReport, type FCPResolvedProfile } from "@/lib/pdf/FCPReport";
+import { PolishedReport } from "@/lib/pdf/PolishedReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
 import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
@@ -30,6 +31,31 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   }
 
   const worksheet = wsRes.data;
+
+  // If the user saved an AI-polished version, render that in place of the
+  // raw-answers report. Raw answers stay intact in Supabase.
+  if (worksheet.polished_version) {
+    try {
+      const buffer = await renderPdfToBuffer(
+        <PolishedReport
+          firstName={worksheet.first_name}
+          companyName={worksheet.company_name}
+          generatedAt={
+            worksheet.updated_at ? new Date(worksheet.updated_at) : new Date()
+          }
+          polishedMarkdown={worksheet.polished_version}
+          eyebrow="Favorite Customer Profile · AI-Polished"
+          title="Your polished customer profiles."
+          intro="What follows is an AI-polished version of your saved Favorite Customer Profile worksheet. Treat suggested edits as starting points, not final copy. The original raw answers remain saved on velocityframework.com if you ever need to revisit them."
+        />
+      );
+      return pdfSuccessResponse(buffer, `velocity-fcp-${id}.pdf`);
+    } catch (e) {
+      console.error("[fcp/pdf] polished render failed", e);
+      return pdfErrorResponse("PDF render failed.", 500);
+    }
+  }
+
   const resolved: FCPResolvedProfile[] = profilesRes.data
     .filter((p) => p.profile_name && p.profile_name.trim().length > 0)
     .map((p) => ({

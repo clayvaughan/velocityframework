@@ -50,7 +50,7 @@ All PDFs use `@react-pdf/renderer` server-side. Shared infra lives in `src/lib/p
 Recent commits show a production "PDF RENDER FAILED" issue rooted in font resolution — be cautious touching `theme.ts`/`resolveFontsDir`.
 
 ### AI Polish (shared infrastructure)
-See `src/lib/ai/README.md` — it is the canonical guide for adding AI Polish to a new tool (5-step recipe, ~30 minutes). Key constraints:
+See `src/lib/ai/README.md` — it is the canonical guide for adding AI Polish to a new tool (5-step recipe, ~30 minutes). Currently shipped on: Messaging & Proof Checklist, Favorite Customer Profile, Leadership Accountability Map, Unified Revenue Team Accountability Map, Culture Action Plan. The reference-PDF tools (Dashboard Example, Scorecard Example, Trust-Building Script, FRE Job Description, Health Check) intentionally do **not** have AI Polish — they have no user-written text to polish. All five AI-Polish tools share `src/lib/pdf/PolishedReport.tsx` (parameterized by eyebrow/title/intro). Key constraints:
 
 - Single global rate limiter at `src/lib/ai/rate-limiter.ts` (per-IP hourly + daily, global daily). In-memory only — fine for single-instance Replit Autoscale, would need Redis/Supabase if we ever scale horizontally. **Don't add per-tool overrides.**
 - Tool registry at `src/lib/ai/registry.ts` maps `tool-name → { buildPrompt, savePolishedVersion }`. Every new tool registers here.

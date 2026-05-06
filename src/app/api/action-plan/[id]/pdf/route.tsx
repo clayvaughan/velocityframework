@@ -11,6 +11,7 @@ import { labelForRhythm, type WeeklyRhythmId } from "@/lib/action-plan/weekly-rh
 import type { ToxinId } from "@/lib/action-plan/toxins";
 import type { VirtueId } from "@/lib/action-plan/virtues";
 import { ActionPlanReport } from "@/lib/pdf/ActionPlanReport";
+import { PolishedReport } from "@/lib/pdf/PolishedReport";
 import { renderPdfToBuffer } from "@/lib/pdf/render";
 import { pdfErrorResponse, pdfSuccessResponse } from "@/lib/pdf/response";
 
@@ -36,6 +37,28 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   }
 
   const plan = planRes.data;
+
+  // If the user saved an AI-polished version, render that in place of the
+  // raw-answers report. Raw answers stay intact in Supabase.
+  if (plan.polished_version) {
+    try {
+      const buffer = await renderPdfToBuffer(
+        <PolishedReport
+          firstName={plan.first_name}
+          generatedAt={plan.saved_at ? new Date(plan.saved_at) : new Date()}
+          polishedMarkdown={plan.polished_version}
+          eyebrow="Culture Action Plan · AI-Polished"
+          title="Your polished culture plan."
+          intro="What follows is an AI-polished version of your saved Culture Action Plan. Treat suggested edits as starting points, not final copy. The original raw answers remain saved on velocityframework.com if you ever need to revisit them."
+        />
+      );
+      return pdfSuccessResponse(buffer, `velocity-action-plan-${id}.pdf`);
+    } catch (e) {
+      console.error("[action-plan/pdf] polished render failed", e);
+      return pdfErrorResponse("PDF render failed.", 500);
+    }
+  }
+
   const reassessmentDays = (plan.reassessment_days ?? 30) as 30 | 60 | 90;
   const reassessmentDate = plan.reassessment_date
     ? new Date(plan.reassessment_date)

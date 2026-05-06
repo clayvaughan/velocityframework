@@ -55,6 +55,8 @@ export type WorksheetRow = WorksheetIntake & {
   created_at: string;
   updated_at: string;
   saved_at: string | null;
+  /** Markdown of the AI-Polished version the user added to their PDF, or null. */
+  polished_version: string | null;
 };
 
 export type FcpProfileInput = {
@@ -150,6 +152,27 @@ export async function upsertProfile(
       },
       { onConflict: "worksheet_id,position" }
     );
+  if (error) return { ok: false, reason: "db_error", error };
+  return { ok: true, data: null };
+}
+
+/**
+ * Persist an AI-polished Markdown version onto the user's worksheet row.
+ * Subsequent PDF renders use this in place of the raw answers.
+ */
+export async function savePolishedVersion(
+  worksheetId: string,
+  polished: string | null
+): Promise<StorageResult<null>> {
+  const client = getClient();
+  if (!client) return { ok: false, reason: "not_configured" };
+  const { error } = await client
+    .from("fcp_worksheets")
+    .update({
+      polished_version: polished,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", worksheetId);
   if (error) return { ok: false, reason: "db_error", error };
   return { ok: true, data: null };
 }

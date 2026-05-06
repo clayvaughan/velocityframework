@@ -8,6 +8,8 @@ import {
   getFocusAreas,
   isStorageConfigured,
 } from "@/lib/action-plan/storage";
+import { AIAssist } from "@/components/ai/AIAssist";
+import { isAiConfigured } from "@/lib/ai/anthropic-client";
 import {
   counterMoveById,
   COUNTER_MOVES,
@@ -158,6 +160,18 @@ export default async function SavedPage({ params }: { params: Params }) {
             focusAreas={resolved}
             accountabilityPartnerName={plan.accountability_partner_name}
             weeklyRhythmLabels={resolved.map((r) => r.weeklyRhythmLabel)}
+          />
+        </div>
+      </section>
+
+      {/* AI Polish — placed before "Make It Real" so it gets first attention. */}
+      <section className="section-padding bg-background">
+        <div className="container-wide max-w-5xl">
+          <AIAssist
+            tool="action-plan"
+            userId={id}
+            aiCleanupAvailable={isAiConfigured()}
+            initialSavedText={plan.polished_version ?? null}
           />
         </div>
       </section>
