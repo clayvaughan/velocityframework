@@ -20,6 +20,7 @@ export async function POST(_req: Request, { params }: { params: Params }) {
   }
 
   const { id } = await params;
+  console.log("[fcp-route-debug] Save route CALLED for id:", id);
   const worksheet = await getWorksheet(id);
   if (!worksheet.ok || !worksheet.data) {
     return NextResponse.json({ error: "Worksheet not found." }, { status: 404 });
@@ -52,15 +53,32 @@ export async function POST(_req: Request, { params }: { params: Params }) {
     return NextResponse.json({ error: "Could not save worksheet." }, { status: 500 });
   }
 
-  void syncFcpContact({
-    email: worksheet.data.email,
-    firstName: worksheet.data.first_name,
-    companyName: worksheet.data.company_name,
-    role: worksheet.data.role,
-    industry: worksheet.data.industry,
-    fcpProfileCount: Math.min(populated.length, 3) as 1 | 2 | 3,
-    fcpHasScopeFilters: worksheet.data.has_scope_filters,
-  }).catch((e) => console.error("[fcp/save] hubspot", e));
+  // Diagnostic: awaiting the call (instead of fire-and-forget) so the
+  // returned typed result is observable in production logs. Revert to
+  // fire-and-forget once the silent-failure root cause is confirmed fixed.
+  console.log("[fcp-route-debug] About to call syncFcpContact");
+  try {
+    const syncResult = await syncFcpContact({
+      email: worksheet.data.email,
+      firstName: worksheet.data.first_name,
+      companyName: worksheet.data.company_name,
+      role: worksheet.data.role,
+      industry: worksheet.data.industry,
+      fcpProfileCount: Math.min(populated.length, 3) as 1 | 2 | 3,
+      fcpHasScopeFilters: worksheet.data.has_scope_filters,
+    });
+    console.log(
+      "[fcp-route-debug] syncFcpContact returned, continuing — result:",
+      JSON.stringify(syncResult)
+    );
+  } catch (e) {
+    console.error(
+      "[fcp-route-debug] syncFcpContact threw — message:",
+      e instanceof Error ? e.message : String(e),
+      "stack:",
+      e instanceof Error ? e.stack : "no stack"
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }
